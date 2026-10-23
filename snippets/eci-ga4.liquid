@@ -1,0 +1,86 @@
+<script>
+  {% if template contains 'collection' %}
+  var eci_products = [];
+  {% for p in collection.products %}
+  eci_products.push({
+      item_id: "{{p.id}}",
+      item_name: {{p.title | json}},
+      affiliation: "Hodges Badge",
+      currency: "USD",
+      index: {{forloop.index}},
+      item_list_id: "{{collection.id}}",
+      item_list_name: {{collection.title | json}},
+      price: {{p.price_min | money_without_currency | remove: ","}},
+      quantity: 1
+    })
+  
+  {% endfor %}
+    gtag("event", "view_item_list", {
+    item_list_id: "{{collection.id}}",
+    item_list_name: {{collection.title | json}},
+    items: eci_products.slice(0,4)
+  });
+  jQuery(document).on('click','.product-list .product-item a', function(){
+      var parent = jQuery(this).closest('.product-item');
+      var eci_this_product = eci_products[parent.index()]
+      gtag("event", "select_item", {
+        item_list_id: "{{collection.id}}",
+        item_list_name: {{collection.title | json}},
+        items: [eci_this_product]
+      });
+  })
+  {% elsif template contains 'product' %}
+    var eci_item = [{
+          item_id: "{{product.id}}",
+          item_name: {{product.title | json}},
+          affiliation: "Hodges Badge",
+          currency: "USD",
+          index: 0,
+          price: {{product.price_min | money_without_currency | remove: ","}},
+          quantity: 1
+        }];
+    gtag("event", "view_item", {
+      currency: "USD",
+      value: {{product.price_min | money_without_currency | remove: ","}},
+      items: eci_item
+    });
+    document.querySelector('.product-form__add-button').addEventListener('click', function(){
+        eci_item[0].quantity = document.querySelector('#varQty').value;
+        gtag("event", "add_to_cart", {
+            currency: "USD",
+            value: eci_item[0].price,
+            items: eci_item
+            });
+    })
+    {% elsif template contains 'cart' %}
+    var eci_products = [];
+    {% for item in cart.items %}
+      eci_products.push({
+        item_id: "{{item.id}}",
+        item_name: {{item.title | json}},
+        affiliation: "Hodges Badge",
+        currency: "USD",
+        index: {{forloop.index}},
+        price: {{item.final_price | money_without_currency | remove: ","}},
+        quantity: {{item.quantity}}
+      });
+    {% endfor %}
+    gtag("event", "view_cart", {
+      currency: "USD",
+      value: {{cart.total_price | money_without_currency | remove: ","}},
+      items: eci_products
+    });
+    var removed_product = []
+    jQuery(document).on('click', '.line-item__quantity-remove', function(){
+      var parent = jQuery(this).closest('.line-item')
+      removed_product = eci_products[parent.index()]
+    })
+    jQuery(document).on('click','#myFormcartremove .form__submit:first', function(){
+     gtag("event", "remove_from_cart", {
+        currency: "USD",
+        value: removed_product.price,
+        items: [removed_product]
+      }); 
+  })
+  {% endif %}
+</script>

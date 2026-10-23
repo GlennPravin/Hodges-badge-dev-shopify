@@ -1,0 +1,97 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-404",
+      "settings": {}
+    },
+    "f24a4222-0225-4e87-b15e-4981aad3e9b7": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "top-picks",
+        "title": "Top Products",
+        "products_count": 12,
+        "layout": "vertical",
+        "stack_products": false,
+        "show_quick_buy": false,
+        "link_title": "View all",
+        "link_url": ""
+      }
+    },
+    "02f5e5cf-1680-42de-ac6e-ec6ae0232c5c": {
+      "type": "slideshow_Trust_pilot",
+      "blocks": {
+        "template--15064533926039__02f5e5cf-1680-42de-ac6e-ec6ae0232c5c-1669023044253c905f-0": {
+          "type": "image",
+          "settings": {
+            "show_overlay": false,
+            "overlay_opacity": 30,
+            "text_color": "#ffffff",
+            "title": "",
+            "content": "",
+            "content_position": "middle_center",
+            "button_background": "#ffffff",
+            "button_text_color": "#000000",
+            "button_text": "Button",
+            "link": ""
+          }
+        },
+        "template--15064533926039__02f5e5cf-1680-42de-ac6e-ec6ae0232c5c-1669023044253c905f-1": {
+          "type": "image",
+          "settings": {
+            "show_overlay": false,
+            "overlay_opacity": 30,
+            "text_color": "#ffffff",
+            "title": "",
+            "content": "",
+            "content_position": "middle_center",
+            "button_background": "#ffffff",
+            "button_text_color": "#000000",
+            "button_text": "Button",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--15064533926039__02f5e5cf-1680-42de-ac6e-ec6ae0232c5c-1669023044253c905f-0",
+        "template--15064533926039__02f5e5cf-1680-42de-ac6e-ec6ae0232c5c-1669023044253c905f-1"
+      ],
+      "settings": {
+        "edge_to_edge": false,
+        "section_size": "preserve_ratio",
+        "carousel_effect": "slide",
+        "autoplay": true,
+        "cycle_speed": 5
+      }
+    },
+    "7459bfb9-61fd-4788-bda1-f07dd3003082": {
+      "type": "recently-viewed-products",
+      "disabled": true,
+      "settings": {
+        "title": "Recently viewed",
+        "show_quick_buy": false
+      }
+    },
+    "1683878050409e7f61": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "f24a4222-0225-4e87-b15e-4981aad3e9b7",
+    "02f5e5cf-1680-42de-ac6e-ec6ae0232c5c",
+    "7459bfb9-61fd-4788-bda1-f07dd3003082",
+    "1683878050409e7f61"
+  ]
+}

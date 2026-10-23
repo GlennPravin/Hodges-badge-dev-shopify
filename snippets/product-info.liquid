@@ -1,0 +1,228 @@
+{% comment %}  chargecode{%- if product.metafields.chargecode != blank -%}
+  <ul>
+    {%- for field in product.metafields.chargecode -%}
+      <li>{{ field | first }}: {{ field | last }}</li>
+    {%- endfor -%}
+  </ul> 
+{%- endif -%} {% endcomment %}
+
+{%- assign selected_variant = product.selected_or_first_available_variant -%}
+{%- assign product_form_id = 'product_form_' | append: section.id | append: product.id -%}
+{%- assign all_markets = product.metafields.variantselector.desctitle.value["MartketInfo"] -%}
+{% comment %} {%- assign seo_description =  product.metafields.Seo.Description-%} {% endcomment %}
+                {%- assign product_description = ""-%}
+                {%- assign product_specification = ""-%}
+                {%- assign market = collection.metafields.market.marketid -%}
+                {%- assign manualobject = "" -%}
+                {%- for mkt in all_markets -%}
+                  {%- if mkt.mktId == market -%}
+                    {%- assign product_specification = mkt.detailedDescr -%}
+                    {%- assign product_description = mkt.AdditionalProductDescr -%}
+                    {{ mkt.AdditionalProductDescr }}
+                    {% elsif mkt.mktId == "C" %}
+                    {%- assign manualobject = mkt -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if product_description == blank and product_specification == blank -%}
+                  {%- if manualobject != "" -%}
+                      {%- assign product_description = manualobject.AdditionalProductDescr -%}
+                      {%- assign product_specification = manualobject.detailedDescr -%}
+                  {%- endif -%}
+                {%- endif -%}
+<div class="card {% if product.media.size > 0 %}card--collapsed{% endif %} ">
+  {%- if section.settings.enable_image_zoom -%}
+    <div id="product-zoom-{{ section.id }}" class="product__zoom-wrapper" style="position: sticky;    
+    top: 25%;
+    z-index: 20;"></div>
+  {%- endif -%}
+
+  <div class="card__section">
+    {%- form 'product', product, id: product_form_id, class: 'product-form' -%}
+      <input type="hidden" name="product-type" id="product-type" value="{{ product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductType }}" />
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'product_meta' -%}
+            {%- render 'product-meta', product: product, block: block -%}
+
+          {%- when 'variant_selector' -%}
+            {%- render 'product-variant-selector', product: product, form: form, block: block -%}
+
+          {%- when 'buy_buttons' -%}
+            {%- render 'product-buy-buttons', product: product, form: form, block: block -%}
+
+          {%- when 'store_pickup' -%}
+            {%- comment -%}The availability container will be added automatically if there is store pickup available{%- endcomment -%}
+            <div class="product-meta__store-availability-container" {{ block.shopify_attributes }}>
+              {%- render 'store-availability', product_variant: product.selected_or_first_available_variant -%}
+            </div>
+
+          {%- when 'featured_description' -%}
+            {%- comment -%}This is only shown on the featured product section{%- endcomment -%}
+            {%- if product.description != blank -%}
+              <div class="product-meta__description rte" {{ block.shopify_attributes }}>
+               {{ product.description | replace: "hodges-badge-uat.myshopify","beta.hodgesbadge"| remove: 'data-section-type="product"' }}
+                {% comment %} {{ product.description | remove: 'data-section-type="product"' }} {% endcomment %}
+              </div>
+            {%- endif -%}
+
+          {%- when '@app' -%}
+            {%- render block -%}
+        {%- endcase -%}
+      {%- endfor -%}
+
+      {%- assign product_meta_block = section.blocks | where: 'type', 'product_meta' | first -%}
+
+      {%- if product_meta_block != blank and product_meta_block.settings.show_share_buttons -%}
+        <div class="product-meta__share-buttons hidden-tablet-and-up">
+          <span class="text--strong">{{ 'product.general.share' | t }}</span>
+
+          {%- assign share_url = shop.url | append: product.url | url_param_escape -%}
+          {%- assign twitter_text = product.title | url_param_escape -%}
+          {%- assign pinterest_description = product.description | strip_html | truncatewords: 15 | url_param_escape -%}
+          {%- assign pinterest_image = product.featured_media | img_url: '1024x' | prepend: 'https:' -%}
+
+          <ul class="social-media__item-list list--unstyled" role="list">
+            <li class="social-media__item social-media__item--facebook">
+              <a href="https://www.facebook.com/sharer.php?u={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.facebook_share' | t }}">{%- render 'icon', icon: 'facebook' -%}</a>
+            </li>
+
+            <li class="social-media__item social-media__item--pinterest">
+              <a href="https://pinterest.com/pin/create/button/?url={{ share_url }}{% if pinterest_image != blank %}&media={{ pinterest_image }}{% endif %}&description={{ pinterest_description }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.pinterest_pin' | t }}">{%- render 'icon', icon: 'pinterest' -%}</a>
+            </li>
+
+            <li class="social-media__item social-media__item--twitter">
+              <a href="https://twitter.com/share?{% if twitter_text != blank %}text={{twitter_text}}&{% endif %}url={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.twitter_tweet' | t }}">{%- render 'icon', icon: 'twitter' -%}</a>
+            </li>
+
+            <li class="social-media__item">
+              <a href="mailto:?&subject={{ product.title | escape }}&body={{ share_url }}" aria-label="{{ 'general.social.email_share' | t }}">{% render 'icon', icon: 'email' %}</a>
+            </li>
+          </ul>
+        </div>
+      {%- endif -%}
+    {%- endform -%}
+	 <img class="magnifiers" id="magnifier1" src="" style="visibility:hidden;">
+  </div>
+
+  {% comment %}
+  ------------------------------------------------------------------------------
+  Product Data. This must be outputted for all products (including home page).
+
+  IMPORTANT: THIS CODE IS VITAL. DO NOT EDIT IT NOR REMOVE IT. MAKE SURE TO KEEP
+  THE EXACT SAME ATTRIBUTES.
+  ------------------------------------------------------------------------------
+  {% endcomment %}
+
+  {%- assign variant_selector_block = section.blocks | where: 'type', 'variant_selector' | first -%}
+
+  <script type="application/json" data-product-json>
+    {
+      "product": {{ product | json }},
+      "options_with_values": {{ product.options_with_values | json }},
+      "selected_variant_id": {{ selected_variant.id }}
+      {%- if variant_selector_block.settings.show_inventory_quantity -%}
+        ,"inventories": {
+          {%- for variant in product.variants -%}
+            {%- if variant.available -%}
+              {%- if variant.inventory_management and variant.inventory_policy == 'deny' and variant_selector_block.settings.low_inventory_threshold > 0 -%}
+                {%- if variant.inventory_quantity <= variant_selector_block.settings.low_inventory_threshold -%}
+                  {%- capture inventory_message -%}{{ 'product.form.low_stock_with_quantity_count' | t: count: variant.inventory_quantity }}{%- endcapture -%}
+                {%- else -%}
+                  {%- capture inventory_message -%}{{ 'product.form.in_stock_with_quantity_count' | t: count: variant.inventory_quantity }}{%- endcapture -%}
+                {%- endif -%}
+              {%- else -%}
+                {%- if variant.inventory_policy == 'continue' and variant.inventory_quantity <= 0 and selected_variant.requires_shipping -%}
+                  {%- if variant.incoming -%}
+                    {%- capture next_incoming_date -%}{{ variant.next_incoming_date | date: format: 'date' }}{%- endcapture -%}
+                    {%- capture inventory_message -%}{{ 'product.form.incoming_stock' | t: next_incoming_date: next_incoming_date }}{%- endcapture -%}
+                  {%- else -%}
+                    {%- capture inventory_message -%}{{ 'product.form.oversell_stock' | t }}{%- endcapture -%}
+                  {%- endif -%}
+                {%- else %}
+                  {%- capture inventory_message -%}{{ 'product.form.in_stock' | t }}{%- endcapture -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- else -%}
+              {%- capture inventory_message -%}{{ 'product.form.sold_out' | t }}{%- endcapture -%}
+            {%- endif -%}
+
+            "{{ variant.id }}": {
+              "inventory_management": {{ variant.inventory_management | json }},
+              "inventory_policy": {{ variant.inventory_policy | json }},
+              "inventory_quantity": {{ variant.inventory_quantity | json }},
+              "inventory_message": {{ inventory_message | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        }
+      {%- endif -%}
+    }
+  </script>
+</div>
+ {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- comment -%}
+              --------------------------------------------------------------------------------------
+              DESCRIPTION
+              --------------------------------------------------------------------------------------
+              {%- endcomment -%}
+
+              {%- when 'description' -%}
+                {%- if product.description != blank -%}
+                  <div class=" product-block-list__item--description " {{ block.shopify_attributes }}>
+                    <div class="card">
+                      {%- if block.settings.display_mode == 'tab_view' and product_description != blank -%}
+                        <div class="card__header">
+                          <button class="tab-button active" onclick="openTab('specification',event)">Specification</button>
+                          <button class="tab-button " onclick="openTab('description',event)">{{ 'product.general.description' | t }}</button>
+                          </div>
+                          <div id="specification" class="tab-content active">
+                          <div class="card__section">
+                            <div class="rte text--pull section2">
+                              {{product_specification}}
+                            </div>
+                          </div>
+                          </div> 
+                        <div id="description" class="tab-content">
+                        <div class="card__section >
+                            <div class="rte text--pull">
+                              {{product_description}}
+                            </div>
+                        </div>
+                        </div>
+                      {%- elsif block.settings.display_mode == 'collapse' -%}
+                        <button class="card__collapsible-button" data-action="toggle-collapsible" aria-expanded="false" aria-controls="block-{{ section.id }}-{{ block.id }}">
+                          <span class="card__title heading h3">{{ 'product.general.description' | t }}</span>
+                          <span class="plus-button plus-button--large"></span>
+                        </button>
+
+                        <div id="block-{{ section.id }}-{{ block.id }}" class="card__collapsible">
+                          <div class="card__collapsible-content">
+                            <div class="rte text--pull">
+                              {{ product.description | replace: "hodges-badge-uat.myshopify","beta.hodgesbadge"| remove: 'data-section-type="product"' }}
+                              {% comment %} {{ product.description | remove: 'data-section-type="product"' }} {% endcomment %}
+                            </div>
+                          </div>
+                        </div>
+                      {%- else -%}
+                        <div class="card__header">
+                          <h2 class="card__title heading h3">{{ 'product.general.description' | t }}</h2>
+                        </div>
+
+                        <div class="card__section {% if block.settings.display_mode == 'view_more' %}expandable-content{% endif %}" {% if block.settings.display_mode == 'view_more' %}aria-expanded="false"{% endif %}>
+                          <div class="rte text--pull">
+                           {{product_specification}}
+                          </div>
+
+                          {%- if block.settings.display_mode == 'view_more' -%}
+                            <button class="expandable-content__toggle">
+                              <span class="expandable-content__toggle-icon"></span>
+                              <span class="expandable-content__toggle-text" data-view-more="{{ 'product.general.view_more' | t | escape }}" data-view-less="{{ 'product.general.view_less' | t | escape }}">{{- 'product.general.view_more' | t -}}</span>
+                            </button>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                {%- endif -%}
+{%- endcase -%}
+          {%- endfor -%}

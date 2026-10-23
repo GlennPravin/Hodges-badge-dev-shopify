@@ -1,0 +1,1017 @@
+{%- assign family = product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.optionFamilyId -%}
+{%- assign SeqChangableOptions =  shop.metafields.optionFamily[family].value.seqChangableOptions -%}
+{%- assign EitherOrOptions =  shop.metafields.optionFamily[family].value.eitherOrOptions -%}
+{%- assign FooterOptions =  shop.metafields.optionFamily[family].value.footNoteOptions -%} 
+{% assign subTypeIds = shop.metafields.ExcludeDesignOption.subTypeIds | split: "," %}
+{% assign canvasEnabled = false %}
+{%- if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true -%}
+{% assign canvasEnabled = product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled %}
+{%- endif -%}
+{% assign ProductDefaultFont = shop.metafields.ProductDefaultFont.Font.value %}
+{% assign productFontSizes = shop.metafields.ProductFontSizes.fontSize %}
+{% assign productFamily = shop.metafields.customizerFonts.fontFamily.value %}
+{%- assign printonBackLines = shop.metafields.printOnBackLines.optionIds.value | split: ","-%}
+{%- assign optionsLimit =  shop.metafields.optionFamily[family].value.optionsLimit-%}
+{% assign prodSubTypeId = product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductSubType |  strip %}
+
+<script> 
+  var SeqOptions = {{SeqChangableOptions | json}}; 
+  var Seq_Options = {{shop.metafields.SeqChangableOptions | json}}; 
+  var popupeitherOptions = {{SeqChangableOptions | json}};
+  var popup_eitherOptions = {{shop.metafields.SeqChangableOptions | json}};
+  var EitherOption = {{EitherOrOptions | json}};
+  var Either_Option = {{shop.metafields.EitherOrOptions | json}};
+ </script>
+<div class="product-form__option info-option clearfix"  >
+  <ul id="sortableoptions" >
+   {%- if canvasEnabled -%}
+      <div class="spacer topSpacer"></div>
+     <div style="display: inline-block; margin-right: 10px; margin-bottom: 7px;">
+      <button id="02All" data-label="Apply All Print Lines" name="apply font" data-option-display data-font-family='{{ProductDefaultFont.fontFamily}}' data-font-size='{{ProductDefaultFont.fontSize}}'></button>
+      <span style="margin-right: 5px;">Font Family & Font Size :</span>
+     <button data-toggle="tooltip" data-placement="top" onclick="fontedit(this,'02All','Apply to All Print Lines','{{productFontSizes}}')" data-original-title="" title="The formatting set here will automatically carry over to all print lines">
+    <span class="fontEditText" style="margin-bottom: -6px;">Apply All</span>
+    </button>
+      </div>
+      <button
+        class="spacerbtn"
+        onclick="addSpacer(this,'topSpacer')"
+        data-toggle='tooltip'
+        data-placement='top'
+        title='Add Top Spacer '
+        style="float: right; margin-right: 9px;">
+        <i class="fa fa-plus-square" aria-hidden="true"></i>
+      </button>
+      <input
+        type="text"
+        id="topSpacer"
+        style="display: none;">
+    {% endif %}
+
+    {%- for option in SeqChangableOptions -%}
+        {%- assign sortable_option = shop.metafields.SeqChangableOptions[option].value -%}      
+        {%- assign content_length = sortable_option.values.size -%}
+        {%- assign sort_type = 'input-text' -%}
+        {%- if sortable_option.valueType == "SeqChangableMR" and sortable_option['isUploadEnabled']==false -%}
+          {%- if sortable_option['isViewOption'] -%}
+            {%- assign content_type = "popup" -%}
+          {%- else -%}
+            {%- assign content_type = "popup" -%}
+          {%- endif -%}
+        {%- else -%}
+          {%- if content_length <= 0 -%}
+            {%- if sortable_option.isUploadEnabled  -%}
+              {%- assign sort_type = 'input-file' -%}
+            {%- else -%}
+              {%- assign sort_type = 'input-text' -%}
+            {%- endif -%}
+          {%- elsif content_length > 0 -%}
+            {%- if sortable_option['isViewOption'] -%}
+              {%- assign sort_type = 'popup' -%}
+            {%- else -%}
+              {%- assign sort_type = 'select' -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+        {%- assign content_length = sortable_option.values.size -%}       
+        <li class="list-group-item" 
+          data-type="{{ sort_type }}" 
+          data-option-id="{{ sortable_option['optionId'] }}" 
+           style="border: 0px !important;  padding: {%- if canvasEnabled -%} 5px 10px 0px 0px {%- else -%} 0px !important ;{%- endif -%}">
+          <div class="content_comes_here">
+            {%- if sortable_option.valueType == 'SeqChangableMR' and sortable_option['isUploadEnabled']==false -%}
+              <div class="product-form__option into-option" data-selector-type="select">
+                {%- if sortable_option['isViewOption'] -%}
+                  <div id="{{sortable_option['optionId']}}_popup" class="popup" ></div>
+                  {% comment %} <script>
+                    var popupeitherOptions = {{SeqChangableOptions | json}};
+                    var popup_eitherOptions = {{shop.metafields.SeqChangableOptions | json}};
+                  </script> {% endcomment %}
+                  {%- if shop.metafields.SeqChangableMR[sortable_option.metaReferenceValues[0]].values[0].size > 0 -%}
+                    <div class="custom_ui">
+<!--                       <span class="my-handle fa fa-bars"></span>
+                      <span class="sort_index"></span> -->
+                      <label class="product-form__option-name text--strong seq" 
+                        for="{{ sortable_option['optionId'] }}">
+                        {{ sortable_option.label }} 
+                      </label>
+                      <input  id="{{sortable_option['optionId']}}_btn" 
+                        type="button" readonly="readonly"
+                        class="btn choose-value" 
+                        value="Select a Stock Design" 
+                        onclick="popUpS('{{sortable_option.optionId}}', 'SeqChangableMR')" 
+                        {% if sortable_option["optionMessage"] %} 
+                          data-toggle="tooltip" 
+                          data-placement="top" 
+                          title="{{ sortable_option["optionMessage"] }}" 
+                          data-html="true" 
+                        {% endif %} >
+                    </div>
+                    <div class="pop-chosen-value" 
+                      data-option-id="{{sortable_option['optionId']}}" >
+                      <a  onclick="clearChoosenValue(this)" class="close" >&times;</a>
+                      <input data-bind="autocomplete" 
+                        data-label="{{ sortable_option.label }}" 
+		                  	data-popup="seq_stock"
+                        data-key="{{sortable_option['optionId']}}" 
+                        name="{{sortable_option['optionId']}}" 
+                        id="{{sortable_option['optionId']}}_id" 
+                        type="hidden" 
+                        value="" 
+                        data-charge="" 
+                        data-chargeCode="" />
+                      <img alt="" loading='lazy' id="{{sortable_option['optionId']}}" src="" >
+                      <div id="{{sortable_option['optionId']}}_txt" ></div>
+                    </div>
+                  {%- else -%}
+                    <label class="product-form__option-name text--strong" 
+                      for="{{ sortable_option['optionId'] }}">
+                        {{ sortable_option['label'] }}
+                    </label>
+                    <div class="choose-value-container" >
+                      <script> 
+                        ac["{{ sortable_option.optionId }}"] = [
+                          {%- for meta_ref_id in sortable_option.metaReferenceValues  -%}
+                            {%- if shop.metafields.SeqChangableMR[meta_ref_id] -%}
+                              {%- assign meta_ref_values = shop.metafields.SeqChangableMR[meta_ref_id] -%}
+                              {% if forloop.index > 1 %} , {% endif %}
+                              {{ meta_ref_values.values | json }}
+                            {%- endif -%}
+                          {%- endfor -%}
+                        ]; 
+                      </script>
+                      <input type="text" 
+                        data-bind="autocomplete" 
+                        data-label="{{ sortable_option['label'] }}" 
+                        name="{{sortable_option['optionId']}}" 
+                        class="autocomplete" 
+                        data-key="{{sortable_option['optionId']}}" />
+                      <input 
+                        class="btn choose-button set_width_ii" readonly="readonly"
+                        onclick="popUp('{{sortable_option.optionId}}', popup_eitherOptions, popupeitherOptions)" 
+                        {% if sortable_option["optionMessage"] %} 
+                          data-toggle="tooltip" 
+                          data-placement="top" 
+                          title="{{ sortable_option["optionMessage"] }}" 
+                          data-html="true" 
+                        {% endif %} 
+                        value="(Or) Choose" > 
+                    </div>
+                    <div class="pop-chosen-value" 
+                      data-option-id="{{sortable_option['optionId']}}" >
+                      <a  onclick="clearChoosenValue(this)" class="close" >&times;</a>
+                      <input id="{{sortable_option['optionId']}}_id" 
+                        type="hidden" 
+                        value="" 
+                        class="meta-reference-master" />
+                      <img alt="" loading='lazy' id="{{sortable_option['optionId']}}" src="" >
+                      <div id="{{sortable_option['optionId']}}_txt" ></div>
+                    </div>
+                  {%- endif -%}
+                {%- endif -%}
+              </div>
+            {%- else -%}
+              {%- if content_length <= 0 -%}
+                {%- if sortable_option.isUploadEnabled  -%}
+                  <div class="product-form__option info-option" 
+                    data-selector-type="select">
+<!--                     <span class="my-handle fa fa-bars"></span>
+                    <span class="sort_index"></span> -->
+                    <label for="{{ sortable_option['optionId'] }}" 
+                      class="product-form__option-name text--strong seq">
+                      {{ sortable_option['label'] }}: {% if sortable_option['isRequired'] %} * {% endif %}
+                    </label>
+                    <!-- <input class="" 
+                      type="file" 
+                      data-label="{{ sortable_option['label'] }}" 
+                      name="{{ sortable_option['optionId'] }}" 
+                      id="{{ sortable_option['optionId'] }}" 
+                      {% if sortable_option['isRequired'] %} required {% endif %} 
+                      {% if sortable_option["optionMessage"] %} 
+                        data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="{{ sortable_option["optionMessage"] }}" 
+                        data-html="true" 
+                      {% endif %} /> -->
+                      
+                      {% comment %} <input type="hidden" name="upload_0" data-uploader="ref" value="ckv27c7d700013o7onkhjffvq"> {% endcomment %}
+                      <!-- <input type="hidden" name="upload_0" data-uploader="ref" value=""> -->
+                      <!-- <input type="hidden" value="" class="ImageName_CustomDesign_28CSDES" name="upload_logo_CustomDesign_0">
+                      <input type="hidden" value="" class="ImageName_Title_Division_28CSDES" name="upload_logo_title_division_0">  -->
+                      <!-- <ul class="attachments customization-form">
+                        <li data-uploader="chooser" data-uploader-key="CustomDesign_28CSDES" data-uploader-label="Ribbon"> -->
+                        <!-- <div class="uploader-item">
+                            <label class="uploader-item-label"></label>
+                            <button type="button" class="uploader-button" data-control="choose">Upload Your File-1</button>
+                        </div> -->
+                      <!-- </li>
+                    </ul> -->
+
+                    <input type="text" name="{{ eitheror_option.optionId }}_uploadImage" data-uploader="ref" value="">
+                    <ul class="attachments customization-form">
+                      <li data-uploader="chooser" data-uploader-key="TEST_CustomDesign_{{ eitheror_option.optionId }}" data-uploader-label="">
+                    </li>
+                  </ul>
+                  <!-- <script>
+                    var refValue = document.getElementsByName("upload_0")[0].value;
+                    document.getElementById("sortableoptions").setAttribute("data-uploader-ref", refValue); 
+                    alert(refValue);
+                  </script> -->
+                    
+                    
+            </div>
+          {%- else -%}
+                <div class="product-form__option info-option {% if sortable_option['isOptionHighlighter'] %}  bg_color_div {% endif %}" 
+                  data-selector-type="select">
+                   {%- if canvasEnabled -%}
+                    <img
+                      class="my-handle"
+                      src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/imageedit_4_7998446026.png?v=1711522827"
+                      style="height:25px;"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      data-html="true"
+                      title="&nbsp;&nbsp;&nbsp;&nbsp;Click and drag <img src='https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Customizer-Tooltip.png?v=1724334191' width='25px' > <br> to move print line <br>up or down"></img>
+                    <span class="sort_index"></span>
+                  {% endif %}
+                   {%- if sortable_option['label'] contains 'Print' -%}
+                  {%- if canvasEnabled -%}
+		<label for="{{ sortable_option['optionId'] }}" class="product-form__option-name text--strong seq">
+                    Print-Line:</label>
+                  {%- else -%}
+		<label for="{{ sortable_option['optionId'] }}" class="product-form__option-name text--strong seq">
+                        {{ sortable_option['label'] }}:</label>
+                  {% endif %}     
+                  {%- else -%}
+		<label for="{{ sortable_option['optionId'] }}" class="product-form__option-name text--strong seq">
+                   {{ sortable_option['label'] }}:</label>
+                  {%- endif -%}  
+                    {% if sortable_option['isRequired'] %}
+                      *
+                    {% endif %}
+                  <input type="text" 
+                   {%- if canvasEnabled -%} style="margin-bottom:11px;" {% endif %}
+                    {% if printonBackLines contains sortable_option['optionId'] %}  
+                      oninput="validate_splChar_ontype(this),canvasColorization(this),validateprintOnBackLines()"
+                    {% else %}
+                      oninput="validate_splChar_ontype(this),canvasColorization(this)"
+                    {% endif %}
+                    id="{{ sortable_option['optionId'] }}" 
+                    data-label="{{ sortable_option['label'] }}"  
+                    class="{%- if canvasEnabled -%}SpacerBtn{% endif %}  test11 fontapply"
+                    name="{{ sortable_option['optionId'] }}" 
+                    {%- assign limit=sortable_option['optionDisplay']  -%}
+                    {% if sortable_option['isRequired'] %} required {% endif %} 
+                    {% if sortable_option["optionMessage"] %} 
+                      data-toggle="tooltip" 
+                      data-placement="top" 
+                      title="{{ sortable_option["optionMessage"] }}" 
+                      data-html="true" 
+                    {% endif %} 
+                    {% if optionsLimit[sortable_option['optionId']]  %}
+                      {%- assign limit=optionsLimit[sortable_option['optionId']] -%}
+                    {% endif %} 
+                    data-option-display={{limit}} maxlength ={{limit}}>
+					{%- if canvasEnabled -%}
+                    <button
+                      data-toggle='tooltip'
+                      data-placement='top'
+                      onclick="fontedit(this,'{{ sortable_option['optionId'] }}','{{ sortable_option['label'] }}','{{productFontSizes}}')"
+                      class="fontEdit"
+                      title='Edit Font'>
+                      {% comment %} <i class="fa fa-ellipsis-v" aria-hidden="true"></i> {% endcomment %}
+                      <img class="fonteditImg" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/edit_icon_863405ed-20e1-4cd2-a8e6-37e5280c65e8.png?v=1704190370" >
+                    </button>
+                    <button
+                      class="spacerbtn"
+                      style=" position: absolute;top: 48%;"
+                      onclick="addSpacer(this,'{{ sortable_option['optionId'] }}')"
+                      data-toggle='tooltip'
+                      data-placement='top'
+                      title='Add Spacer'>
+                      <i class="fa fa-plus-square" aria-hidden="true"></i>
+                    </button>
+                  {%- endif -%}
+                </div>
+				{%- if canvasEnabled -%}
+                  <div class="spacer {{ sortable_option['optionId'] }}"></div>
+                {%- endif -%}
+              {%- endif -%}
+              {%- elsif content_length > 0 -%}
+              <div class="product-form__option info-option  {% if sortable_option['isExtraField'] %}  Print_line_bg {% endif %} " 
+                data-selector-type="select">
+                {%- if canvasEnabled -%}
+                <!-- <span class="my-handle fa fa-bars"></span> -->
+                   <img 
+                class="my-handle"
+                src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/imageedit_4_7998446026.png?v=1711522827"
+                style="height:25px"
+                data-toggle="tooltip"
+                data-placement="top"
+                data-html="true"
+                title="&nbsp;&nbsp;&nbsp;&nbsp;Click and drag <img src='https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Customizer-Tooltip.png?v=1724334191' width='25px' > <br> to move print line <br>up or down"></img>
+                
+                <span class="sort_index"></span> 
+                {%- endif -%}
+                <label for="{{sortable_option['optionId']}}" 
+                  class="product-form__option-name text--strong seq">
+                  {{ sortable_option.label }}: {% if sortable_option['isRequired'] %} * {% endif %}
+                </label>
+                {%- if sortable_option['isViewOption'] -%}
+                  <div id="{{sortable_option['optionId']}}_popup" class="popup" ></div>
+                  {% comment %} <script> 
+                  var SeqOptions = {{SeqChangableOptions | json}}; 
+                  var Seq_Options = {{shop.metafields.SeqChangableOptions | json}}; 
+                  </script> {% endcomment %}
+                  <div class="choose-value-container set_width_div_input">
+                    <script> 
+                      ac["{{sortable_option['optionId']}}"] = {{ sortable_option.values | json }}; 
+                    </script>
+                    <input data-label="{{ sortable_option['label'] }}" 
+                      id="{{sortable_option['optionId']}}_dn" 
+					  onchange="canvasColorization(this)"
+                      data-label="{{ sortable_option['label'] }}"
+                      data-charge="" 
+                      data-chargeCode=""  
+                      data-dn=""  
+                      name="{{sortable_option['optionId']}}" 
+                      type="text" 
+                      class="autocomplete" 
+                      data-key="{{sortable_option['optionId']}}" />
+                    <input class="btn choose-button  fix_choose" readonly="readonly"
+                      onclick="popUp('{{sortable_option['optionId']}}',SeqOptions, Seq_Options)" 
+                      {% if common_option[1]["optionMessage"] %} 
+                        data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="{{ common_option[1]["optionMessage"] }}" 
+                        data-html="true" 
+                      {% endif %} 
+                      value="(Or) Choose" />
+					   {%- if canvasEnabled -%}
+                      <button
+                        class="spacerbtn"
+                        onclick="addSpacer(this,'{{sortable_option['optionId']}}_dn')"
+                        data-toggle='tooltip'
+                        style="margin-left: 55%; padding:0px!important;position: absolute;top: 45%;"
+                        data-placement='top'
+                        title='Add Spacer '>
+                        <i
+                          class="fa fa-plus-square"
+                          aria-hidden="true"></i>
+                      </button>
+                    {%- endif -%}
+                  </div>
+                  <div class="pop-chosen-value" 
+                    data-option-id="{{sortable_option['optionId']}}" 
+                    {% if sortable_option["optionMessage"] %} 
+                      data-toggle="tooltip" 
+                      data-placement="top" 
+                      title="{{ sortable_option["optionMessage"] }}" 
+                      data-html="true" 
+                    {% endif %} >
+                    <a  onclick="clearChoosenValue(this)" class="close" >&times;</a>
+                    <input name="{{sortable_option['optionId']}}_id" 
+                      id="{{sortable_option['optionId']}}_id" 
+                      {% if sortable_option['isRequired'] %} required {% endif %} 
+                      type="hidden" />
+                    <img alt="" loading='lazy' class="img_border_i" id="{{sortable_option['optionId']}}" src="" />
+                    <div id="{{sortable_option['optionId']}}_txt" ></div>
+					 {%- if canvasEnabled -%}
+                      <div class="slider-container">
+                        <input
+                          type="range"
+                          id="slider_{{sortable_option['optionId']}}_dn"
+                          class="slider customiz"
+                          max="100"
+                          min="30"
+                          value="70"
+                          step="5"
+                          onchange="onSliderChange(this,'{{sortable_option['optionId']}}_dn')" />
+                        <span id="sliderValue">70</span>
+                      </div>
+                    {%- endif -%}
+                  </div>
+				  {%- if canvasEnabled -%}
+                    <div class="spacer {{sortable_option['optionId']}}_dn"></div>
+                  {%- endif -%}
+                {%- else -%}
+                  <select class="{%- if canvasEnabled -%} SpacerBtn {% endif  %} fontapply extraFieldValue" 
+                   {% if sortable_option['isExtraField'] %} onchange="eitherOrValidation(this,'select'); canvasColorization(this,'{{ sortable_option['optionId'] }}');" {% endif %}
+                    data-label="{{ sortable_option['label'] }}"  
+                    name="{{ sortable_option['optionId'] }}" 
+                    id="{{ sortable_option['optionId'] }}" 
+                    {% if sortable_option['isRequired'] %} required {% endif %} 
+                    {% if sortable_option["optionMessage"] %} 
+                      data-toggle="tooltip" 
+                      data-placement="top" 
+                      title="{{ sortable_option["optionMessage"] }}" 
+                      data-html="true" 
+                    {% endif %} >
+                    <option  value=""  selected>- Select an Option - </option>
+                    {%- for block_swatch in sortable_option.values -%}      
+                    {%- capture block_swatch_id -%}{{block_swatch.id}}-{{forloop.index}}{%- endcapture -%}     
+                      <option value="{{ block_swatch.id }}" >{{ block_swatch.name | escape }}</option>
+                    {%- endfor -%}
+                    
+                  </select> 
+                   {%- if canvasEnabled -%}
+                    <button
+                      data-toggle='tooltip'
+                      data-placement='top'
+                      onclick="fontedit(this,'{{ sortable_option['optionId'] }}','{{ sortable_option['label'] }}','{{productFontSizes}}')"
+                      class="fontEdit"
+                      title='Edit Font'>
+                      {% comment %} <i class="fa fa-ellipsis-v" aria-hidden="true"></i> {% endcomment %}
+                      <img class="fonteditImg" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/edit_icon_863405ed-20e1-4cd2-a8e6-37e5280c65e8.png?v=1704190370" >
+                    </button>
+                    <button
+                      class="spacerbtn "
+                      style=" position: absolute;top: 76%;z-index: 1;right: 1%;"
+                      onclick="addSpacer(this,'{{ sortable_option['optionId'] }}')"
+                      data-toggle='tooltip'
+                      data-placement='top'
+                      title='Add Spacer '>
+                      <i class="fa fa-plus-square" aria-hidden="true"></i>
+                    </button>
+                  {%- endif -%}
+                  {%- if canvasEnabled -%}
+                    <div class="spacer {{ sortable_option['optionId'] }}"></div>
+                  {%- endif -%}              
+                 {% if sortable_option['isExtraField'] %}
+                   <div>
+                    <div class="or_clause" style="padding:10px opx;">
+                      <span class="or_clause_text">Or </span>
+                    </div>
+                    <label for="" class="product-form__option-name text--strong " {%- if canvasEnabled and window.innerWidth > 999 -%} style="margin-left: 40px;" {% endif  %}>
+                        Enter Place Name                                   
+                    </label>
+                    <input type="text"   class="print_input_place place_validation fontapply" {%- if canvasEnabled -%} style="width:52%;margin-left: 0;" {% endif  %} onkeypress="validate_Extrainputtext_ontype(this)"
+                    oninput="validate_splChar_ontype(this); eitherOrValidation(this,'input'); canvasColorization(this,'{{ sortable_option['optionId'] }}ExtraField')"
+                    data-label="{{ sortable_option['label'] }}"  
+                    name="{{ sortable_option['optionId'] }}ExtraField"
+                    id="{{ sortable_option['optionId'] }}ExtraField"
+                    {% if sortable_option['isRequired'] %} required {% endif %}
+                    {% if sortable_option["optionMessage"] %}
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="{{ sortable_option["optionMessage"] }}"
+                      data-html="true"  
+                    {% endif %}  data-option-display="30" maxlength="30"/>  
+                    {%- if canvasEnabled -%}
+                        <button
+                          data-toggle='tooltip'
+                          data-placement='top'
+                          onclick="fontedit(this,'{{ sortable_option['optionId'] }}ExtraField','Enter Place Name','{{productFontSizes}}')"
+                          class="fontEdit"
+                          title='Edit Font'>
+                          {% comment %} <i class="fa fa-ellipsis-v" aria-hidden="true"></i> {% endcomment %}
+                      <img class="fonteditImg" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/edit_icon_863405ed-20e1-4cd2-a8e6-37e5280c65e8.png?v=1704190370" >
+                        </button>
+                        <button
+                          class="spacerbtn "
+                          style=" position: absolute;top: 76%;z-index: 1;right: 1%;"
+                          onclick="addSpacer(this,'{{ sortable_option['optionId'] }}ExtraField')"
+                          data-toggle='tooltip'
+                          data-placement='top'
+                          title='Add Spacer '>
+                          <i class="fa fa-plus-square" aria-hidden="true"></i>
+                        </button>
+                      {%- endif -%}			
+                  </div>
+                  
+                  {% endif %}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+          </div>
+          {%- if canvasEnabled -%}
+            <div class="spacer {{ sortable_option['optionId'] }}ExtraField"></div>
+          {%- endif -%}		
+<!--           <div class="error {{sortable_option['optionId']}}"></div> -->
+           <div class="error {% if sortable_option['isExtraField'] %}  error_bg_color {% endif %} {% if sortable_option['isOptionHighlighter'] %}  error_bg_color {% endif %}{{sortable_option['optionId']}}"></div>
+        </li>
+    {%- endfor -%}
+    
+    {%- if subTypeIds contains prodSubTypeId -%}
+    {%- else -%}
+    <li class="list-group-item eitheror-group either_grp"  
+      style="" 
+      data-type="{{ sort_type }}" >
+      {%- for option in EitherOrOptions -%}
+         {%- assign eitheror_option = shop.metafields.EitherOrOptions[option].value -%}
+        {%- assign content_length = eitheror_option.values.size -%}
+        {%- if forloop.index > 1 -%}
+          <div class="or_clause or_clause1 custom_ui" >
+            <span class="or_clause_text">Or </span>
+          </div>
+        {%- endif -%}
+        {%- assign content_type = "input-text" -%}
+        {%- if eitheror_option.stockDesignValue != "" and eitheror_option['isUploadEnabled']==false -%}
+          {%- if eitheror_option['isViewOption'] -%}
+            {%- assign content_type = "popup" -%}
+            {%- else -%}
+            {%- assign content_type = "popup" -%}
+          {%- endif -%}
+        {%- else -%}
+          {%- if content_length <= 0 -%}
+            {%- if eitheror_option.isUploadEnabled  -%}
+              {%- assign content_type = "input-file" -%}
+              {%- else -%}     
+              {%- assign content_type = "input-text" -%}
+            {%- endif -%}
+            {%- else -%}
+              {%- unless eitheror_option.isUploadEnabled  -%}
+                {%- if eitheror_option['isViewOption'] -%}
+                  {%- assign content_type = "popup" -%}
+                  {%- else -%}
+                  {%- assign content_type = "select" -%}
+                {%- endif -%}
+              {%- endunless -%}
+          {%- endif -%}
+        {%- endif -%}
+
+        <div class="content_comes_here {% if content_type == "input-file" %} custom_ui {% endif  %}"
+          data-option-id="{{ eitheror_option.optionId }}" 
+          data-type="{{ content_type }}" >
+          {%- if eitheror_option.stockDesignValue != "" and eitheror_option['isUploadEnabled']==false -%}
+            <div class="product-form__option info-option" data-selector-type="select">
+					{%- if canvasEnabled -%}
+                    {%- if forloop.index == 1 -%}
+                      <img
+                        class="my-handle seqeor"
+                        src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/imageedit_4_7998446026.png?v=1711522827"
+                        style="height: 25px;"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        data-html="true"
+                        title="&nbsp;&nbsp;&nbsp;&nbsp;Click and drag <img src='https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Customizer-Tooltip.png?v=1724334191' width='25px' > <br> to move print line <br>up or down"></img>
+                    {%- else -%}
+                      <span class="my-handle-seqeor-empty"></span>
+                    {%- endif -%}
+                    {%- if forloop.index == 1 -%}
+                      <span class="sort_index seqeor"></span>
+                    {%- else -%}
+                      <span class="sort_index-seqeor-empty"></span>
+                    {%- endif -%}
+                  {%- endif -%}
+              <label data-toggle="tooltip" 
+                data-placement="top" 
+                title= "{{shop.metafields.helpText.stkcusDesign}}"
+                style=" width: 20px;">
+                <i class="fa fa-info-circle" style="font-size:15px;color:#00badb"></i></label>
+                <span class="showtoggle" style="color: red; cursor: pointer; float: right; display:none;" onclick="closeCustomDesign()">
+                  <i class="fa fa-times" aria-hidden="true"    
+                  data-toggle="tooltip" 
+                  data-placement="top" 
+                  title="Close" 
+                  data-html="true"></i>
+                </span>
+				{%  comment  %} 
+                {%- if canvasEnabled -%}
+                    <button
+                      class="spacerbtn"
+                      style="float:right; margin-right: 0%;;"
+                      onclick="addSpacer(this,'eitherorSeq_option')"
+                      data-toggle='tooltip'
+                      data-placement='top'
+                      title='Add Spacer '>
+                      <i class="fa fa-plus-square" aria-hidden="true"></i>
+                    </button>
+                  {% endif %} {% endcomment %}
+              {%- if eitheror_option['isViewOption'] -%}
+                <div id="{{eitheror_option['optionId']}}_popup" class="popup" ></div>
+                {% comment %} <script>
+                  var popupeitherOptions = {{EitherOrOptions | json}};
+                  var popup_eitherOptions = {{shop.metafields.EitherOrOptions | json}};
+                </script> {% endcomment %}
+                {%- if eitheror_option.stockDesignValue != "" -%}
+                  <div class="custom_ui" >
+                    <label class="product-form__option-name text--strong" 
+                      for="{{ eitheror_option['optionId'] }}"> 
+                        {{ eitheror_option.label }} 
+                    </label>
+                    <input  id="{{eitheror_option['optionId']}}_btn" 
+                      type="button" readonly="readonly"
+                      class="btn choose-value" 
+                      value="Select a Stock Design" 
+                      onclick="popUpM('{{eitheror_option.optionId}}', 'EithersMR', '{{eitheror_option.stockDesignValue}}')" 
+                      {% if eitheror_option["optionMessage"] %} 
+                        data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="{{ eitheror_option["optionMessage"] }}" 
+                        data-html="true" 
+                      {% endif %} >
+                  </div>
+                  <div class="pop-chosen-value" 
+                    data-option-id="{{eitheror_option['optionId']}}" >
+                     <a  onclick="clearChoosenValue(this)" class="close" >&times;</a>
+                    <input data-bind="autocomplete" 
+                      data-label="{{ eitheror_option.label }}" 
+		      data-popup="seq_stock"
+                      data-key="{{eitheror_option['optionId']}}" 
+                      name="{{eitheror_option['optionId']}}" 
+                      id="{{eitheror_option['optionId']}}_id" 
+                      type="hidden" 
+					  onchange="canvasColorization(this)"
+                      value="" 
+                      data-charge="" 
+                      data-design="Stock" 
+                      data-chargeCode="" />
+                    <img alt="" loading='lazy' id="{{eitheror_option['optionId']}}" src="" >
+                    <div id="{{eitheror_option['optionId']}}_txt" ></div>
+                  </div>
+                {%- else -%}
+                  <label class="product-form__option-name text--strong" 
+                    for="{{ eitheror_option['optionId'] }}">
+                      {{ eitheror_option['label'] }}
+                  </label>
+                  <div class="choose-value-container" >
+                    <script> 
+                      ac["{{ eitheror_option.optionId }}"] = [
+                        {%- for meta_ref_id in eitheror_option.metaReferenceValues  -%}
+                          {%- if shop.metafields.MetaReference[meta_ref_id] -%}
+                            {%- assign meta_ref_values = shop.metafields.MetaReference[meta_ref_id] -%}
+                            {% if forloop.index > 1 %} , {% endif %}
+                            {{ meta_ref_values.values | json }}
+                          {%- endif -%}
+                        {%- endfor -%}
+                      ]; 
+                    </script>
+                    <input type="text" 
+                      data-bind="autocomplete" 
+                      data-label="{{ eitheror_option['label'] }}" 
+                      name="{{eitheror_option['optionId']}}" 
+                      class="autocomplete" 
+                      data-key="{{eitheror_option['optionId']}}" />
+                    <input 
+                      class="btn choose-button set_width_i" readonly="readonly"
+                      onclick="popUp('{{eitheror_option.optionId}}', popupeitherOptions, popup_eitherOptions)" 
+                      {% if eitheror_option["optionMessage"] %} 
+                        data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="{{ eitheror_option["optionMessage"] }}" 
+                        data-html="true" 
+                      {% endif %} 
+                      value="(Or) Choose" > 
+                  </div>
+                  <div class="pop-chosen-value" 
+                    data-option-id="{{eitheror_option['optionId']}}" >
+                    <a  onclick="clearChoosenValue(this)" class="close" >&times;</a>
+                    <input id="{{eitheror_option['optionId']}}_id" 
+                      type="hidden" 
+                      value="" 
+                      class="meta-reference-master" />
+                    <img alt="" loading='lazy' id="{{eitheror_option['optionId']}}" src="" >
+                    <div id="{{eitheror_option['optionId']}}_txt" ></div>
+                  </div>
+                {%- endif -%}
+              {%- endif -%}
+            </div>
+          {%- else -%}
+            {%- if content_length <= 0 -%}
+              {%- if eitheror_option.isUploadEnabled  -%}
+                <div class="product-form__option info-option custom_ui" data-selector-type="select">
+                  {% comment %} {%- if forloop.index == 1 -%}
+                    <span class="my-handle seqeor fa fa-bars"></span>
+                    {%- else -%}
+                    <span class="my-handle-seqeor-empty"></span>
+                  {%- endif -%}
+                  {%- if forloop.index == 1 -%}
+                    <span class="sort_index seqeor"></span>
+                    {%- else -%}
+                    <span class="sort_index-seqeor-empty"></span>
+                  {%- endif -%} {% endcomment %}
+                  <label for="{{ eitheror_option.optionId}}" class="product-form__option-name text--strong seqeor">{{ eitheror_option.label }}: {% if eitheror_option['isRequired'] %} * {% endif %}</label>
+                   {% comment %} <input class=""  data-label="{{ eitheror_option['label'] }}" 
+                     type="file" 
+                     name="{{ eitheror_option.optionId}}" 
+                     id="{{ eitheror_option.optionId}}" 
+                     {% if eitheror_option['isRequired'] %} 
+                       required 
+                     {% endif %} 
+                     {% if eitheror_option["optionMessage"] %} 
+                       data-toggle="tooltip" 
+                      data-placement="top" 
+                       title="{{ eitheror_option["optionMessage"] }}" 
+                       data-html="true" 
+                     {% endif %} 
+                     data-key="{{eitheror_option['optionId']}}" /> {% endcomment %}
+                  {% comment %} <input type="hidden" name="upload_0" data-uploader="ref" value="ckv27c7d700013o7onkhjffvq"> {% endcomment %}
+                  <!-- <input type="hidden" name="upload_0" data-uploader="ref" value=""> -->
+                  <!-- <input type="text" value="" class="ImageName_CustomDesign_28CSDES" name="upload_logo_CustomDesign_0">
+                  <input type="text" value="" class="ImageName_Title_Division_28CSDES" name="upload_logo_title_division_0"> -->
+
+                    <!-- <div class="uploader-item" data-uploader="chooser" data-uploader-key="CustomDesign_28CSDES" data-uploader-label="" >
+                        <label class="uploader-item-label"></label>
+                        <button type="button" class="uploader-button" data-control="choose">Upload Your File-2</button>
+                    </div> -->
+
+                    <!-- <ul class="attachments customization-form">
+                      <li class="uploader-item" data-uploader="chooser" data-uploader-key="CustomDesign_28CSDES" data-uploader-label="">
+                        <div class="uploader-item">
+                            <label class="uploader-item-label"></label>
+                            <button type="button" class="uploader-button" data-control="choose">Upload Your File-2</button>
+                        </div>
+                      </li>
+                  </ul> -->
+
+                  {% comment %} <input type="hidden" name="upload_0" data-uploader="ref" value="">
+                  <ul class="attachments customization-form">
+                    <li data-uploader="chooser" data-uploader-key="CustomDesign_{{ eitheror_option.optionId }}" data-uploader-label="">
+                    </li>
+                  </ul> {% endcomment %}
+<input
+                        id="uploadclick_seq"
+                        name="uploadclick_seq"
+                        type="button"
+                        readonly="readonly"
+                        class="btn choose-value  set_width_select"
+                        value="Upload Your Design">
+                 <div
+                        id="yourZoom_uploader"
+                        data-uploader="item"
+                        data-uploader-ref="">
+
+                        <input
+                          type="hidden"
+                          data-option-id="{{ eitheror_option.optionId }}_uploadImage"
+                          name="{{ eitheror_option.optionId }}_uploadImage"
+                           id="{{ eitheror_option.optionId }}"
+                          data-uploader="ref"
+                          onchange="canvasColorization(this)"
+                          value="">
+                        <div class="attachments customization-form">
+                          <div
+                            class="image_position"
+                            style="font-size:12px;color:black;position: relative; left: 20px;"
+                            data-uploader="chooser"
+                            data-uploader-key="Ribbon"
+                            data-uploader-label="">
+                            <div class="uploader-item">
+                              <div class="uploader-preview" title="">
+                                <a data-control="choose">
+                                  <img alt="" loading='lazy' alt="" src="">
+                                  <img alt="" loading='lazy' id='preview' alt="" src="">
+                                </a>
+                
+                                <label class="filename"></label>
+                              </div>
+                              <label class="uploader-item-label"></label>
+                              <a
+                                onclick="clearuploadedValue(this)"
+                                class="close custom_Ribbon"
+                                id="uploader-close">×</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                  
+                <div>
+                  <div class="or_clause or_clause1" >
+                     <span class="or_clause_text">Or </span>
+                  </div>
+                  <label for="" 
+                    class="product-form__option-name text--strong">
+                    
+                      Enter file Name or <br><span>Design # on file w/ Hodges</span>
+                   
+                  </label>
+                 <!-- <i class="fa fa-info-circle"
+                          title="{{ shop.metafields.helpText.PreviousDesignLimit.value }}"
+                          style="font-size:16px;color:#ae1a1a"></i> -->
+                  <label data-toggle="tooltip" 
+                  data-placement="top" 
+                  title= "{{shop.metafields.helpText.PreviousDesignLimit.value}}"style="
+                  width: 20px;">
+                  <i class="fa fa-info-circle"  style="font-size:15px;color:#00badb"></i></label>
+                  <input type="text" 
+                    id="enterUploadfile"  class="previouslimit"  maxlength="7"               
+                    data-option-id="{{ eitheror_option.optionId }}_enterUploadfile" 
+                    name="{{ eitheror_option.optionId }}_enterUploadfile"
+                    oninput="validate_splChar_ontype(this)"/>
+                   <br>
+              <span id="error-message" style="display:none;color:red;font-size:12px;">A maximum of 6 characters are allowed</span>
+              <span class="error {{ eitheror_option.optionId }}_enterUploadfile" style="display:none;color:red;font-size:12px;"></span>
+
+                <button class="spacerbtn" style="float:right; margin-right: 0%;margin-top: -31px; display: block;" onclick="addSpacer(this,'eitherorSeq_option')" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add Spacer ">
+                <i class="fa fa-plus-square" aria-hidden="true"></i>
+                 </button>
+                </div>
+                 {% comment %}{%- if canvasEnabled -%}
+                  <button
+                    class="spacerbtn"
+                    style="float:right; margin-right: 0%;"
+                    onclick="addSpacer(this,'eitherorSeq_option')"
+                    data-toggle='tooltip'
+                    data-placement='top'
+                    title='Add Spacer '>
+                    <i class="fa fa-plus-square" aria-hidden="true"></i>
+                  </button>
+                {% endif %}{% endcomment %}
+                </div>
+              {%- else -%}                
+                <div class="product-form__option info-option" data-selector-type="select">
+<!--                   {%- if forloop.index == 1 -%}
+                    <span class="my-handle seqeor fa fa-bars"></span>
+                    {%- else -%}
+                    <span class="my-handle-seqeor-empty"></span>
+                  {%- endif -%}
+                  {%- if forloop.index == 1 -%}
+                    <span class="sort_index seqeor"></span>
+                    {%- else -%}
+                    <span class="sort_index-seqeor-empty"></span>
+                  {%- endif -%} -->
+                  <label for="{{ eitheror_option['optionId'] }}" 
+                    class="product-form__option-name text--strong seqeor">
+                      {{ eitheror_option.label }}: {% if eitheror_option['isRequired'] %} * {% endif %}
+                  </label>
+                  <input type="text" 
+                    data-key="{{eitheror_option['optionId']}}" 
+                    data-label="{{ eitheror_option['label'] }}" 
+                    id="eitheror_option['optionId']" 
+                    class="" 
+                    name="eitheror_option['optionId']" 
+                    {% if eitheror_option['isRequired'] %} required {% endif %} 
+                    {% if eitheror_option["optionMessage"] %} 
+                      data-toggle="tooltip" 
+                      data-placement="top" 
+                      title="{{ eitheror_option.optionMessage }}" 
+                      data-html="true" 
+                    {% endif %} 
+                    data-option-display="{{ eitheror_option['optionDisplay'] }}" maxlength = "{{ eitheror_option['optionDisplay'] }}" >
+                </div>
+              {%- endif -%}            
+            {%- else -%}
+              {%- unless eitheror_option.isUploadEnabled  -%}
+                <div class="product-form__option info-option" data-selector-type="select">
+<!--                   {%- if forloop.index == 1 -%}
+                    <span class="my-handle seqeor fa fa-bars"></span>
+                    {%- else -%}
+                    <span class="my-handle-seqeor-empty"></span>
+                  {%- endif -%}
+                  {%- if forloop.index == 1 -%}
+                    <span class="sort_index seqeor"></span>
+                    {%- else -%}
+                    <span class="sort_index-seqeor-empty"></span>
+                  {%- endif -%} -->
+                  <label for="streamer-size" 
+                    class="product-form__option-name text--strong seqeor">
+                    {{ eitheror_option.label }}: {% if eitheror_option['isRequired'] %} * {% endif %}
+                  </label>
+                  {%- if eitheror_option['isViewOption'] -%}
+                    <div id="{{eitheror_option['optionId']}}_popup" class="popup" ></div>
+                    {% comment %} <script>
+                      var EitherOption = {{EitherOrOptions | json}};
+                      var Either_Option = {{shop.metafields.EitherOrOptions | json}};
+                    </script> {% endcomment %}
+                    <input data-key="{{eitheror_option['optionId']}}" 
+                      data-label="{{ eitheror_option['label'] }}" 
+                      name="{{eitheror_option['optionId']}}" 
+                      id="{{eitheror_option['optionId']}}_btn" 
+                      class="btn choose-value" 
+                      type="button" readonly="readonly"
+                      data-bind="autocomplete" 
+                      value="Select an Option" 
+                      onclick="popUp('{{eitheror_option['optionId']}}',EitherOption,Either_Option)" 
+                      {% if eitheror_option["optionMessage"] %} 
+                        data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="{{ eitheror_option.optionMessage }}" 
+                        data-html="true" 
+                      {% endif %} />
+                    <div class="pop-chosen-value" 
+                      data-option-id="{{eitheror_option['optionId']}}" >
+                      <a  onclick="clearChoosenValue(this)" class="close" >&times;</a>
+                      <input class="img_border_i" name="{{eitheror_option['optionId']}}_id" 
+                        id="{{eitheror_option['optionId']}}_id" 
+                        {% if eitheror_option['isRequired'] %} required {% endif %} 
+                        type="hidden" /> 
+                      <img alt="" loading='lazy' id="{{eitheror_option['optionId']}}" src="" >
+                      <div id="{{eitheror_option['optionId']}}_txt" ></div>
+                    </div>
+                  {%- else -%}
+                    <select class="" 
+                      data-key="{{eitheror_option['optionId']}}" 
+                      data-label="{{ eitheror_option['label'] }}" 
+                      name="{{ eitheror_option.optionId }}" 
+                      id="{{ eitheror_option.optionId }}" 
+                      {% if eitheror_option['isRequired'] %} required {% endif %} 
+                      {% if eitheror_option['isRequired'] %} required {% endif %} 
+                      {% if eitheror_option["optionMessage"] %} 
+                        data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="{{ eitheror_option.optionMessage }}" 
+                        data-html="true" 
+                      {% endif %} >
+                      <option value="" selected>- Select an Option - </option>
+                      {%- for block_swatch in eitheror_option.values -%}      
+                        {%- capture block_swatch_id -%}{{block_swatch.id}}-{{forloop.index}}{%- endcapture -%}     
+                        <option value="{{ block_swatch.id }}" >{{ block_swatch.name | escape }}</option>
+                      {%- endfor -%}
+                    </select>
+                  {%- endif -%}
+                </div>
+              {% endunless %}
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+        <div class="error {{  }}"></div>
+      {%- endfor -%}
+	    {%- if canvasEnabled -%}
+            <div class="new_custom" style="display: none;" >
+            <img
+            src=""
+            alt="Image Alt Text"
+            id="newcustomImg">
+            <label class="filename_newcustom"></label>
+            <div class="slider-new"> 
+            <input type="range" id="slider_eitherorSeq_option_new" class="slider customiz" max="100" min="30" value="70" step="5" onchange="onSliderChange_new(this,'slider_eitherorSeq_option')" data-gtm-form-interact-field-id="2">
+            <span id="sliderValue_new">70</span> </div>
+            <button id="custom_newui" onclick="displayCustomUi(this)">
+              <img class="fonteditImg" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/edit_icon_863405ed-20e1-4cd2-a8e6-37e5280c65e8.png?v=1704190370">
+            </button>
+          </div>
+             <!-- <button class="spacerbtn" style="float:right; margin-right: 0%;margin-top: -31px; display: block;" onclick="addSpacer(this,'eitherorSeq_option')" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add Spacer ">
+             <i class="fa fa-plus-square" aria-hidden="true"></i>
+         </button> -->
+          {%- endif -%}
+          {%- if canvasEnabled -%}
+            <div class="slider-container eitherorSeq_option" style="margin-left: 42%;display:none">
+              <div class="slider-content"><input
+                type="range"
+                id="slider_eitherorSeq_option"
+                class="slider customiz"
+                max="100"
+                min="30"
+                value="70"
+                step="5"
+                onchange="onSliderChange(this,'eitherorSeq_option')" />
+              <span id="sliderValue">70</span></div>
+            </div>
+            <div class="spacer eitherorSeq_option design_option" id='eitherorSeq_option'></div>
+          {%- endif -%}
+    </li>
+  {%- endif -%}
+   {%- if canvasEnabled -%}
+      <button
+        class="spacerbtn bottom"
+        onclick="addSpacer(this,'bottomSpacer')"
+        data-toggle='tooltip'
+        data-placement='top'
+        title='Add Bottom Spacer '>
+        <i class="fa fa-plus-square" aria-hidden="true"></i>
+      </button>
+      <input
+        type="text"
+        id="bottomSpacer"
+        style="display: none;">
+      <div class="spacer bottomSpacer"></div>
+    {% endif %}
+  </ul>
+  
+</div>
+<div class="product-form__option info-option">
+    <ul id="FooterOptions" >
+      {%- for option in FooterOptions -%}
+        <hr>
+        {%- assign footer_option = shop.metafields.FootNoteOptions[option].value -%} 
+          <li class="list-group-item" style="border: 0px !important; padding: 0px !important;" >
+          
+                <label for="{{ footer_option['optionId'] }}" 
+                    class="product-form__option-name text--strong">
+                    {{ footer_option['label'] }} 
+                    {% if footer_option['isRequired'] %} * {% endif %}
+                  </label>
+                  <textarea  type="text" 
+                    data-label="{{ footer_option['label'] }}" 
+                    id="{{ footer_option['optionId'] }}" 
+                    class="set_text_area txtarea_validation" 
+                    name="{{ footer_option['optionId'] }}" 
+                    {% if footer_option['isRequired'] %} required {% endif %} 
+                    placeholder="{{ footer_option['label'] }}" 
+                    {% if footer_option["optionMessage"] %} 
+                      data-toggle="tooltip" 
+                      data-placement="top" 
+                      title="{{ footer_option["optionMessage"] }}"
+                      data-html="true" 
+                    {% endif %} 
+                    data-key="{{ footer_option['optionId'] }}" 
+                    data-charge="{{ footer_option['additionalCharge'] }}" 
+                    data-charge-type="{{ footer_option["chargeType"]}}" maxlength="1000"
+                    oninput=validate_splChar_ontype(this)></textarea>
+           <div> <span class=" txtarea_validation_span" style="color: red;padding: 2px 16px;font-size: 11px!important;display:none;"></span></div>
+            
+          </li>
+        {%- endfor -%}
+    </ul>
+ </div>
+ <script>
+$(document).ready(function() {
+  tabkeyBehavior();
+
+  // inputsAndSelects.eq(0).focus();
+});
+
+</script>

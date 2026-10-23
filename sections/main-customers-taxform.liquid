@@ -1,0 +1,303 @@
+{% assign  tax-exempt =  customer.metafields.tax-exempt.Details.value   %}
+{%  assign count = tax-exempt | size %}
+<style>                                                                                                                                                                                                                                                           
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+  }
+
+  .prev {
+    left: 10px;
+  }
+
+  .next {
+    right: 10px;
+  }
+  .page__header--stack{
+    display:none;
+   }
+</style>
+<section data-section-id="{{ section.id }}" data-section-type="tax">
+  <div class="container container--flush">
+    <div class="page__sub-header">
+      <nav aria-label="{{ 'general.breadcrumb.title' | t }}" class="breadcrumb">
+        <ol class="breadcrumb__list" role="list">
+          <li class="breadcrumb__item">
+            <a class="breadcrumb__link link" href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t }}</a> {%- render 'icon', icon: 'arrow-right' -%}
+          </li>
+          <li class="breadcrumb__item">
+            <a class="breadcrumb__link link" href="{{ routes.account_url }}">{{ 'general.breadcrumb.account' | t }}</a> {%- render 'icon', icon: 'arrow-right' -%}
+          </li>
+          <li class="breadcrumb__item">
+            <a class="breadcrumb__link link" href="{{ routes.account_url }}">{{ 'customer.general.orders' | t }}</a> {%- render 'icon', icon: 'arrow-right' -%}
+          </li>
+          <li class="breadcrumb__item">
+            <span class="breadcrumb__link" aria-current="page">My tax-Exempt</span>
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+  <div class="layout">
+    <div class="layout__section layout__section--secondary">
+      <div class="card card--sticky hidden-pocket">
+        <div class="card__section card__section--tight">
+          <div class="card__linklist">
+            <a href="{{ routes.account_url }}" class="card__linklist-item link">{{ 'customer.general.orders' | t }}</a>
+            <a href="{{ routes.account_addresses_url }}" class="card__linklist-item link">{{ 'customer.general.addresses' | t }}</a>
+            <a href="/pages/tax-details" class="card__linklist-item link text--strong">My tax-Exempt</a>
+            <a href="{{ routes.account_logout_url }}" class="card__linklist-item link" data-no-instant>{{ 'customer.general.logout' | t }}</a>
+          </div>
+
+        </div>
+      </div>
+
+             <div class="value-picker-wrapper hidden-tablet-and-up">
+          <div id="account-selector" class="value-picker" aria-hidden="true">
+            <div class="value-picker__inner">
+
+
+              <div class="value-picker__choice-list">
+                
+              <a href="{{ routes.account_url }}" class="value-picker__choice-item is-selected">{{ 'customer.general.orders' | t }} {% render 'icon', icon: 'check-2' %}</a>
+              <a href="{{ routes.account_addresses_url }}" class="value-picker__choice-item">{{ 'customer.general.addresses' | t }} {% render 'icon', icon: 'check-2' %}</a>
+              <a href="/pages/tax-details" class="card__linklist-item link">My tax-Exempt {% render 'icon', icon: 'check-2' %}</a>
+              <a href="{{ routes.account_logout_url }}" class="value-picker__choice-item" data-no-instant>{{ 'customer.general.logout' | t }} {% render 'icon', icon: 'check-2' %}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="layout__section">
+        <div class="card">
+          <div class="{% if count == 0 %}card__section card__section--tight{% else %}card__header card__header--tight{% endif %}">
+            <h1 class="heading h1">My tax-Exempt</h1>
+          </div>
+         
+          {%- if count == 0 -%}
+            <div class="card__section">
+              <div class="empty-state empty-state--extra-tight">
+                <p class="empty-state__icon-description">No tax details found.</p>
+              </div>
+            </div>
+          {%- else -%}
+            {% assign pageSize = 10 %}
+            {% assign totalItems = count %}
+            {% assign fullPages = totalItems | divided_by: pageSize %}
+            {% assign remainingItems = totalItems | modulo: pageSize %}
+            {% assign totalPages = fullPages %}
+            {% assign currentPage = 1 %}
+            {% assign start = 0 %}
+            {% assign end = pageSize | minus: 1 %}
+            {% assign remaining = count %}
+            {% if remainingItems > 0 %}
+              {% assign totalPages = totalPages | plus: 1 %}
+            {% endif %}
+            <div class="table-wrapper">
+              <table class="table table--loose">
+                <thead>
+                  <tr>
+                    <th class="pro_respon" style="font-weight: bold;width:20%;"> Customer Id </th>
+                  <th class="table__cell--center" style="text-align: justify;font-weight: bold;width:20%;"> File Name </th>
+                  <th class="table__cell--right" style="padding-right: 30px;font-weight: bold;width:20%;">Expiration date </th>
+                  <th class="table__cell--right"style="padding-right: 30px;font-weight: bold;width:20%;">File Replaced By Admin</th>
+                  <th class="table__cell--right"style="padding-right: 30px;font-weight: bold;width:20%;">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in tax-exempt %}
+                    {% if forloop.index0 >= start and forloop.index0 <= end %}
+                      <tr>
+                        <td> {{ item.osasId }} </td>
+                        <td> {{ item.taxFileName }}</td>
+                        <td> {{ item.taxFileExpiryDate}} </td>
+                        <td> {% if item.isFileReplaced %} Yes {% else %} No {% endif %}</td>
+                        <td style="padding-right: 30px">
+                          <a href="https://hops-connect.dev.hodgesbadge.com/api/BlobStorage/DownloadFile/{{ item.taxFileName }}?containerName=taxexemptdev" download>
+                            <label data-toggle="tooltip" data-placement="top" title="" 
+                            data-original-title="Download">
+                            <i class="fa fa-solid fa-download" style="font-size: 20px;"></i></label></a>
+            
+                        <a href="{{ item.taxFileBlobUrl }}" target="_blank">
+                            <label data-toggle="tooltip" data-placement="top" title="" data-original-title="View">
+                            <i class="fa fa-solid fa-eye" style="font-size: 20px;margin-left: 10px;cursor:pointer"></i></label>
+                        </a>
+                        </td>
+                      </tr>
+                    {% endif %}
+                     {% if forloop.index0 == end %}
+                        {% assign start = end | plus: 1 %}
+                        {% assign end = start | plus: pageSize | minus: 1 %}
+                      {% endif %}
+                    {% if remaining > 0 and forloop.index0 == end %}
+                    {% assign start = end | plus: 1 %}
+                    {% assign end = remaining | divided_by: pageSize | ceil | times: pageSize | plus: start | minus: 1 %}
+                    {% assign remaining = remaining | minus: pageSize %}
+                  {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+           {% if totalPages > 1 %}
+            <div class="pagination">
+                <div class="pagination__inner account__prev">
+                    <a href="#" class="pagination__link pagination__prev link pagination__item account__pagination" data-label="prev"  data-page="{{ currentPage }}" onclick="paginationAccount(event)" id="pagination__prev" >
+                      {%- render 'icon', icon: 'arrow-left' -%} {{- 'general.pagination.previous_page' | t -}}
+                    </a>
+                  
+                  {% for page in (1..totalPages) %}
+                    <span class="pagination__nav-item ">
+                      <a href="#" class="pagination__link  link" data-page="{{ page }}" onclick="paginationAccount(event)">{{ page }}</a>
+                    </span>
+                 
+                  {% endfor %}
+                     {% if currentPage < totalPages %}
+                    <a href="#" class="pagination__link pagination__next link pagination__item" data-label="next" data-page="{{ currentPage }}" onclick="paginationAccount(event)" id="pagination__next">
+                      {{- 'general.pagination.next_page' | t -}} {%- render 'icon', icon: 'arrow-right' -%}
+                    </a>
+                   {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  <div>
+</div>
+</div>
+</section>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(event) { 
+    var tableRows = document.querySelectorAll('.table-wrapper tbody tr');
+    var pageSize = {{ pageSize }};
+    var currentPage = 1;
+    var startIndex = (currentPage - 1) * pageSize;
+    var endIndex = Math.min(startIndex + pageSize, tableRows.length);
+    let pagination__prev = document.getElementById("pagination__prev");
+    pagination__prev.style.display="none";
+
+    for (var i = 0; i < tableRows.length; i++) {
+      tableRows[i].style.display = 'none';
+    }
+
+    for (var i = startIndex; i < endIndex; i++) {
+      if (tableRows[i]) {
+        tableRows[i].style.display = '';
+      }
+    }
+
+    var paginationLinks = document.querySelectorAll('.pagination__link');
+    paginationLinks.forEach(function(link) {
+      if (link.getAttribute('data-page') === '1' && link.getAttribute('data-label') != 'next' && link.getAttribute('data-label') != 'prev') {
+        link.setAttribute('data-count',link.getAttribute('data-page'))
+        link.classList.add('pagination__nav-item','is-active')
+        link.parentElement.classList.add('pagination__item--active');
+      } else {
+         link.classList.remove('pagination__nav-item','is-active')
+        link.parentElement.classList.remove('pagination__item--active');
+      }
+    });
+  });
+
+  function paginationAccount(event) {
+    event.preventDefault();
+     var targetPage;
+     var currentPage;
+    let pagination__prev = document.getElementById("pagination__prev");
+    pagination__prev.style.display="none";
+    if(event.target.getAttribute('data-label') == "next"){
+      pagination__prev.style.display="block";
+      var paginationLinks = document.querySelectorAll('.pagination__link');
+      paginationLinks.forEach(function(link) {
+      if (link.getAttribute('data-count')) {
+         currentPage =parseInt(link.getAttribute('data-count'))
+      }
+    });
+      targetPage = parseInt(currentPage) +1
+    }else if(event.target.getAttribute('data-label') == "prev"){
+      var paginationLinks = document.querySelectorAll('.pagination__link');
+      paginationLinks.forEach(function(link) {
+      if (link.getAttribute('data-count')) {
+         currentPage =parseInt(link.getAttribute('data-count'))
+      }
+    });
+      targetPage = parseInt(currentPage) -1
+    }
+    else{
+    targetPage = parseInt(event.target.getAttribute('data-page'));
+      if(targetPage == 1){
+        pagination__prev.style.display="none";
+      } else{
+         pagination__prev.style.display="block";
+      }    
+    }
+
+    var tableRows = document.querySelectorAll('.table-wrapper tbody tr');
+    var pageSize = {{ pageSize }};
+    var startIndex = (targetPage - 1) * pageSize;
+    var endIndex = Math.min(startIndex + pageSize, tableRows.length);
+    for (var i = 0; i < tableRows.length; i++) {
+      tableRows[i].style.display = 'none';
+    }
+
+    for (var i = startIndex; i < endIndex; i++) {
+      if (tableRows[i]) {
+        tableRows[i].style.display = '';
+      }
+    }
+    let pagination__next = document.getElementById("pagination__next");  
+    pagination__next.style.display = "block";
+    if (targetPage === {{ totalPages }}) {
+    pagination__prev.style.display="block";
+    pagination__next.style.display = "none";  
+    var start = (targetPage - 1) * pageSize;
+    let end = {{count}} 
+    for (let i = start; i < end.length; i++) {
+      if (tableRows[i]) {
+        tableRows[i].style.display = '';
+      }
+    }
+    }else{
+       pagination__next.style.display = "block";
+    }
+    var paginationLinks = document.querySelectorAll('.pagination__link');
+    paginationLinks.forEach(function(link) {
+       link.removeAttribute('data-count')
+       if(link.getAttribute('data-page') == parseInt(currentPage)+1 && event.target.getAttribute('data-label') == "next"){
+         link.setAttribute('data-count',parseInt(currentPage)+1) 
+         if(event.target.getAttribute('data-label') == "next"){
+         link.classList.add('pagination__nav-item','is-active')
+         }
+       }else if(link.getAttribute('data-page') == parseInt(currentPage)-1 && event.target.getAttribute('data-label') == "prev"){
+         link.setAttribute('data-count',parseInt(currentPage)-1) 
+       }
+      link.classList.remove('pagination__nav-item','is-active')
+      link.parentElement.classList.remove('pagination__item--active');
+    });
+     if(event.target.getAttribute('data-label') != "next"){
+     event.target.parentElement.querySelector('a').setAttribute('data-count',event.target.getAttribute('data-page') );
+     event.target.classList.add('pagination__nav-item','is-active');
+     }else if(event.target.getAttribute('data-label') != "prev"){
+        event.target.parentElement.querySelector('a').setAttribute('data-count',event.target.getAttribute('data-page'));
+        event.target.classList.add('pagination__nav-item','is-active');
+     }
+    event.target.parentElement.classList.add('pagination__item--active');
+  }
+
+
+  
+</script>
+
+
+{% schema %}
+{
+  "name": "tax"
+}
+{% endschema %}

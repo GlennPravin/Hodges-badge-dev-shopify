@@ -1,0 +1,446 @@
+<style>
+    #main{
+      background-color:#f3f5f6;
+    }
+    .con_top_fixed_full{
+      max-width: 2000px;
+      background-color: #e7ebee;
+    }
+    .team{
+      margin-top:20px;
+      margin-bottom:-20px;
+      margin-left:auto;
+      margin-right:auto;
+        
+    }
+      .con_header_txt {
+          max-width: revert;
+          /*max-width: 1626px;*/
+          padding: 20px 0px 20px 0px;
+          border: 1px solid var(--border-color);
+          border: 1px solid var(--border-color);
+  
+      }
+  
+      @media screen and (min-width: 1000px) {
+          .team__block-item {
+              width: calc(14.33333% - -23px) ! important;
+            border-radius: 19px ! important;
+  
+          }
+  
+          .mm {
+              margin: 2px!important;
+          }
+       .m_bottom_title{
+  margin-bottom: -27px !important;
+  }
+          
+      }
+      @media screen and (min-width: 641px) and (max-width: 1000px) {
+          
+         
+       .m_bottom_title{
+  margin-bottom: -27px !important;
+  }
+          
+      }
+  
+  
+      @media screen and (min-width: 641px) {
+          .team__block-item {
+              margin: 4px;
+              flex: none;
+              width: calc(38% - 30px);
+            
+            border-radius: 19px ! important;
+          }
+      }
+  
+      @media screen and (max-width: 641px) {
+          .team__block-item {
+  /*             width: calc(51.33333% - 8px); */
+              width: calc(47.33333% - 8px);
+             border-radius: 19px ! important;
+          }
+  
+          .block_Zero_margin {
+              margin: 0px ! important;
+          }
+  
+          .ml {
+              margin: 0px;
+          }
+  
+          .team__block-list_sd {
+              display: flex;
+            justify-content: flex-start;
+              flex-wrap: wrap;
+              border-radius: 0px;
+          }
+      }
+  
+      .team__member {
+          border-radius: 0px;
+          padding: 5px 5px 5px 5px ! important;
+          border: 1px solid var(--border-color) ! important;
+          /* border-radius: 3px; */
+          background: var(--secondary-background) ! important;
+      }
+  
+      .title_head {
+          border: 1px solid var(--border-color) ! important;
+          background-color: white;
+      }
+    #main {
+          /* background-color: #e7ebee; */
+          background-color: #fff;
+      }
+  
+      .con_outer {
+          padding: 5px 10px;
+          max-width: 450px;
+      }
+  
+      .card-design {
+          border-radius: 8px;
+  
+          /* margin-bottom: -4px;
+                                      margin-top: -4px; */
+          /* width: 100%; */
+      }
+  
+  
+      @media screen and (max-width: 920px) {
+  
+          .contanier_border_right {
+              border: 5px solid #1e2d7d;
+              border-radius: 10px;
+  
+          }
+      }
+  
+      @media screen and (min-width: 1000px) and (max-width: 1336px) {
+          .con_outer {
+              padding: 5px 10px;
+              max-width: 450px;
+          }
+  
+  
+          /* .contanier_border_right {
+                                  border: 10px solid;
+                                  border-image-slice: 1;
+                                  border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+                                  border-width: 4px;
+                                  border-bottom-right-radius: 10px;
+                                  border-bottom-left-radius: 0px;
+                                  border-top-left-radius: 0px;
+                                  border-top-right-radius: 10px;
+                                  border-radius: 10px;
+                              } */
+  
+      }
+  
+      @media screen and (min-width: 1337px) {
+          .con_outer {
+              padding: 5px 10px;
+              max-width: 450px;
+          }
+  
+          /* .contanier_border_right {
+                                  border: 10px solid;
+                                  border-image-slice: 1;
+                                  border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+                                  border-width: 4px;
+                                  border-bottom-right-radius: 10px;
+                                  border-bottom-left-radius: 10px;
+                                  border-top-left-radius: 10px;
+                                  border-top-right-radius: 10px;
+                                  border-radius: 10px;
+                              } */
+  
+      }
+  
+      .outer_con {
+          border-radius: 10px;
+          background-color: #e7ebee !important;
+          /* border-image-slice: 1; */
+          border-width: 1px;
+          max-width: 950px;
+          padding: 20px 15px 10px 15px;
+          -moz-box-shadow: inset 0 0 10px #b28e44;
+          -moz-box-shadow: inset 0 0 10px #00badb;
+          -webkit-box-shadow: inset 0 0 10px #1e2d7d;
+      }
+  
+      .bor1 {
+          background-color: white;
+          border: 3px solid;
+          border-image-slice: 1;
+          border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+          font-weight: 500;
+          /* border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44); */
+      }
+    .bor2 {
+          border: 5px solid;
+          border-image-slice: 1;
+          border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+          font-weight: 500;
+          /* border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44); */
+      }
+  
+  /*     .bbttn {
+          width: 150px;
+          text-align: center;
+          color: #fff ! important;
+          font-size: 22px;
+          border-radius: 10px;
+          background-image: linear-gradient(to right, #c0923f 37%, #c0923f 51%, #1e2d7d 92%);
+          margin-top: 15px;
+          margin-bottom: 5px;
+          -moz-box-shadow: inset 0 0 10px #b28e44;
+          -moz-box-shadow: inset 0 0 10px #00badb;
+          -webkit-box-shadow: inset 0 0 10px #1e2d7d;
+          border: 2px white;
+      } */
+  
+      .card-body {
+          font-size: 15px;
+          line-height: 1.5;
+      }
+  
+      .form__field {
+          background-color: #fff ! important;
+          font-weight: 400;
+        font-size:13px;
+      }
+  
+      .border_collapse {
+          border: 10px solid;
+          border-image-slice: 1;
+          border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+          border-width: 3px;
+      }
+  
+      .out_border {
+          background: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+          border-radius: 10px;
+      }
+  
+  
+      #myFormPopUp {
+          overflow-y: scroll !important;
+      }
+  
+      #display_123 {
+          cursor: pointer;
+      }
+    .btn-4 {
+      width: 150px;
+          text-align: center;
+          color: #fff ! important;
+          font-size: 22px;
+      margin-top: 15px;
+          margin-bottom: 5px;
+          border-radius: 10px;
+          background-image: linear-gradient(to right, #c0923f 37%, #c0923f 51%, #1e2d7d 92%);
+  border: 3px solid #fff! important;
+      }
+  </style>
+  
+  
+  <div class="container" style=" 
+      border-radius: 10px;
+  
+      
+      border-radius: 10px;
+     
+      padding-top:14px;
+      padding-bottom: :10px;
+      padding-bottom: 1px;border: 5px solid #B28E44">
+      <div class="team block_Zero_margin">
+  
+          <div id="target1" class="team__block-list_sd">
+          <div class="theme." style="border-radius:15px;    margin: 7px;">
+           <div id="buttons" class="width_size_stock" style="">
+  
+  </div>
+          </div>
+            
+            <div class="team__block-item_sd team__member mm" style="border-radius:15px;border:none ! important;   margin: 7px;">
+                <div id="enlargeImage" class="enlarging_stockimagetheme" >
+  <h1 id="img_enlargeImage_p" class="enlarge_image_h1_stock" ></h1>
+    <img id="img_enlargeImage" loading="lazy" src="" class=""  >    
+      
+                                          
+  </div> 
+            </div>
+          
+           
+            
+          
+            
+          
+          
+            
+           
+           
+          
+         
+         
+       </div>
+  
+  
+      </div>
+  </div>
+  
+  <!-----------Start stock title start-------------->
+  
+  <script>
+  var stockDesigns = {{ shop.metafields.ColorStkImgMR | json}}
+   var catValues = {{ shop.metafields.StockDesignCategory | json}};
+  console.log(catValues,'catValues');
+  window.onload = popUpDe('CENTER_GOLDRIM','01CO','Color');
+      function popUpDe(id, pId,stkColor) {
+        $('div#buttons').empty();
+        const popSearch = ({oId}) => ` 
+            <div class="catdiv">  
+                <input id="popSearch${oId}" class="popSearch" onkeyup="popupSearchFilter(this,'${oId}_popup','${oId}' )" type="text" name="search" placeholder="Search..">
+                <ul class="catul">
+                    <li class="catli selected caltliAll" onclick="filterCategory('All',this)"><a href="#" >All</a></li>
+                </ul>
+            </div>`;
+        $('div#buttons').append([{oId:id}].map(popSearch).join(''));  
+    
+        var catValues = {{ shop.metafields.StockDesignCategory | json}};
+        var cat = catValues[stkColor.toLowerCase()];
+    
+        if(cat){
+            var catItems = cat.split(",");
+            for (cate in catItems) {
+                var item = catItems[cate];
+                const popcate = ({li,oId}) => ` <li class="catli"  onclick="filterCategory('${li}',this,'${oId}')"><a href="#" >${li}</a></li>`;
+                $('.catul').append([{li:item, oId:id}].map(popcate).join(''));  
+            }
+        }
+            
+       
+        var  dependValues={};
+         
+    
+            dependValues = {{ shop.metafields.ColorStkImgMR | json}};
+           // console.log('dependValues',dependValues);
+  
+    
+        for (option in dependValues) {
+          
+            if(option.includes(stkColor.toLowerCase())){
+                for ( var pop_value in dependValues[option].values) {
+                    var popvalues = dependValues[option].values[pop_value];
+                console.log('test');
+                    var valId = popvalues.id;
+                    var valName = popvalues.name;
+                    var valImage = popvalues.image;
+                    var valAdd = popvalues.additionalCharge;
+                    var valChargeType = popvalues.chargeType;
+    
+                    var designCategory = popvalues.DesignCategory1;
+                    var designKeywords = popvalues.Keywords;
+    
+                    let str_val = valAdd;
+    console.log('valName',valName);
+                  //  var value_name_add = valName + ' - Add: $'+valAdd;
+  
+           
+                        var value_name_add = valName;
+  
+                    const popupOption = ({oId,vImage,vName,vName1,vId, parId,dc,dk, str_val,valAdd}) => `                    
+                        <div class="view-option-block" onmouseover="dis_image_enlarge('${vImage}','${vName1}')" >
+                            <div class="image-tag " >
+                                <img  loading="lazy"onmouseover="dis_image_enlarge('${vImage}','${vName1}')" onclick="selectedImage('${vImage}', '${oId}','${vName1}', this,'${parId}', '${str_val}','${valAdd}')" src="${vImage}" data-id="${valId}" data-charge='${str_val}'  />
+                            </div>
+                            <div class="label" >${vName}</div>
+                            <div hidden class="label" >${dc}</div>
+                            <div hidden class="label" >${vName},${dk}</div>
+                        </div>`;
+                    $('div#buttons').append([{oId: 'stockpopup', vImage:valImage , vName1:value_name_add.replace("'","\\'"), vName:value_name_add, vId: valId, parId:pId, dc:designCategory, dk:designKeywords, str_val:str_val,valAdd:valAdd}].map(popupOption).join('')); 
+                }
+            }
+        }   
+    
+     
+    
+    }
+      function filterCategory(_thisval, _this,id) {
+        $("#popSearch"+id).val('');
+        $('.catli').each(function(index, element){
+            $(element).removeClass('selected');
+        });
+        $(_this).addClass('selected');
+    
+        $(".view-option-block").each(function(index, element) {  
+            var  lblele = element.children[2];
+            const lbl = $(lblele).text();
+            if(_thisval == "" || _thisval == "All"){
+                $(element).show();
+            } else {
+                {% comment %} 
+                if (lbl.toString().toLowerCase().indexOf(_thisval.toLowerCase()) >= 0) { 
+                {% endcomment %}
+                    if (lbl.toString().toLowerCase() == _thisval.toLowerCase()) {
+                        $(element).show();
+                    } else {
+                        $(element).hide();
+                    }
+                {% comment %} 
+                }
+                {% endcomment %}
+            }
+        });
+    }
+  function dis_image_enlarge(imgsrc,imgname) {
+  var ttet = imgname;
+  var result = ttet.includes("'") ? "Yes" : "No";
+  console.log(result,'result');
+  $('#img_enlargeImage').attr("src", imgsrc);
+  
+  console.log(imgsrc,'imgsrc ');
+  //$('#img_enlargeImage_p').attr("value", imgname);
+  $("#img_enlargeImage_p").html( imgname);
+  console.log(imgname,'imgname');
+  }
+    function popupSearchFilter(_this,popId, id){
+        $('.catli').each(function(index, element){
+            $(element).removeClass('selected');
+        });
+        $(".caltliAll").addClass('selected');
+    
+        $(".view-option-block").each(function(index, element) {  
+            var lbl = "";
+            if(element.children[3]) {
+                var  lblele = element.children[3];
+                lbl = $(lblele).text();
+            }else{
+                var  lblele = element.children[1];
+                lbl = $(lblele).text();
+            }
+    
+            {% comment %} 
+            var  lblele = element.children[3];
+            const lbl = $(lblele).text(); 
+            {% endcomment %}
+    
+            if(_this.value == "") {
+                $(element).show();
+            } else {
+                if (lbl.toString().toLowerCase().indexOf(_this.value.trim().toLowerCase()) >= 0) {
+                    $(element).show();
+                } else {
+                    $(element).hide();
+                }
+            }
+        });
+    } 
+     
+  </script>
+    

@@ -1,0 +1,36 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "pf-c5e80166": {
+      "type": "pf-c5e80166",
+      "settings": {}
+    },
+    "221948d4-172d-4d18-8395-1254fa4d1120": {
+      "type": "blog-posts",
+      "settings": {
+        "blog": "news",
+        "blog_posts_count": 3,
+        "title": "Blog posts",
+        "link_title": "View all",
+        "show_category": true,
+        "show_author": true,
+        "show_date": true,
+        "show_excerpt": true,
+        "show_button_readmore": false,
+        "stack_mobile": false
+      }
+    }
+  },
+  "order": [
+    "pf-c5e80166",
+    "221948d4-172d-4d18-8395-1254fa4d1120"
+  ]
+}

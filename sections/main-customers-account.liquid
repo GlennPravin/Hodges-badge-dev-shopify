@@ -1,0 +1,374 @@
+<style>
+  .slideshow-container {
+    max-width: 600px;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .address-slide {
+    display: none;
+  }
+
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+  }
+
+  .prev {
+    left: 10px;
+  }
+
+  .next {
+    right: 10px;
+  }
+</style>
+<section data-section-id="{{ section.id }}" data-section-type="account">
+  <div class="container container--flush">
+    <div class="page__sub-header">
+      <nav aria-label="{{ 'general.breadcrumb.title' | t }}" class="breadcrumb">
+        <ol class="breadcrumb__list" role="list">
+          <li class="breadcrumb__item">
+            <a class="breadcrumb__link link" href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t }}</a> {%- render 'icon', icon: 'arrow-right' -%}
+          </li>
+
+          <li class="breadcrumb__item">
+            <a class="breadcrumb__link link" href="{{ routes.account_url }}">{{ 'general.breadcrumb.account' | t }}</a> {%- render 'icon', icon: 'arrow-right' -%}
+          </li>
+
+          <li class="breadcrumb__item">
+            <span class="breadcrumb__link" aria-current="page">{{ 'customer.general.orders' | t }}</span>
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+  <div class="layout">
+    <div class="layout__section layout__section--secondary">
+      <div class="card card--sticky hidden-pocket">
+        <div class="card__section card__section--tight">
+          <div class="card__linklist">
+            {%- if customer.addresses.size > 1 -%}
+                <div class="slideshow-container">
+                {%- for address in customer.addresses -%}
+                  <div class="address-slide">
+                    <div class="address-list__item">
+                      <div class="address-list__item-top">
+                        {% for item in  customer.metafields.CustomerInfo.osasId %}
+                          {%- if address.id == item.defaultAddress_id -%}
+                            <span class="line-item__price"> Customer Id: {{ item.osasId }}</span>
+                            {% break %} 
+                          {%- endif -%}
+                        {%- endfor -%}
+                        {{- address | format_address -}}
+                      </div>
+                    </div>
+                  </div>
+                {%- endfor -%}
+                
+                <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+                <a class="next" onclick="changeSlide(1)">&#10095;</a>
+              </div>              
+            {%- else -%}
+                {% for item in  customer.metafields.CustomerInfo.osasId %}
+                    {%- if customer.default_address.id == item.defaultAddress_id -%}
+                      <span class="line-item__price"> Customer Id: {{ item.osasId }}</span>
+                    {%- elsif address.id == item.defaultAddress_id -%}
+                          <span class="line-item__price"> Customer Id: {{ item.osasId }}</span>
+                    {%- endif -%}   
+                {%- endfor -%}
+            {%- endif -%}  
+          
+            <a href="{{ routes.account_url }}" class="card__linklist-item link text--strong">{{ 'customer.general.orders' | t }}</a>
+            <a href="{{ routes.account_addresses_url }}" class="card__linklist-item link">{{ 'customer.general.addresses' | t }}</a>
+            <a href="/pages/tax-details" class="card__linklist-item link">My tax-Exempt</a>
+            <a href="{{ routes.account_logout_url }}" class="card__linklist-item link" data-no-instant>{{ 'customer.general.logout' | t }}</a>
+          </div>
+
+        </div>
+      </div>
+
+        <div class="value-picker-wrapper hidden-tablet-and-up">
+          <button class="value-picker-button value-picker-button--pill" aria-haspopup="true" aria-expanded="false" aria-controls="account-selector" data-action="open-value-picker">
+            {{- 'customer.general.orders' | t -}} {%- render 'icon', icon: 'arrow-bottom' -%}
+          </button>
+
+          <div id="account-selector" class="value-picker" aria-hidden="true">
+            <div class="value-picker__inner">
+              <header class="value-picker__header">
+                <span class="value-picker__title text--strong">{{ 'customer.general.my_account' | t }}</span>
+                <button class="value-picker__close" data-action="close-value-picker" aria-controls="account-selector" aria-label="{{ 'general.accessibility.close' | t }}">{% render 'icon', icon: 'close' %}</button>
+              </header>
+
+              <div class="value-picker__choice-list">
+                <a href="{{ routes.account_url }}" class="value-picker__choice-item is-selected">{{ 'customer.general.orders' | t }} {% render 'icon', icon: 'check-2' %}</a>
+                <a href="{{ routes.account_addresses_url }}" class="value-picker__choice-item">{{ 'customer.general.addresses' | t }} {% render 'icon', icon: 'check-2' %}</a>
+                 <a href="/pages/tax-details" class="card__linklist-item link">My tax-Exempt {% render 'icon', icon: 'check-2' %}</a>
+                <a href="{{ routes.account_logout_url }}" class="value-picker__choice-item" data-no-instant>{{ 'customer.general.logout' | t }} {% render 'icon', icon: 'check-2' %}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="layout__section">
+        <div class="card">
+          <div class="{% if customer.orders.size == 0 %}card__section card__section--tight{% else %}card__header card__header--tight{% endif %}">
+            <h1 class="heading h1">{{ 'customer.general.orders' | t }} {% if customer.orders.size > 0 %}({{ customer.orders.size }}){% endif %}</h1>
+          </div>
+
+          {%- if customer.orders.size == 0 -%}
+            <div class="card__section">
+              <div class="empty-state empty-state--extra-tight">
+                <div class="empty-state__icon">
+                  {%- render 'icon', icon: 'package' -%}
+                  <span class="empty-state__count">0</span>
+                </div>
+
+                <p class="empty-state__icon-description">{{ 'customer.general.no_orders' | t }}</p>
+
+                <div class="empty-state__button-container">
+                  <a href="{{ routes.all_products_collection_url }}" class="empty-state__button button button--primary">{{ 'customer.general.no_orders_button' | t }}</a>
+                </div>
+              </div>
+            </div>
+          {%- else -%}
+            {% assign pageSize = 10 %}
+            {% assign totalItems = customer.orders.size %}
+            {% assign fullPages = totalItems | divided_by: pageSize %}
+            {% assign remainingItems = totalItems | modulo: pageSize %}
+            {% assign totalPages = fullPages %}
+            {% assign currentPage = 1 %}
+            {% assign start = 0 %}
+            {% assign end = pageSize | minus: 1 %}
+            {% assign remaining = customer.orders.size %}
+            {% if remainingItems > 0 %}
+              {% assign totalPages = totalPages | plus: 1 %}
+            {% endif %}
+            <div class="table-wrapper">
+              <table class="table table--loose">
+                <thead>
+                  <tr>
+                    <th>{{ 'customer.order.order' | t }}</th>
+                    <th>{{ 'customer.order.date' | t }}</th>
+                    <th>{{ 'customer.order.payment_status' | t }}</th>
+                    <th>{{ 'customer.order.fulfillment_status' | t }}</th>
+                    <th class="table__cell--right">{{ 'customer.order.total' | t }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for order in customer.orders %}
+                    {% if forloop.index0 >= start and forloop.index0 <= end %}
+                      <tr>
+                        <td><a href="{{ order.customer_url }}" class="link link--accented">{{ order.name }}</a></td>
+                        <td>{{ order.created_at | date: format: 'month_day_year' }}</td>
+                        {% if order.metafields.payment.status %}
+                          <td>{{ order.metafields.payment.status }}</td>
+                        {% else %}
+                          <td>{{ order.financial_status_label }}</td>
+                        {% endif %}
+                        <td>{{ order.fulfillment_status_label }}</td>
+                        <td class="table__cell--right">{{ order.total_price | money }}</td>
+                      </tr>
+                    {% endif %}
+                     {% if forloop.index0 == end %}
+                        {% assign start = end | plus: 1 %}
+                        {% assign end = start | plus: pageSize | minus: 1 %}
+                      {% endif %}
+                    {% if remaining > 0 and forloop.index0 == end %}
+                    {% assign start = end | plus: 1 %}
+                    {% assign end = remaining | divided_by: pageSize | ceil | times: pageSize | plus: start | minus: 1 %}
+                    {% assign remaining = remaining | minus: pageSize %}
+                  {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="pagination">
+               {% if totalPages > 1 %}
+                <div class="pagination__inner account__prev">
+                    <a href="#" class="pagination__link pagination__prev link pagination__item account__pagination" data-label="prev"  data-page="{{ currentPage }}" onclick="paginationAccount(event)" id="pagination__prev" >
+                      {%- render 'icon', icon: 'arrow-left' -%} {{- 'general.pagination.previous_page' | t -}}
+                    </a>
+                  
+                  {% for page in (1..totalPages) %}
+                    <span class="pagination__nav-item ">
+                      <a href="#" class="pagination__link  link" data-page="{{ page }}" onclick="paginationAccount(event)">{{ page }}</a>
+                    </span>
+                 
+                  {% endfor %}
+                     {% if currentPage < totalPages %}
+                    <a href="#" class="pagination__link pagination__next link pagination__item" data-label="next" data-page="{{ currentPage }}" onclick="paginationAccount(event)" id="pagination__next">
+                      {{- 'general.pagination.next_page' | t -}} {%- render 'icon', icon: 'arrow-right' -%}
+                    </a>
+                   {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  <div>
+</div>
+</div>
+</section>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(event) { 
+    var tableRows = document.querySelectorAll('.table-wrapper tbody tr');
+    var pageSize = {{ pageSize }};
+    var currentPage = 1;
+    var startIndex = (currentPage - 1) * pageSize;
+    var endIndex = Math.min(startIndex + pageSize, tableRows.length);
+    let pagination__prev = document.getElementById("pagination__prev");
+    pagination__prev.style.display="none";
+
+    for (var i = 0; i < tableRows.length; i++) {
+      tableRows[i].style.display = 'none';
+    }
+
+    for (var i = startIndex; i < endIndex; i++) {
+      if (tableRows[i]) {
+        tableRows[i].style.display = '';
+      }
+    }
+
+    var paginationLinks = document.querySelectorAll('.pagination__link');
+    paginationLinks.forEach(function(link) {
+      if (link.getAttribute('data-page') === '1' && link.getAttribute('data-label') != 'next' && link.getAttribute('data-label') != 'prev') {
+        link.setAttribute('data-count',link.getAttribute('data-page'))
+        link.classList.add('pagination__nav-item','is-active')
+        link.parentElement.classList.add('pagination__item--active');
+      } else {
+         link.classList.remove('pagination__nav-item','is-active')
+        link.parentElement.classList.remove('pagination__item--active');
+      }
+    });
+  });
+
+  function paginationAccount(event) {
+    event.preventDefault();
+     var targetPage;
+     var currentPage;
+    let pagination__prev = document.getElementById("pagination__prev");
+    pagination__prev.style.display="none";
+    if(event.target.getAttribute('data-label') == "next"){
+      pagination__prev.style.display="block";
+      var paginationLinks = document.querySelectorAll('.pagination__link');
+      paginationLinks.forEach(function(link) {
+      if (link.getAttribute('data-count')) {
+         currentPage =parseInt(link.getAttribute('data-count'))
+      }
+    });
+      targetPage = parseInt(currentPage) +1
+    }else if(event.target.getAttribute('data-label') == "prev"){
+      var paginationLinks = document.querySelectorAll('.pagination__link');
+      paginationLinks.forEach(function(link) {
+      if (link.getAttribute('data-count')) {
+         currentPage =parseInt(link.getAttribute('data-count'))
+      }
+    });
+      targetPage = parseInt(currentPage) -1
+    }
+    else{
+    targetPage = parseInt(event.target.getAttribute('data-page'));
+      if(targetPage == 1){
+        pagination__prev.style.display="none";
+      } else{
+         pagination__prev.style.display="block";
+      }    
+    }
+
+    var tableRows = document.querySelectorAll('.table-wrapper tbody tr');
+    var pageSize = {{ pageSize }};
+    var startIndex = (targetPage - 1) * pageSize;
+    var endIndex = Math.min(startIndex + pageSize, tableRows.length);
+    for (var i = 0; i < tableRows.length; i++) {
+      tableRows[i].style.display = 'none';
+    }
+
+    for (var i = startIndex; i < endIndex; i++) {
+      if (tableRows[i]) {
+        tableRows[i].style.display = '';
+      }
+    }
+    let pagination__next = document.getElementById("pagination__next");  
+    pagination__next.style.display = "block";
+    if (targetPage === {{ totalPages }}) {
+    pagination__prev.style.display="block";
+    pagination__next.style.display = "none";  
+    var start = (targetPage - 1) * pageSize;
+    let end = {{customer.orders.size }} 
+    for (let i = start; i < end.length; i++) {
+      if (tableRows[i]) {
+        tableRows[i].style.display = '';
+      }
+    }
+    }else{
+       pagination__next.style.display = "block";
+    }
+    var paginationLinks = document.querySelectorAll('.pagination__link');
+    paginationLinks.forEach(function(link) {
+       link.removeAttribute('data-count')
+       if(link.getAttribute('data-page') == parseInt(currentPage)+1 && event.target.getAttribute('data-label') == "next"){
+         link.setAttribute('data-count',parseInt(currentPage)+1) 
+         if(event.target.getAttribute('data-label') == "next"){
+         link.classList.add('pagination__nav-item','is-active')
+         }
+       }else if(link.getAttribute('data-page') == parseInt(currentPage)-1 && event.target.getAttribute('data-label') == "prev"){
+         link.setAttribute('data-count',parseInt(currentPage)-1) 
+       }
+      link.classList.remove('pagination__nav-item','is-active')
+      link.parentElement.classList.remove('pagination__item--active');
+    });
+     if(event.target.getAttribute('data-label') != "next"){
+     event.target.parentElement.querySelector('a').setAttribute('data-count',event.target.getAttribute('data-page') );
+     event.target.classList.add('pagination__nav-item','is-active');
+     }else if(event.target.getAttribute('data-label') != "prev"){
+        event.target.parentElement.querySelector('a').setAttribute('data-count',event.target.getAttribute('data-page'));
+        event.target.classList.add('pagination__nav-item','is-active');
+     }
+    event.target.parentElement.classList.add('pagination__item--active');
+  }
+
+  let slideIndex = 0;
+  showSlide(slideIndex);
+
+  function showSlide(index) {
+    const slides = document.getElementsByClassName("address-slide");
+    
+    // Hide all slides
+    for (let i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+
+    // Ensure index is within valid range
+    if (index >= slides.length) {
+      slideIndex = 0;
+    } else if (index < 0) {
+      slideIndex = slides.length - 1;
+    }
+
+    // Display the current slide
+    slides[slideIndex].style.display = "block";
+  }
+
+  function changeSlide(offset) {
+    showSlide(slideIndex += offset);
+  }
+
+  
+</script>
+
+
+{% schema %}
+{
+  "name": "Account"
+}
+{% endschema %}

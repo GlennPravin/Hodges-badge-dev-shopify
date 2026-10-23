@@ -1,0 +1,849 @@
+{% assign MagicToolboxShowMessage = shop.metafields.magic360.options['ShowMessage'] | default: 'No' %}
+{% assign MagicToolbox360IconURL = shop.metafields.magic360.options['360IconURL'] | default: 'icon.spin.12.png' %}
+{% assign MagicToolboxDefaultView = shop.metafields.magic360.options['DefaultView'] | default: 'Spin' %}
+{% assign MagicToolboxMessage = shop.metafields.magic360.options['Message'] | default: 'Drag image to spin' %}
+{% assign MagicToolboxBigImageSize = shop.metafields.magic360.options['BigImageSize'] | default: 'master' %}
+{% assign MagicToolboxThumbnailImageSize = shop.metafields.magic360.options['ThumbnailImageSize'] | default: 'grande' %}
+{% assign MagicToolboxSelectorImageSize = shop.metafields.magic360.options['SelectorImageSize'] | default: 'small' %}
+{% assign MagicToolboxUseCustomWidth = shop.metafields.magic360.options['UseCustomWidth'] | default: 'No' %}
+{% assign MagicToolboxThumbnailImageWidth = shop.metafields.magic360.options['ThumbnailImageWidth'] | default: '480' %}
+{% assign MagicToolboxSortImages = shop.metafields.magic360.options['SortImages'] | default: 'No' %}
+{% assign Magic360ImageCount = shop.metafields.magic360.options['Magic360ImageCount'] | default: 36 %}
+{% assign Magic360ImageCount = Magic360ImageCount | times: 1 %}
+
+{% assign MagicToolboxSelectorImageSize_Text = MagicToolboxSelectorImageSize %}
+
+{% if MagicToolbox360IconURL contains 'magictoolbox.sirv.com' %} 
+  {% assign MagicToolbox360IconURLFull = MagicToolbox360IconURL %}
+{% else %}
+  {% assign MagicToolbox360IconURLFull = MagicToolbox360IconURL %}
+  {% assign MagicToolbox360IconSize = MagicToolboxSelectorImageSize %}
+{% endif %}
+
+{% if MagicToolboxBigImageSize == 'pico' %}{% assign MagicToolboxBigImageSize = 16 %}{% endif %}
+{% if MagicToolboxBigImageSize == 'icon' %}{% assign MagicToolboxBigImageSize =  32 %}{% endif %}
+{% if MagicToolboxBigImageSize == 'thumb' %}{% assign MagicToolboxBigImageSize =  50 %}{% endif %}
+{% if MagicToolboxBigImageSize == 'small' %}{% assign MagicToolboxBigImageSize =  100 %}{% endif %}
+{% if MagicToolboxBigImageSize == 'compact' %}{% assign MagicToolboxBigImageSize = 160 %}{% endif %}
+{% if MagicToolboxBigImageSize == 'medium' %}{% assign MagicToolboxBigImageSize = 240 %}{% endif %}
+{% if MagicToolboxBigImageSize == 'large' %}{% assign MagicToolboxBigImageSize = 480 %}{% endif %}
+{% if MagicToolboxBigImageSize == 'grande' %}{% assign MagicToolboxBigImageSize = 600 %}{% endif %}
+{% if MagicToolboxBigImageSize == '1024x1024' %}{% assign MagicToolboxBigImageSize = 1024 %}{% endif %}
+{% if MagicToolboxBigImageSize == 'original' %}{% assign MagicToolboxBigImageSize = 1024 %}{% endif %}
+{% if MagicToolboxBigImageSize == '2048x2048' %}{% assign MagicToolboxBigImageSize = 2048 %}{% endif %}
+{% if MagicToolboxBigImageSize == 'master' %}{% assign MagicToolboxBigImageSize = 2048 %}{% endif %}
+
+{% if MagicToolboxThumbnailImageSize == 'pico' %}{% assign MagicToolboxThumbnailImageSize = 16 %}{% endif %}
+{% if MagicToolboxThumbnailImageSize == 'icon' %}{% assign MagicToolboxThumbnailImageSize =  32 %}{% endif %}
+{% if MagicToolboxThumbnailImageSize == 'thumb' %}{% assign MagicToolboxThumbnailImageSize =  50 %}{% endif %}
+{% if MagicToolboxThumbnailImageSize == 'small' %}{% assign MagicToolboxThumbnailImageSize =  100 %}{% endif %}
+{% if MagicToolboxThumbnailImageSize == 'compact' %}{% assign MagicToolboxThumbnailImageSize = 160 %}{% endif %}
+{% if MagicToolboxThumbnailImageSize == 'medium' %}{% assign MagicToolboxThumbnailImageSize = 240 %}{% endif %}
+{% if MagicToolboxThumbnailImageSize == 'large' %}{% assign MagicToolboxThumbnailImageSize = 480 %}{% endif %}
+{% if MagicToolboxThumbnailImageSize == 'grande' %}{% assign MagicToolboxThumbnailImageSize = 600 %}{% endif %}
+{% if MagicToolboxThumbnailImageSize == '1024x1024' %}{% assign MagicToolboxThumbnailImageSize = 1024 %}{% endif %}
+{% if MagicToolboxThumbnailImageSize == 'original' %}{% assign MagicToolboxThumbnailImageSize = 1024 %}{% endif %}
+{% if MagicToolboxThumbnailImageSize == '2048x2048' %}{% assign MagicToolboxThumbnailImageSize = 2048 %}{% endif %}
+{% if MagicToolboxThumbnailImageSize == 'master' %}{% assign MagicToolboxThumbnailImageSize = 2048 %}{% endif %}
+
+{% if MagicToolboxSelectorImageSize == 'pico' %}{% assign MagicToolboxSelectorImageSize = 16 %}{% endif %}
+{% if MagicToolboxSelectorImageSize == 'icon' %}{% assign MagicToolboxSelectorImageSize =  32 %}{% endif %}
+{% if MagicToolboxSelectorImageSize == 'thumb' %}{% assign MagicToolboxSelectorImageSize =  50 %}{% endif %}
+{% if MagicToolboxSelectorImageSize == 'small' %}{% assign MagicToolboxSelectorImageSize =  100 %}{% endif %}
+{% if MagicToolboxSelectorImageSize == 'compact' %}{% assign MagicToolboxSelectorImageSize = 160 %}{% endif %}
+{% if MagicToolboxSelectorImageSize == 'medium' %}{% assign MagicToolboxSelectorImageSize = 240 %}{% endif %}
+{% if MagicToolboxSelectorImageSize == 'large' %}{% assign MagicToolboxSelectorImageSize = 480 %}{% endif %}
+{% if MagicToolboxSelectorImageSize == 'grande' %}{% assign MagicToolboxSelectorImageSize = 600 %}{% endif %}
+{% if MagicToolboxSelectorImageSize == '1024x1024' %}{% assign MagicToolboxSelectorImageSize = 1024 %}{% endif %}
+{% if MagicToolboxSelectorImageSize == 'original' %}{% assign MagicToolboxSelectorImageSize = 1024 %}{% endif %}
+{% if MagicToolboxSelectorImageSize == '2048x2048' %}{% assign MagicToolboxSelectorImageSize = 2048 %}{% endif %}
+{% if MagicToolboxSelectorImageSize == 'master' %}{% assign MagicToolboxSelectorImageSize = 2048 %}{% endif %}
+
+{% for tag in product.tags %}
+{% assign tag_ = tag | replace: 'spinimages=', '' %}
+{% if tag_ != tag %}
+{% assign Magic360ImageCount = tag_  | times: 1 %}
+{% endif %}
+{% endfor %}
+
+{% for tag in product.tags %}
+{% assign tag_ = tag | replace: 'spinrows=', '' %}
+{% if tag_ != tag %}
+{% assign rows = tag_  | times: 1 %}
+<script>Magic360.options.rows = {{ rows }}; Magic360.options.columns = {{ Magic360ImageCount | divided_by: rows }} </script>
+{% endif %}
+{% endfor %}
+
+    {% assign still_images_count = product.media.size | minus: Magic360ImageCount %}
+    {% if still_images_count < 0 %}
+    {% assign still_images_count = 0 %}
+    {% endif %}
+
+    {% assign m360ImagesSmall = '' %}
+    {% assign m360ImagesLarge = '' %}
+    {% assign m360Images0 = '' %}
+    {% for image in product.media %}
+        {% if forloop.index > still_images_count %}
+            {% if m360Images0 == '' %}
+                {% assign m360Images0 = image %}
+            {% endif %}
+            {% assign url = image | image_url: width: MagicToolboxThumbnailImageSize%}
+            {% assign m360ImagesSmall = m360ImagesSmall | append: url | append: ';' %}
+            {% assign url = image | image_url: width: MagicToolboxBigImageSize %}
+            {% assign m360ImagesLarge = m360ImagesLarge | append: url | append: ';' %}
+        {% endif %}
+    {% endfor %}
+
+    {% if MagicToolboxSortImages == 'Yes' %}
+        {% assign m360ImagesSmall = m360ImagesSmall | split: ';' | sort %}
+        {% assign m360ImagesLarge = m360ImagesLarge | split: ';' | sort %}
+    {% else %}
+        {% assign m360ImagesSmall = m360ImagesSmall | split: ';' %}
+        {% assign m360ImagesLarge = m360ImagesLarge | split: ';' %}
+    {% endif %}
+
+    {% if MagicToolbox360IconURL contains 'magictoolbox.sirv.com' %} 
+      {% assign MagicToolbox360IconURLFull = MagicToolbox360IconURL %}
+    {% else %}
+      {% if MagicToolbox360IconURL == 'overlay' %}
+        {% assign MagicToolbox360IconURLFull = m360Images0 | image_url: width: MagicToolboxSelectorImageSize %}
+      {% else %}
+        {% assign MagicToolbox360IconURLFull = MagicToolbox360IconURL | asset_img_url: MagicToolbox360IconSize %}
+        
+      {% endif %}
+    {% endif %}
+  
+    {% assign m360ImagesOption = '' %}
+    {% assign m360LargeImagesOption = '' %}
+    {% for m360Image in m360ImagesSmall %}
+        {% assign m360ImagesOption = m360ImagesOption | append: ' ' | append: m360Image  %}
+    {% endfor %}
+    {% for m360Image in m360ImagesLarge %}
+        {% assign m360LargeImagesOption = m360LargeImagesOption | append: ' ' | append: m360Image  %}
+    {% endfor %}
+
+    
+
+    {% capture spin %}
+        <a class="js-no-transition Magic360" href="#" data-magic360-options="columns: {{ Magic360ImageCount }}; images:{{ m360ImagesOption }}; large-images:{{ m360LargeImagesOption }};">
+            <img style="position:relative !important;aspect-ratio: {{ m360Images0.width }} / {{ m360Images0.height }};" alt="{% if m360Images0.alt != blank %}{{ m360Images0.alt  | escape }}{% else %}{{ product.title  | escape }}{% endif %}" src="{{ m360Images0 | image_url: width: MagicToolboxThumbnailImageSize }}" />
+        </a>
+    {% endcapture %}
+{%- capture contentForQuerystring -%}{{ content_for_header }}{%- endcapture -%}
+    {%- assign pageUrl = contentForQuerystring | split:'"pageurl":"' | last | split:'"' | first | split:'.myshopify.com' | last |
+       replace:'\/','/' | 
+       replace:'%20',' ' | 
+       replace:'\u0026','&'
+    -%}
+    {%- assign itemShow = '' -%}
+    {%- for i in (1..1) -%}
+       {%- unless pageUrl contains "?" -%}{% break %}{%- endunless -%}
+       {%- assign pageQuerystring = pageUrl | split:'?' | last -%}
+    {%- assign parts= pageQuerystring | split:'&' -%}
+      {%- for part in parts -%}
+       {%- assign partKey = part | split:'='  | first -%}
+        {% if partKey == 'sort_by'%}
+          {%- assign itemShow = part | split:'='  | last  -%}
+          {% break %}
+        {% endif%}
+      {%- endfor -%}
+    {%- endfor -%}
+    {% assign canvasEnabled = false %}
+{%- if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true -%}
+{% assign canvasEnabled = product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled %}
+{%- endif -%}
+    
+    {%- if product.media.size > 0 -%}
+      {%- assign show_thumbnails_if_one_media = true -%}
+       {%- assign shopifyAlternateImages = product.metafields.ProductMeta.ProductAdditionalInfo.ExtraInfoAboutProduct.shopifyAlternateImages -%} 
+    
+    <div class="{% if canvasEnabled %}customizer {% endif %}card">
+        <div class="card__section card__section--tight">
+        {% if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true %}
+            <span id="canvasName" style="visiblity:hidden;"></span>
+            <!-- <span
+              id='info-btn'
+              class="fa fa-play"
+              onclick="VideoPopup()"
+              aria-hidden="true"
+              style="font-size: 16px!important;"
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Click to View Customizer FAQ"
+              style="cursor:pointer;"></span> -->
+            <!-- <span
+              id='info-btn'
+              onclick="redirectToNewLink()"
+              class="fa fa-question-circle"
+              aria-hidden="true"
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Click to View Customizer FAQ"
+              style="cursor:pointer;"></span> -->
+              <button 
+
+              onclick="redirectToNewLink()"
+             {% comment %} class="fa fa-question-circle"  {% endcomment %}
+               class="custom-button"
+              aria-hidden="true"
+              data-toggle="tooltip"
+              data-placement="top"
+              {% comment %} title="Click to View Customizer FAQ" {% endcomment %}
+              style="cursor:pointer;"><span class="help-text" >Help Me</span></button >
+            <img
+              id='info-btn'
+              onclick="applyRuler(true)"
+              style="display:none;padding: 1px;"
+              src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/MicrosoftTeams-image_6.png?v=1706791056"
+              class="ruler"
+              aria-hidden="true"
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Click to View ruler"
+              style="cursor:pointer;"></img>
+          {% endif %}
+           {% if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true %}
+          <div class="customization">
+            {{ shop.metafields.helpText.customizationNotes.value }}
+          </div>
+          {% endif %}
+          <div class="product-gallery {% if show_thumbnails_if_one_media %}product-gallery--with-thumbnails{% endif %}">
+            {%- assign selected_media = product.selected_variant.featured_media | default: product.featured_media -%}
+    
+            <div class="product-gallery__carousel-wrapper">
+              <div class="{% if canvasEnabled %}block-product {% endif %}product-gallery__carousel {% if template != 'product.quick-view' and section.settings.enable_image_zoom %}product-gallery__carousel--zoomable{% endif %}" data-media-count="{{ product.media.size }}" data-initial-media-id="{{ selected_media.id }}">
+       
+                  {%- if shopifyAlternateImages.size > 0 -%}
+                      {%- assign counter = 0 -%}
+                      {%- for media in product.media -%}
+{% if forloop.index0 < still_images_count %}
+                        
+                          {%- for image in product.images -%}
+                         
+                              {%- if image.src == media -%}
+                                  {%- for Hops_media in shopifyAlternateImages -%}
+    
+                                      {% assign imageId = image.id | append: "" %}
+                                      
+                                      {%- if imageId == Hops_media.imageSrc -%}
+                                       
+                                          {%- if counter == 0 -%}
+                                              {%- if Hops_media.marketId == itemShow -%}
+                                                  {%- assign selected_media = media -%}
+                                                  {%- assign counter = 1 -%}
+                                              {%- endif -%}
+                                          {%- endif -%}
+                                          {%- assign is_media_group = false -%}
+                                          {%- assign is_media_filtered = false -%}
+                                          {%- assign media_alt = media.alt -%}
+                                          {%- if media.alt contains '#' -%}
+                                              {%- assign is_media_group = true -%}
+                                              {%- assign alt_parts = media.alt | split: '#' -%}
+    
+                                              {%- comment -%}
+                                            If the custom ALT tag contains two parts (for instance "My custom alt # color_blue") then the first part is actually used
+                                            as a custom ALT tag
+                                            {%- endcomment -%}
+    
+                                              {%- if alt_parts.size == 2 and alt_parts.first != blank -%}
+                                                  {%- assign media_alt = alt_parts.first | strip -%}
+                                              {%- else -%}
+                                                  {%- assign media_alt = product.title -%}
+                                              {%- endif -%}
+    
+                                              {%- assign media_group_parts = alt_parts.last | split: '_' -%}
+    
+                                              {%- for option in product.options -%}
+                                                  {%- assign downcase_option = option | downcase -%}
+                                                  {%- assign downcase_group_option = media_group_parts.first | strip | downcase -%}
+    
+                                                  {%- if downcase_option == downcase_group_option -%}
+                                                      {%- assign option_setting = 'option' | append: forloop.index -%}
+                                                      {%- assign option_value = product.selected_or_first_available_variant[option_setting] | downcase -%}
+    
+                                                      {%- assign downcase_group_value = media_group_parts.last | strip | downcase -%}
+                                                      {%- assign media_variant_ids = media.variants | map: 'id' -%}
+    
+                                                      {%- if option_value != downcase_group_value -%}
+                                                          {%- unless media_variant_ids contains product.selected_or_first_available_variant.id -%}
+                                                              {%- assign is_media_filtered = true -%}
+                                                          {%- endunless -%}
+                                                      {%- endif -%}
+    
+                                                      {%- break -%}
+                                                  {%- endif -%}
+                                              {%- endfor -%}
+                                          {%- endif -%}
+    
+                                          <div class="product-gallery__carousel-item image_hide {% if media.id == selected_media.id %}is-selected{% endif %} {% if is_media_filtered %}is-filtered{% endif %}" tabindex="-1" data-media-id="{{ media.id }}" data-media-type="{{ media.media_type | escape }}" {% if media.media_type == 'external_video' %} data-media-host="{{ media.host | escape }}" data-video-id="{{ media.external_id | escape }}" {% endif %} {% if is_media_group %} data-group-name="{{ media_group_parts.first | strip | downcase | escape }}" data-group-value="{{ media_group_parts.last | strip | downcase | escape }}" {% endif %}>
+                                              {%- case media.media_type -%}
+                                                  {%- when 'image' -%}
+                                                      <div class="product-gallery__size-limiter" style="max-width: {{ media.width }}px">
+                                                          {%- capture supported_sizes -%}
+                                                              {%- render 'image-size', sizes: '400,500,600,700,800,900,1000,1100,1200', image: media -%}
+                                                          {%- endcapture -%}
+                                                          {%- assign image_url = media | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+    
+                                                          <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: media.aspect_ratio }}%">
+                                                              <img loading='lazy'  class="product-gallery__image lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" data-zoom="{{ media | img_url: '1600x' }}" data-zoom-width="{{ media.width | at_most: 1600 }}" alt="{{ media_alt | escape }}">
+    
+                                                              <noscript>
+                                                                  <img loading='lazy'  src="{{ media | img_url: '800x' }}" alt="{{ media_alt | escape }}">
+                                                              </noscript>
+                                                          </div>
+                                                      </div>
+    
+                                                  {%- when 'model' -%}
+                                                      <div class="product-gallery__model">
+                                                          <div class="model-wrapper">
+                                                              {{- media | model_viewer_tag: image_size: '1024x', reveal: 'interaction', toggleable: true -}}
+                                                          </div>
+                                                      </div>
+    
+                                                  {%- when 'external_video' -%}
+                                                      <div class="product-gallery__external-video">
+                                                          <div class="video-wrapper">
+                                                              {{- media | external_video_tag: image_size: '1024x' -}}
+                                                          </div>
+                                                      </div>
+    
+                                                  {%- when 'video' -%}
+                                                      <div class="product-gallery__video">
+                                                          <div class="video-wrapper video-wrapper--native" style="padding-bottom: {{ 100.0 | divided_by: media.aspect_ratio }}%">
+                                                              {{- media | video_tag: image_size: '1024x', controls: true -}}
+                                                          </div>
+                                                      </div>
+                                              {%- endcase -%}
+                                          </div>
+                                      {%- endif -%}
+                                  {%- endfor -%}
+                              {%- endif -%}
+                          {%- endfor -%}
+
+
+{% endif %}
+
+                        
+                      {%- endfor -%}
+
+                                          <div class="product-gallery__carousel-item image_hide " tabindex="-1" data-media-id="360" data-media-type="image" >
+                                                      <div class="product-gallery__size-limiter">
+                                                          <div class="aspect-ratio" style="positiopn:relative;padding-bottom: {{ 100.0 | divided_by: m360Images0.aspect_ratio }}%">
+                                                            <div style="position:absolute;top:0;left:0;width:100%;height:100%;">
+                                                              {{ spin }}
+                                                            </div>
+                                                              
+                                                          </div>
+                                                      </div>
+                                          </div>
+             
+                    {%- if product.metafields.Specialimages.size  > 0  -%}
+                    
+                    
+                           {%- for si_media in product.metafields.Specialimages %}
+                            {%- for si_image in product.images %}
+                         <!--                          simedis <li>   {{ si_media[0] }} -- {{si_image.id}}</li> -->
+                    
+                                    {% assign imageId = si_image.id  | append: "" %}
+                    
+                                        {%- if si_media[0] ==  imageId   -%}
+                    
+                                           <!--                 siimage {{si_image.src}} -->
+                                       {%- for media in product.media -%}
+                                       {%- if media == si_image.src  -%}
+                   
+                    
+         <div class="product-gallery__carousel-item image_hide {% if media.id == selected_media.id %}is-selected{% endif %} {% if is_media_filtered %}is-filtered{% endif %}" tabindex="-1" data-media-id="{{ media.id }}" data-media-type="{{ media.media_type | escape }}" {% if media.media_type == 'external_video' %} data-media-host="{{ media.host | escape }}" data-video-id="{{ media.external_id | escape }}" {% endif %} {% if is_media_group %} data-group-name="{{ media_group_parts.first | strip | downcase | escape }}" data-group-value="{{ media_group_parts.last | strip | downcase | escape }}" {% endif %}>
+                                              {%- case media.media_type -%}
+                                                  {%- when 'image' -%}
+                                                      <div class="product-gallery__size-limiter" style="max-width: {{ media.width }}px">
+                                                          {%- capture supported_sizes -%}
+                                                              {%- render 'image-size', sizes: '400,500,600,700,800,900,1000,1100,1200', image: media -%}
+                                                          {%- endcapture -%}
+                                                          {%- assign image_url = media | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+    
+                                                          <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: media.aspect_ratio }}%">
+                                                              <img loading='lazy'  class="product-gallery__image lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" data-zoom="{{ media | img_url: '1600x' }}" data-zoom-width="{{ media.width | at_most: 1600 }}" alt="{{ media_alt | escape }}">
+    
+                                                              <noscript>
+                                                                  <img loading='lazy'  src="{{ media | img_url: '800x' }}" alt="{{ media_alt | escape }}">
+                                                              </noscript>
+                                                          </div>
+                                                      </div>
+    
+                                                  {%- when 'model' -%}
+                                                      <div class="product-gallery__model">
+                                                          <div class="model-wrapper">
+                                                              {{- media | model_viewer_tag: image_size: '1024x', reveal: 'interaction', toggleable: true -}}
+                                                          </div>
+                                                      </div>
+    
+                                                  {%- when 'external_video' -%}
+                                                      <div class="product-gallery__external-video">
+                                                          <div class="video-wrapper">
+                                                              {{- media | external_video_tag: image_size: '1024x' -}}
+                                                          </div>
+                                                      </div>
+    
+                                                  {%- when 'video' -%}
+                                                      <div class="product-gallery__video">
+                                                          <div class="video-wrapper video-wrapper--native" style="padding-bottom: {{ 100.0 | divided_by: media.aspect_ratio }}%">
+                                                              {{- media | video_tag: image_size: '1024x', controls: true -}}
+                                                          </div>
+                                                      </div>
+                                              {%- endcase -%}
+                                          </div>
+                    
+                     {% endif %} 
+                   {% endfor %}
+                     {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                    {% endif %}
+                  {%- else -%}
+                      {%- for media in product.media -%}
+                          {%- assign is_media_group = false -%}
+                          {%- assign is_media_filtered = false -%}
+                          {%- assign media_alt = media.alt -%}
+    
+                          {%- if media.alt contains '#' -%}
+                              {%- assign is_media_group = true -%}
+                              {%- assign alt_parts = media.alt | split: '#' -%}
+    
+                              {%- comment -%}
+                                  If the custom ALT tag contains two parts (for instance "My custom alt # color_blue") then the first part is actually used
+                                  as a custom ALT tag
+                                  {%- endcomment -%}
+    
+                              {%- if alt_parts.size == 2 and alt_parts.first != blank -%}
+                                  {%- assign media_alt = alt_parts.first | strip -%}
+                              {%- else -%}
+                                  {%- assign media_alt = product.title -%}
+                              {%- endif -%}
+    
+                              {%- assign media_group_parts = alt_parts.last | split: '_' -%}
+    
+                              {%- for option in product.options -%}
+                                  {%- assign downcase_option = option | downcase -%}
+                                  {%- assign downcase_group_option = media_group_parts.first | strip | downcase -%}
+    
+                                  {%- if downcase_option == downcase_group_option -%}
+                                      {%- assign option_setting = 'option' | append: forloop.index -%}
+                                      {%- assign option_value = product.selected_or_first_available_variant[option_setting] | downcase -%}
+    
+                                      {%- assign downcase_group_value = media_group_parts.last | strip | downcase -%}
+                                      {%- assign media_variant_ids = media.variants | map: 'id' -%}
+    
+                                      {%- if option_value != downcase_group_value -%}
+                                          {%- unless media_variant_ids contains product.selected_or_first_available_variant.id -%}
+                                              {%- assign is_media_filtered = true -%}
+                                          {%- endunless -%}
+                                      {%- endif -%}
+    
+                                      {%- break -%}
+                                  {%- endif -%}
+                              {%- endfor -%}
+                          {%- endif -%}
+    
+                          <div class="product-gallery__carousel-item image_hide {% if media.id == selected_media.id %}is-selected{% endif %} {% if is_media_filtered %}is-filtered{% endif %}" tabindex="-1" data-media-id="{{ media.id }}" data-media-type="{{ media.media_type | escape }}" {% if media.media_type == 'external_video' %} data-media-host="{{ media.host | escape }}" data-video-id="{{ media.external_id | escape }}" {% endif %} {% if is_media_group %} data-group-name="{{ media_group_parts.first | strip | downcase | escape }}" data-group-value="{{ media_group_parts.last | strip | downcase | escape }}" {% endif %}>
+                              {%- case media.media_type -%}
+                                  {%- when 'image' -%}
+                                      <div class="product-gallery__size-limiter" style="max-width: {{ media.width }}px">
+                                          {%- capture supported_sizes -%}
+                                              {%- render 'image-size', sizes: '400,500,600,700,800,900,1000,1100,1200', image: media -%}
+                                          {%- endcapture -%}
+                                          {%- assign image_url = media | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+    
+                                          <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: media.aspect_ratio }}%">
+                                              <img loading='lazy'  class="product-gallery__image lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" data-zoom="{{ media | img_url: '1600x' }}" data-zoom-width="{{ media.width | at_most: 1600 }}" alt="{{ media_alt | escape }}">
+    
+                                              <noscript>
+                                                  <img loading='lazy'  src="{{ media | img_url: '800x' }}" alt="{{ media_alt | escape }}">
+                                              </noscript>
+                                          </div>
+                                      </div>
+    
+                                  {%- when 'model' -%}
+                                      <div class="product-gallery__model">
+                                          <div class="model-wrapper">
+                                              {{- media | model_viewer_tag: image_size: '1024x', reveal: 'interaction', toggleable: true -}}
+                                          </div>
+                                      </div>
+    
+                                  {%- when 'external_video' -%}
+                                      <div class="product-gallery__external-video">
+                                          <div class="video-wrapper">
+                                              {{- media | external_video_tag: image_size: '1024x' -}}
+                                          </div>
+                                      </div>
+    
+                                  {%- when 'video' -%}
+                                      <div class="product-gallery__video">
+                                          <div class="video-wrapper video-wrapper--native" style="padding-bottom: {{ 100.0 | divided_by: media.aspect_ratio }}%">
+                                              {{- media | video_tag: image_size: '1024x', controls: true -}}
+                                          </div>
+                                      </div>
+                              {%- endcase -%}
+                          </div>
+                      {%- endfor -%}
+                  {%- endif -%}
+              </div>
+    
+              {%- comment -%}Add the "view in your space" button, which allows to show the product in customer's environment (if the device supports it){%- endcomment -%}
+              {%- assign first_3d_model = product.media | where: 'media_type', 'model' | first -%}
+    
+              {%- if first_3d_model -%}
+                <button class="product-gallery__view-in-space button button--full" data-shopify-xr data-shopify-model3d-id="{{ first_3d_model.id }}" data-shopify-model3d-default-id="{{ first_3d_model.id }}" data-shopify-title="{{ product.title | escape }}" data-shopify-xr-hidden>
+                  {%- render 'icon', icon: 'media-view-in-space' -%} {{- 'product.general.view_in_space' | t -}}
+                </button>
+              {%- endif -%}
+    
+              {%- if template != 'product.quick-view' and section.settings.enable_image_zoom -%}
+                <span class="product-gallery__zoom-notice">
+                  {% render 'icon', icon: 'zoom' %}
+                  <span class="hidden-pocket">{{ 'product.general.zoom' | t }}</span>
+                  <span class="hidden-lap-and-up">{{ 'product.general.zoom_mobile' | t }}</span>
+                </span>
+              {%- endif -%}
+            </div>
+    
+            <div class="big_image"   data-media-type="image"  style="position: absolute; opacity: 1;width: 100%;display:none;">
+              <div class="product-gallery__size-limiter" style="max-width: 380px">
+               <div
+                  class="aspect-ratio"
+                  style="{%- if canvasEnabled -%} padding-bottom: 0% {%- else -%} padding-bottom: 100.0% {%- endif -%}" 
+                  style="width:fit-content">
+                  <div class="customizer-content">
+                    <div id="container1">
+                      <canvas id="myCanvas"></canvas>
+                    </div>
+                    <div id="container2" style="display: none;">
+                      <canvas id="myCanvas2"></canvas>
+                    </div>
+                  </div>
+                </div>
+                {% if canvasEnabled %}
+                <div id="MobileCanvasImage">
+                    <img class= "canvasimagecss" src="" >
+                </div>
+               {% endif %}
+               </div>
+            </div>
+           
+            {%- if show_thumbnails_if_one_media -%}
+              <div class="{%- if canvasEnabled -%}is-canvas-enabled{% endif %} scroller">
+                <div class="scroller__inner">
+                  <div class="product-gallery__thumbnail-list">
+                    {%- if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true -%}
+                    <a class="customizer_btn product-gallery__thumbnail ls-is-cached" data-action="customizerClick">
+                    <div class="canvas_image " style="">
+                        <img loading='lazy' style=""  src="https://cdn.shopify.com/s/files/1/0497/2724/2391/files/costumezierr_copy22312.png?v=1656075900" alt="{{ media_alt | escape }}">
+                    </div>
+                    </a>
+                     {%- endif -%}
+                     {%- if shopifyAlternateImages.size > 0  -%}
+                          {%- assign counter = 0 -%}
+                          {%- for media in product.media -%}
+    {% if forloop.index0 < still_images_count %}
+                              {%- for image in product.images -%}
+                                  {%- if image.src == media -%}
+                                      {%- for Hops_media in shopifyAlternateImages -%}
+                                          {% assign imageId = image.id | append: "" %}
+                                          {%- if imageId == Hops_media.imageSrc -%}
+                                              {%- if counter == 0 -%}
+                                                  {%- if  itemShow == '' -%}
+                                                      {%- assign selected_media = media -%}
+                                                      {%- assign counter = 1 -%}
+                                                  {%- endif -%}
+                                                  {%- if Hops_media.marketId == itemShow -%}
+    
+                                                      {%- assign selected_media = media -%}
+                                                      {%- assign counter = 1 -%}
+                                                  {%- endif -%}
+                                              {%- endif -%}
+                                              {%- assign is_media_group = false -%}
+                                              {%- assign is_media_filtered = false -%}
+                                              {%- assign media_alt = media.alt -%}
+    
+                                              {%- if media.alt contains '#' -%}
+                                                  {%- assign is_media_group = true -%}
+                                                  {%- assign alt_parts = media.alt | split: '#' -%}
+    
+                                                  {%- comment -%}
+                                        If the custom ALT tag contains two parts (for instance "My custom alt # color_blue") then the first part is actually used
+                                        as a custom ALT tag
+                                      {%- endcomment -%}
+    
+                                                  {%- if alt_parts.size == 2 and alt_parts.first != blank -%}
+                                                      {%- assign media_alt = alt_parts.first | strip -%}
+                                                  {%- else -%}
+                                                      {%- assign media_alt = product.title -%}
+                                                  {%- endif -%}
+    
+                                                  {%- assign media_group_parts = alt_parts.last | split: '_' -%}
+    
+                                                  {%- for option in product.options -%}
+                                                      {%- assign downcase_option = option | downcase -%}
+                                                      {%- assign downcase_group_option = media_group_parts.first | strip | downcase -%}
+    
+                                                      {%- if downcase_option == downcase_group_option -%}
+                                                          {%- assign option_setting = 'option' | append: forloop.index -%}
+                                                          {%- assign option_value = product.selected_or_first_available_variant[option_setting] | downcase -%}
+    
+                                                          {%- assign downcase_group_value = media_group_parts.last | strip | downcase -%}
+                                                          {%- assign media_variant_ids = media.variants | map: 'id' -%}
+    
+                                                          {%- if option_value != downcase_group_value -%}
+                                                              {%- unless media_variant_ids contains product.selected_or_first_available_variant.id -%}
+                                                                  {%- assign is_media_filtered = true -%}
+                                                              {%- endunless -%}
+                                                          {%- endif -%}
+    
+                                                          {%- break -%}
+                                                      {%- endif -%}
+                                                  {%- endfor -%}
+                                              {%- endif -%}
+    
+                                              <a href="{{ media | img_url: '1024x' }}" rel="noopener" class="product-gallery__thumbnail {% if media.id == selected_media.id %}is-nav-selected{% endif %} {% if is_media_filtered %}is-filtered{% endif %}" data-media-id="{{ media.id }}" {% if is_media_group %} data-group-name="{{ media_group_parts.first | strip | downcase | escape }}" data-group-value="{{ media_group_parts.last | strip | downcase | escape }}" {% endif %}>
+                                                  {%- comment -%}Based on the type of media, we have to add an icon as per Shopify rules{%- endcomment -%}
+    
+                                                  {%- case media.media_type -%}
+                                                      {%- when 'model' -%}
+                                                          <span class="product-gallery__thumbnail-badge">{% render 'icon', icon: 'media-model-badge' %}</span>
+    
+                                                      {%- when 'video' or 'external_video' -%}
+                                                          <span class="product-gallery__thumbnail-badge">{% render 'icon', icon: 'media-video-badge' %}</span>
+                                                  {%- endcase -%}
+    
+                                                  <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: media.preview_image.aspect_ratio }}%">
+                                                     <img loading='lazy'  class="image--fade-in lazyload imageborder" data-src="{{ media | img_url: '130x' }}" alt="{{ media_alt | escape }}">
+                                                  </div>
+                                              </a>
+                                          {%- endif -%}
+                                      {%- endfor -%}
+                                  {%- endif -%}
+                              {%- endfor -%}
+      {% endif %}
+                          {%- endfor -%}
+
+                                              <a href="#" rel="noopener" class="product-gallery__thumbnail -is-nav-selected" data-media-id="360" >
+                                                  {%- comment -%}Based on the type of media, we have to add an icon as per Shopify rules{%- endcomment -%}
+    
+                                                  <div class="aspect-ratio magic360-overlay-icon" style="padding-bottom: 100%">
+                                                     <img loading='lazy'  class="image--fade-in lazyload imageborder" data-src="{{ MagicToolbox360IconURLFull }}" alt="{{ media_alt | escape }}">
+                                                  </div>
+                                              </a>
+
+                       
+                    <!--          siicount  {{product.metafields.Specialimages.size}} -->
+                    
+                    {%- if product.metafields.Specialimages.size  > 0  -%}
+                    
+                    
+                           {%- for si_media in product.metafields.Specialimages %}
+                            {%- for si_image in product.images %}
+                         <!--                          simedis <li>   {{ si_media[0] }} -- {{si_image.id}}</li> -->
+                    
+                                    {% assign imageId = si_image.id  | append: "" %}
+                    
+                                        {%- if si_media[0] ==  imageId   -%}
+                    
+                                           <!--                 siimage {{si_image.src}} -->
+                                       {%- for media in product.media -%}
+                                       {%- if media == si_image.src  -%}
+                   
+                    
+       <a href="{{ media | img_url: '1024x' }}" rel="noopener" class="product-gallery__thumbnail {% if media.id == selected_media.id %}is-nav-selected{% endif %} {% if is_media_filtered %}is-filtered{% endif %}" data-media-id="{{ media.id }}" {% if is_media_group %} data-group-name="{{ media_group_parts.first | strip | downcase | escape }}" data-group-value="{{ media_group_parts.last | strip | downcase | escape }}" {% endif %}>
+                                                  {%- comment -%}Based on the type of media, we have to add an icon as per Shopify rules{%- endcomment -%}
+    
+                                                  {%- case media.media_type -%}
+                                                      {%- when 'model' -%}
+                                                          <span class="product-gallery__thumbnail-badge">{% render 'icon', icon: 'media-model-badge' %}</span>
+    
+                                                      {%- when 'video' or 'external_video' -%}
+                                                          <span class="product-gallery__thumbnail-badge">{% render 'icon', icon: 'media-video-badge' %}</span>
+                                                  {%- endcase -%}
+    
+                                                  <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: media.preview_image.aspect_ratio }}%">
+                                                     <img loading='lazy'  class="image--fade-in lazyload imageborder" data-src="{{ media | img_url: '130x' }}" alt="{{ media_alt | escape }}">
+                                                  </div>
+                                              </a>
+                    
+                     {% endif %} 
+                   {% endfor %}
+                     {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                    {% endif %}
+                      {%- else -%}
+                          {%- for media in product.media -%}
+    
+                              {%- assign is_media_group = false -%}
+                              {%- assign is_media_filtered = false -%}
+                              {%- assign media_alt = media.alt -%}
+    
+                              {%- if media.alt contains '#' -%}
+                                  {%- assign is_media_group = true -%}
+                                  {%- assign alt_parts = media.alt | split: '#' -%}
+    
+                                  {%- comment -%}
+                                        If the custom ALT tag contains two parts (for instance "My custom alt # color_blue") then the first part is actually used
+                                        as a custom ALT tag
+                                      {%- endcomment -%}
+    
+                                  {%- if alt_parts.size == 2 and alt_parts.first != blank -%}
+                                      {%- assign media_alt = alt_parts.first | strip -%}
+                                  {%- else -%}
+                                      {%- assign media_alt = product.title -%}
+                                  {%- endif -%}
+    
+                                  {%- assign media_group_parts = alt_parts.last | split: '_' -%}
+    
+                                  {%- for option in product.options -%}
+                                      {%- assign downcase_option = option | downcase -%}
+                                      {%- assign downcase_group_option = media_group_parts.first | strip | downcase -%}
+    
+                                      {%- if downcase_option == downcase_group_option -%}
+                                          {%- assign option_setting = 'option' | append: forloop.index -%}
+                                          {%- assign option_value = product.selected_or_first_available_variant[option_setting] | downcase -%}
+    
+                                          {%- assign downcase_group_value = media_group_parts.last | strip | downcase -%}
+                                          {%- assign media_variant_ids = media.variants | map: 'id' -%}
+    
+                                          {%- if option_value != downcase_group_value -%}
+                                              {%- unless media_variant_ids contains product.selected_or_first_available_variant.id -%}
+                                                  {%- assign is_media_filtered = true -%}
+                                              {%- endunless -%}
+                                          {%- endif -%}
+    
+                                          {%- break -%}
+                                      {%- endif -%}
+                                  {%- endfor -%}
+                              {%- endif -%}
+    
+                              <a href="{{ media | img_url: '1024x' }}" rel="noopener" class="product-gallery__thumbnail {% if media.id == selected_media.id %}is-nav-selected{% endif %} {% if is_media_filtered %}is-filtered{% endif %}" data-media-id="{{ media.id }}" {% if is_media_group %} data-group-name="{{ media_group_parts.first | strip | downcase | escape }}" data-group-value="{{ media_group_parts.last | strip | downcase | escape }}" {% endif %}>
+                                  {%- comment -%}Based on the type of media, we have to add an icon as per Shopify rules{%- endcomment -%}
+    
+                                  {%- case media.media_type -%}
+                                      {%- when 'model' -%}
+                                          <span class="product-gallery__thumbnail-badge">{% render 'icon', icon: 'media-model-badge' %}</span>
+    
+                                      {%- when 'video' or 'external_video' -%}
+                                          <span class="product-gallery__thumbnail-badge">{% render 'icon', icon: 'media-video-badge' %}</span>
+                                  {%- endcase -%}
+    
+                                  <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: media.preview_image.aspect_ratio }}%">
+                                      <img loading='lazy'  class="image--fade-in lazyload" data-src="{{ media | img_url: '130x' }}" alt="{{ media_alt | escape }}">
+                                  </div>
+                              </a>
+                          {%- endfor -%}
+                      {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+    
+            {%- if section.settings.enable_image_zoom -%}
+              {%- comment -%}This code is used to power the mobile zoom and must not be removed nor altered{%- endcomment -%}
+              <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="pswp__bg"></div>
+                <div class="pswp__scroll-wrap">
+                  <div class="pswp__container">
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                  </div>
+    
+                  <div class="pswp__ui">
+                    <button class="pswp__button pswp__button--close" aria-label="{{ 'general.accessibility.close' | t }}">
+                      {% render 'icon', icon: 'close-2' %}
+                    </button>
+    
+                    <div class="pswp__prev-next">
+                      <button class="pswp__button pswp__button--arrow--left" aria-label="{{ 'general.accessibility.previous' | t }}">
+                        {% render 'icon', icon: 'arrow-left' %}
+                      </button>
+    
+                      <button class="pswp__button pswp__button--arrow--right" aria-label="{{ 'general.accessibility.next' | t }}">
+                        {% render 'icon', icon: 'arrow-right' %}
+                      </button>
+                    </div>
+    
+                    <div class="pswp__pagination">
+                      <span class="pswp__pagination-current"></span> / <span class="pswp__pagination-count"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+    {% if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true %}
+      <div>
+
+            <button class="View-button" type="button" id="dropdownToggle"  data-toggle="dropdown" style="--clr:#1e2a5e">
+              View
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownToggle">
+              <button class="dropdown-item" onclick="viewCanvasImage()">Canvas Image</button>
+              <hr>
+              <button class="dropdown-item" onclick="expandProperties()">Options</button>
+            </div> 
+
+          
+          
+{% comment %} <div class="dropdown">
+  <input type="checkbox" id="dropdown__btn">
+  <label class="View-button" for="dropdown__btn" type="button" data-toggle="dropdown" style="--clr:#0d7c66">
+    Dropdown button
+  </label>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="#">Action</a>
+    <a class="dropdown-item" href="#">Another action</a>
+    <a class="dropdown-item" href="#">Something else here</a>
+  </div>
+</div> {% endcomment %}
+
+ </div>
+{% comment %}     
+    <img
+    id="expand-details"
+    onclick="expandProperties()"
+    src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/maximize.png?v=1721291087"
+    class="expand-view">
+  </img>  {% endcomment %}
+   {% endif %}
+    
+        </div>
+
+      <div class="image-container" style="display:none;"></div> 
+      <canvas id="stockCanvas" style="display: none;"></canvas>
+    {%- endif -%}
+     <script>
+      var CanvasColors = {{shop.metafields.CanvasColors | json}};
+      var CanvasImages = {{shop.metafields.OptionImages | json}};
+      var OptionsType = {{ shop.metafields.optiontype | json}}
+      var defaultFont = {{ shop.metafields.ProductDefaultFont.Font | json}}
+      var CanvasPatterns = {{product.metafields.PatternImages| json}};
+      var CanvasLayers = {{product.metafields.CanvasLayerOptions.Layers.canvasConfigLayers | json}};
+      var CanvasConfig = {{product.metafields.Placeholder | json}}
+      var CanvasOptions = {{product.metafields.CanvasLayerOptions.Options | json}};
+      var CanvasSpecs = {{ product.metafields.printableArea |json }};
+      var MedalConfig = {{ product.metafields.medalFinishMap.config.value | json}};
+      var Medal = {{ product.metafields.ProductMeta.ProductAdditionalInfo.ExtraInfoAboutProduct | json}};
+      var isMedal = Medal.filterName == 'Custom Medal'
+        ? true
+        : false;
+      var MedalPattern = {{ product.metafields.MedalPattern.config.value | json}};
+      var MedalPC = {{ product.metafields.MedalPrintColor.optionId.value | json}};
+      var ProductDefaultFont = {{shop.metafields.ProductDefaultFont.Font | json}};
+      var productFamily = {{shop.metafields.customizerFonts.fontFamily.value | json }};
+      var borderdetail = {{ shop.metafields.border.details.value | json}};
+    
+    // 
+      {% if product.metafields.CanvasLayerOptions.IsBorder.value %}
+        var isborder = true;
+      {% else %}
+        var isborder = false;{% endif %};
+      var borderImages = {{ shop.metafields.Border.ImageUrls.value | json}};
+    </script>

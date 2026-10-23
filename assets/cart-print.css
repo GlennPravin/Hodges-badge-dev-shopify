@@ -1,0 +1,917 @@
+/**
+ * cart-print.css — Phase 1 (complete)
+ * Loaded on /cart only (see layout/theme.liquid).
+ *
+ * Goals:
+ *  1. Full-page-width cart — no narrow left column.
+ *  2. Customisation property lines: ≥11pt, solid black, clearly readable.
+ *  3. Print-only header with company name, "Cart / Quote Request", phone, date.
+ *  4. Bordered contact / event-date block.
+ *  5. Hide all non-cart site chrome.
+ *  6. Hide interactive controls (buttons, remove links, checkout).
+ */
+
+/* ─────────────────────────────────────────────────────
+   Screen-only: hide the print header on screen.
+   The "Print your cart" link stays visible.
+───────────────────────────────────────────────────── */
+.cart-print-summary {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════
+   PRINT MEDIA QUERY — everything below only applies
+   when the customer does File → Print / Print to PDF.
+═══════════════════════════════════════════════════ */
+@media print {
+
+  /* ── Page setup ── */
+  @page {
+    size: letter portrait;
+    margin: 0.5in 0.5in 0.6in 0.5in;
+  }
+
+  html,
+  body {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 12pt !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ─────────────────────────────────────────────────
+     1. HIDE SITE CHROME
+     Everything that is not the actual cart order.
+  ───────────────────────────────────────────────── */
+
+  /* Shopify section wrappers */
+  #shopify-section-announcement-bar,
+  #shopify-section-header,
+  #shopify-section-footer,
+  #shopify-section-BannerWithImage,
+  #shopify-section-rich-text,
+  #shopify-section-static-text-with-icons,
+  #shopify-section-text-with-icons,
+  #shopify-section-recently-viewed-products,
+  #shopify-section-featured-collection,
+  #shopify-section-popups,
+
+  /* Section-type selectors (theme JS-driven) */
+  [data-section-type="announcement-bar"],
+  [data-section-type="header"],
+  [data-section-type="footer"],
+  [data-section-type="image-with-text"],
+  [data-section-type="rich-text"],
+  [data-section-type="static-text-with-icons"],
+  [data-section-type="text-with-icons"],
+  [data-section-type="recently-viewed-products"],
+  [data-section-type="featured-collection"],
+  [data-section-type="map"],
+
+  /* Common class-based chrome */
+  .announcement-bar,
+  .header,
+  .header__wrapper,
+  nav,
+  .navbar,
+  .footer,
+  .footer__inner,
+  .footer__blocks,
+  .mini-cart,
+  .overlay,
+  .modal,
+  .popup,
+  .loaderbg,
+  .loading-bar,
+  .skip-to-content,
+
+  /* Text-with-icons guarantee bar */
+  .text-with-icons,
+  .text-with-icons--boxed,
+
+  /* Social icons wherever they appear */
+  .social-links,
+  .social-media,
+  .footer__social,
+
+  /* Digital catalog / newsletter banners */
+  .catalog-banner,
+  .digital-catalog,
+  .newsletter,
+
+  /* Payment icons in recap */
+  .cart-recap__secure-payment,
+
+  /* Cart-recap interactive controls */
+  .cart-recap__note,
+  button[name="checkout"],
+  #testqq,
+
+  /* Line-item interactive controls */
+  .line-item__quantity-remove,
+  .quantity-selector__button,
+  .btn_cart_PC,
+  .set_width_mob,
+  a[href*="&edit"],
+  a[href*="?cart_id="],
+
+  /* "Edit Customization" link in line-items */
+  a.line-item__title[style*="color:#ae1a1a"],
+
+  /* Shipping estimator widget */
+  .shipping-estimator,
+  .estimate-shipping__arrow,
+
+  /* Upsell section */
+  [data-section-id$="-upsell"],
+
+  /* Calendar date-picker modals */
+  #Modal_ship,
+  #Modal_alert,
+  #Modal_alert_prior_warning,
+  #Modal_alert_delivery_cutoff,
+  .modal_pop_ship,
+  .modal_pop_alert,
+  .modal_pop_alert_prioor_warning,
+  .modal-footer,
+  .modal-header,
+  .modal-dialog,
+  .bs-example,
+
+  /* Image enlarge overlay */
+  #popup1,
+  .overlay,
+
+  /* Misc */
+  .fa-info-circle,
+  .trustpilot-widget,
+  #calendaralerts,
+  #movmessagespan,
+  .page__description,
+  .hidden-print,
+  iframe,
+  noscript,
+  script {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* ─────────────────────────────────────────────────
+     2. PRINT-ONLY CART HEADER
+     Shown only on print (hidden on screen above).
+  ───────────────────────────────────────────────── */
+
+  .cart-print-summary {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 0 8px !important;
+    padding-bottom: 8px !important;
+    border-bottom: 3px solid #000 !important;
+  }
+
+  .cart-print-summary__logo-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 6px !important;
+  }
+
+  /* Logo image */
+  .cart-print-summary__logo img {
+    max-height: 60px !important;
+    width: auto !important;
+    display: block !important;
+  }
+
+  /* Shop name (shown when no logo image, or alongside it) */
+  .cart-print-summary__shop {
+    margin: 0 !important;
+    font-size: 20pt !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    line-height: 1.2 !important;
+  }
+
+  /* "Cart / Quote Request" label — right-aligned */
+  /* .cart-print-summary__tagline {
+    margin: 0 !important;
+    font-size: 14pt !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    text-align: right !important;
+    letter-spacing: 0.02em !important;
+    text-transform: uppercase !important;
+  } */
+
+  .cart-print-summary__meta-row {
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+
+  .cart-print-summary__meta,
+  .cart-print-summary__customer {
+    margin: 0 !important;
+    font-size: 12pt !important;
+    color: #000 !important;
+    line-height: 1.5 !important;
+  }
+
+  /* ─────────────────────────────────────────────────
+     3. FULL-PAGE-WIDTH LAYOUT
+  ───────────────────────────────────────────────── */
+
+  main#main,
+  .container,
+  .container--flush,
+  .cart-wrapper,
+  .cart-wrapper__inner,
+  .cart-wrapper__inner-inner,
+  .card,
+  .card-Out_ship,
+  .table-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    float: none !important;
+    position: static !important;
+    box-shadow: none !important;
+  }
+
+  /* Cart recap: slim top separator */
+  .cart-recap {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-top: 8px !important;
+    padding-top: 6px !important;
+    border-top: 2px solid #000 !important;
+    page-break-inside: avoid;
+  }
+
+  .cart-recap__scroller,
+  .cart-recap .card,
+  .cart-recap .card__section {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* ─────────────────────────────────────────────────
+     FLEXBOX GRID FOR PRINT
+     Replaces Bootstrap’s float-based grid so columns
+     always render side-by-side in every print engine.
+  ───────────────────────────────────────────────── */
+
+  /* Every Bootstrap .row becomes a flex container */
+  .row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Full-width columns (headings, col-lg-12) */
+  .col-lg-12,
+  .col-md-12,
+  .col-sm-12[class*="col-lg-12"] {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    float: none !important;
+  }
+
+  /* Standard 50/50 split (Additional Details question/answer rows) */
+  .col-lg-6,
+  .col-md-6 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    padding-left: 0 !important;
+    padding-right: 8px !important;
+    box-sizing: border-box !important;
+    float: none !important;
+  }
+  /* Right column: no right-padding, add left-padding */
+  .col-lg-6 + .col-lg-6,
+  .col-md-6 + .col-md-6 {
+    padding-left: 8px !important;
+    padding-right: 0 !important;
+  }
+
+  /* Quarter columns (col-lg-3) — default 25% */
+  .col-lg-3,
+  .col-md-3 {
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+    padding-left: 0 !important;
+    padding-right: 8px !important;
+    box-sizing: border-box !important;
+    float: none !important;
+  }
+
+  /* Prevent col-sm-12 from collapsing all columns to 100% in print */
+  .col-lg-6.col-sm-12 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+  }
+  .col-lg-3.col-sm-12 {
+    flex: 0 0 25% !important;
+    max-width: 25% !important;
+  }
+
+  /* ─── Contact sub-section rows ───
+     Web HTML: [empty col-lg-3][label col-lg-3][value col-lg-6]
+     Web visual: label at 25–50%, value at 50–100%.
+     Print fix: hide empty spacer → label 50% left → value 50% right.
+     This aligns Contact Name/Phone/How-did-you-hear with the
+     question-label column directly above them. */
+
+  /* 1. Completely remove the empty spacer column */
+  .additional-questions ~ .row > .col-lg-3:first-child,
+  .additional-questions ~ .row > .col-md-3:first-child,
+  .additional-questions ~ .row > .col-lg-1:first-child,
+  .additional-questions ~ .row > .col-md-1:first-child {
+    display: none !important;
+    flex: 0 0 0 !important;
+    max-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* 2. Label column → 50% (left side, matches question-label width above) */
+  .additional-questions ~ .row > .col-lg-3:nth-child(2),
+  .additional-questions ~ .row > .col-md-3:nth-child(2),
+  .additional-questions ~ .row > .col-lg-5:nth-child(2),
+  .additional-questions ~ .row > .col-md-5:nth-child(2) {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    padding-left: 0 !important;
+    padding-right: 8px !important;
+    font-weight: 700 !important;
+    float: none !important;
+  }
+
+  /* 3. Value column → 50% (right side, aligns with answer column above) */
+  .additional-questions ~ .row > .col-lg-6:last-child,
+  .additional-questions ~ .row > .col-md-6:last-child {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    padding-left: 8px !important;
+    padding-right: 0 !important;
+    float: none !important;
+  }
+
+  /* ─────────────────────────────────────────────────
+     4. CART PAGE TITLE + WRAPPER SPACING
+  ───────────────────────────────────────────────── */
+
+  /* Kill the gap between the print header and "My cart" title */
+  .page__header,
+  .page__header--stack {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .page__header .page__title {
+    font-size: 14pt !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    margin: 0 0 4px !important;
+    padding: 0 !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Kill the gap introduced by cart-wrapper and its inner divs */
+  .cart-wrapper {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .cart-wrapper__inner,
+  .cart-wrapper__inner-inner {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* The outermost container wrapping the cart-print-summary + heading */
+  section[data-section-type="cart"] > .container {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Collapse ALL card and card-section theme padding */
+  .card {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 4px !important;
+    padding: 0 !important;
+  }
+
+  .card__section,
+  .card__section--loose,
+  .card__section--tight {
+    padding: 10px 0 !important;
+    margin: 0 !important;
+  }
+
+  /* ─────────────────────────────────────────────────
+     5. LINE-ITEM TABLE
+  ───────────────────────────────────────────────── */
+
+  /* Add breathing room before the product table */
+  .card:has(.line-item-table),
+  .card + .card {
+    margin-top: 16px !important;
+  }
+
+  .line-item-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: auto !important;   /* let browser size columns by content */
+  }
+
+  /* Explicit column widths via nth-child on td/th */
+  .line-item-table thead th:nth-child(1),
+  .line-item-table tbody td:nth-child(1) {
+    width: 62% !important;
+  }
+  .line-item-table thead th:nth-child(2),
+  .line-item-table tbody td:nth-child(2) {
+    width: 10% !important;
+    text-align: center !important;
+  }
+  .line-item-table thead th:nth-child(3),
+  .line-item-table tbody td:nth-child(3) {
+    width: 14% !important;
+    text-align: right !important;
+  }
+  .line-item-table thead th:nth-child(4),
+  .line-item-table tbody td:nth-child(4) {
+    width: 14% !important;
+    text-align: right !important;
+  }
+
+  /* Make the header row visible (class "hidden-phone" hides it on mobile) */
+  .line-item-table thead,
+  .line-item-table thead.hidden-phone {
+    display: table-header-group !important;
+  }
+
+  .line-item-table thead th {
+    font-size: 12pt !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    border-bottom: 2px solid #000 !important;
+    /* Extra bottom padding pushes the black border away from the
+       header text; combined with td padding-top this gives clear
+       visual separation on both page 1 and every repeated page. */
+    padding: 6px 6px 14px !important;
+    text-align: left !important;
+  }
+
+  .line-item-table thead th.table__cell--right {
+    text-align: right !important;
+  }
+
+  .line-item-table thead th.table__cell--center {
+    text-align: center !important;
+  }
+
+  /* ── 1. Allow long products to flow across pages naturally ──
+     Removing page-break-inside:avoid stops the browser from
+     pushing an entire product to the next page when it doesn't
+     fit; content now continues line-by-line as on screen. */
+  .line-item {
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    border-bottom: 1px solid #ccc !important;
+  }
+
+  /* ── 3. No separator after the LAST product ──
+     The grey rule should only divide products, not trail
+     below the final one. */
+  .line-item:last-child,
+  .line-item-table tbody tr:last-child {
+    border-bottom: none !important;
+  }
+
+  /* ── Padding on every line-item cell ──
+     box-decoration-break: clone tells the browser to RE-APPLY
+     padding-top at the start of each page fragment when a row
+     splits across pages.  This is the only CSS mechanism that
+     adds space below a repeated thead on page 2+. */
+  .line-item td {
+    vertical-align: top !important;
+    padding: 14px 6px 8px !important;  /* 14px top = space after any separator */
+    -webkit-box-decoration-break: clone !important;
+    box-decoration-break: clone !important;
+    border: none !important;
+    color: #000 !important;
+  }
+
+  /* Extra top clearance on the very first product row (page 1) */
+  .line-item-table tbody tr:first-child td {
+    padding-top: 22px !important;
+  }
+
+  /* Consistent top clearance after each inter-product separator */
+  .line-item-table tbody tr:not(:first-child) td {
+    padding-top: 18px !important;
+  }
+
+  /* Product thumbnail */
+  .line-item__image-wrapper {
+    float: left !important;
+    margin: 0 10px 6px 0 !important;
+  }
+
+  .line-item__image-wrapper img {
+    max-width: 72px !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+  .line-item__product-info,
+  .line-item__meta,
+  .line-item__product-info-wrapper {
+    display: block !important;
+  }
+
+  /* Product title */
+  .line-item__title,
+  a.line-item__title {
+    font-size: 12pt !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    text-decoration: none !important;
+    display: block !important;
+    margin-bottom: 4px !important;
+    line-height: 1.3 !important;
+  }
+
+  .line-item__vendor,
+  .line-item__price {
+    font-size: 12pt !important;
+    color: #000 !important;
+    display: block !important;
+  }
+
+  /* ─────────────────────────────────────────────────
+     6. CUSTOMISATION PROPERTY LINES
+        (the primary readability fix)
+  ───────────────────────────────────────────────── */
+
+  .line_itm_width,
+  .line-item__property-list {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 4px 0 0 !important;
+    list-style: none !important;
+    /* Clear past the product thumbnail float so ALL properties
+       start from the same left edge of the product-info column */
+    clear: both !important;
+    display: block !important;
+  }
+
+  .line-item__property-list li,
+  .line-item__property {
+    font-size: 12pt !important;
+    line-height: 1.4 !important;
+    color: #000 !important;
+    font-weight: 600 !important;
+    opacity: 1 !important;
+    margin: 0 0 2px !important;
+    padding: 0 !important;
+    page-break-inside: avoid;
+    list-style: none !important;
+    display: block !important;
+  }
+
+  /* Thumbnail images attached to properties (e.g. CustomDesign) */
+  .line-item__property-list img {
+    max-width: 64px !important;
+    height: auto !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin-left: 4px !important;
+  }
+
+  /* "Free Engraved Logo" promotional badge */
+  .line-item .line-item__meta span[style*="color:#ff0707"] {
+    font-size: 12pt !important;
+    color: #000 !important;
+    font-weight: 600 !important;
+    font-style: italic !important;
+  }
+
+  /* ─────────────────────────────────────────────────
+     7. QUANTITY + PRICE COLUMNS
+  ───────────────────────────────────────────────── */
+
+  .line-item__quantity,
+  .table__cell--right,
+  .table__cell--center,
+  .line-item__price-list,
+  .line-item__line-price,
+  .set_height_span,
+  .set_height_span_T {
+    color: #000 !important;
+    font-size: 12pt !important;
+    font-weight: 600 !important;
+  }
+
+  /* Quantity input — strip interactive chrome */
+  .quantity-selector {
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  .quantity-selector__value,
+  input.quantity-selector__value,
+  input.q_number {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #000 !important;
+    font-size: 12pt !important;
+    font-weight: 700 !important;
+    padding: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    text-align: center !important;
+  }
+
+  /* ─────────────────────────────────────────────────
+     8. CART TOTALS / RECAP
+  ───────────────────────────────────────────────── */
+
+  .cart-recap__price-line {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 3px 0 !important;
+    color: #000 !important;
+    font-size: 12pt !important;
+  }
+
+  .cart-recap__price-line-label,
+  .cart-recap__price-line-price {
+    color: #000 !important;
+    font-size: 12pt !important;
+    font-weight: 600 !important;
+  }
+
+  /* Grand total line */
+  .cart-recap__price-line:last-of-type .cart-recap__price-line-label,
+  .cart-recap__price-line:last-of-type .cart-recap__price-line-price {
+    font-size: 13pt !important;
+    font-weight: 700 !important;
+  }
+
+  .cart-recap__amount-saved {
+    color: #000 !important;
+    font-size: 12pt !important;
+  }
+
+  /* ─────────────────────────────────────────────────
+     9. CONTACT / EVENT-DATE BLOCK
+        (card-Out_ship and cart__additional-details)
+        Shown in a clear bordered box.
+  ───────────────────────────────────────────────── */
+
+  .card-Out_ship {
+    border: 1.5px dashed #000 !important;
+    padding: 10px 12px !important;
+    margin-top: 6px !important;
+    margin-bottom: 10px !important;
+    page-break-inside: avoid;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* Section heading ("When is your Event or a specific Need-by Date?") */
+  .head-top-ship {
+    font-size: 14pt !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    margin: 0 0 8px !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  /* Rush-fee notice link line — hide on print */
+  .head-top-ship.mt-4 {
+    display: none !important;
+  }
+
+  /* "Additional Details" heading — position at the right-column start
+     and center its text within that 50% column to match the web layout */
+  .estimate-shipping__toggle {
+    font-size: 12pt !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 8px 0 6px 20% !important;   /* indent to right column */
+    width: 50% !important;
+    display: block !important;
+    text-align: center !important;      /* center within the right column */
+    cursor: default !important;
+  }
+
+  /* Collapse the inner form wrapper of Additional Details */
+  .estimate-shipping,
+  .estimate-shipping_new,
+  .shipping-estimator_new {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Collapse text-with-icons wrapper inside Additional Details form */
+  .text-with-icons__item {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .cart-attribute__field {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Force the collapsible "Additional Details" section open on print */
+  #shipping-estimator_new {
+    display: block !important;
+    max-height: none !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  .cart__additional-details,
+  .cart-attribute__field,
+  .form_input_ship,
+  .text_area_text,
+  .card-Out_ship label,
+  .card-Out_ship p,
+  .card-Out_ship input,
+  .card-Out_ship select,
+  .card-Out_ship textarea {
+    color: #000 !important;
+    font-size: 12pt !important;
+    line-height: 1.7 !important;
+  }
+
+  .cart__additional-details label,
+  .card-Out_ship label,
+  .form__label {
+    font-weight: 700 !important;
+    color: #000 !important;
+    font-size: 12pt !important;
+  }
+
+  /* Strip interactive styling from form fields — show values as plain text */
+  .form_input_ship,
+  .text_area_text,
+  .card-Out_ship input,
+  .card-Out_ship select,
+  .card-Out_ship textarea,
+  .select_from,
+  .select_from_cus {
+    border: none !important;
+    border-bottom: 1px solid #999 !important;
+    background: transparent !important;
+    padding: 0 2px !important;
+    min-height: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    font-size: 12pt !important;
+    color: #000 !important;
+  }
+
+  /* "For questions regarding this order please contact:" subheading */
+  .additional-questions label[style*="color: #1e2d7d"] {
+    color: #000 !important;
+    font-size: 12pt !important;
+    font-weight: 700 !important;
+  }
+
+  /* ─────────────────────────────────────────────────
+     10. LINKS — strip colours, no underlines, no URLs
+  ───────────────────────────────────────────────── */
+
+  a,
+  a:visited {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+
+  a[href]:after {
+    content: none !important;
+  }
+
+  /* "Print your cart" on-screen link — hide on print */
+  .cart-print-link {
+    display: none !important;
+  }
+
+  /* "Edit customization for this product" link — hide on print */
+  a[href*="cart_id"] {
+    display: none !important;
+  }
+
+  /* ─────────────────────────────────────────────────
+     11. MISCELLANEOUS CLEAN-UP
+  ───────────────────────────────────────────────── */
+
+  /* ── EMPTY BOX FIX ──
+     The mobile-only quantity block ('.hidden-tablet-and-up') lives INSIDE
+     the product-info <td>. Its children are display:none but the wrapper
+     itself still renders as a blank box. Hide the whole thing on print. */
+  .hidden-tablet-and-up {
+    display: none !important;
+  }
+
+  /* Also hide the matching hidden-phone columns from the non-table td area */
+  .line-item td .hidden-tablet-and-up,
+  .line-item__quantity.hidden-tablet-and-up {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Bootstrap row/col margins */
+  .mar-bottom {
+    margin-bottom: 8px !important;
+  }
+
+  /* Bootstrap row gutter already handled in the flexbox grid section above */
+
+  /* "For questions..." heading — give it a clear top gap */
+  .additional-questions {
+    margin-top: 12px !important;
+    margin-bottom: 6px !important;
+    padding-top: 0 !important;
+  }
+
+  /* Give the event-date card inner container a little breathing room */
+  .card-Out_ship .container {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  /* The form inside cart__additional-details should not add space */
+  form.cart__additional-details {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* The inner "" div wrapping the card (line 223 in main-cart.liquid) */
+  form.cart__additional-details > div {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* Remove card box-shadow and borders on print */
+  .card {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* Discount strikethrough prices */
+  .set_height_span[style*="line-through"] {
+    color: #000 !important;
+    text-decoration: line-through !important;
+  }
+
+  /* Notification bar (removed print color notice) */
+  .notification-message {
+    font-size: 9pt !important;
+    color: #000 !important;
+    font-style: italic !important;
+  }
+  .cart-recap__notices{
+    text-align: right !important;
+  }
+} /* end @media print */

@@ -1,0 +1,102 @@
+{% assign canvasEnabled = false %}
+{%- if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true -%}
+{% assign canvasEnabled = product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled %}
+{%- endif -%}
+
+<style>
+ .scene {
+	display: none;
+  height: 100%;
+  position: fixed;
+  top: 0px;
+    width: 100vw;
+    height: 100vh;
+    z-index: 5;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+}
+
+.cart-container {
+  width: 900px;
+  margin: 5em auto;
+  margin-top: 7em;
+}
+
+#cart-new {
+  /* width: 150px;
+  display:inline-block; */
+    width: 150px;
+    display: inline-block;
+    margin-top: 106px;
+}
+
+.product {
+  /* width: 60px;
+  position: absolute;
+  left: 50%; */
+  margin-top: 189px;
+    width: 60px;
+    position: absolute;
+    left: 50%;
+  opacity: 0;
+  transform: scale(2);
+}
+ #text{
+	text-align: center;
+	font-size: 25px;
+	color: #ff0000;
+	font-weight: 500;
+ }
+/* #image {
+  width: 300px;
+  margin: 1em auto;
+  position: relative;
+  top: -20px;
+  img {
+    width: 100%;
+  }
+}  */
+
+/* #image {
+  width: 300px;
+  margin: 1em auto;
+  position: relative;
+  top: -20px;
+  img {
+    width: 100%;
+  }
+} */
+@media screen and (max-width: 767px) {
+  #text{
+    font-size: 16px;
+  }
+}
+ </style>
+{% if canvasEnabled %}
+<div id="cart-page" class="scene">
+	<img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Loader_image-1.png?v=1721995333" id="mustard" class="product" alt="Mustard">
+	<img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Loader_image-2.png?v=1721995346" id="meat" class="product" alt="Meat">
+	<img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Loader_image-3.png?v=1721995425" id="soda" class="product" alt="Soda">
+	{% comment %} <img src="https://hodges-badge-sandbox-dev.myshopify.com/cdn/shop/files/x-large_9b8e9756-adbd-4e63-9eb7-898a14d95669_180x.jpg?v=1688634440" id="stream" class="product" alt="stream"> {% endcomment %}
+
+  <div class="cart-container">
+  <svg 
+	 viewBox="0 0 512 512" id="cart-new">
+<circle cx="376.8" cy="440" r="55"/>
+<circle cx="192" cy="440" r="55"/>
+<polygon points="128,0 0.8,0 0.8,32 104.8,32 136.8,124.8 170.4,124.8 "/>
+<polygon style="fill:#32BEA6;" points="250.4,49.6 224,124.8 411.2,124.8 "/>
+<polygon style="fill:#1e2d7d;" points="411.2,124.8 224,124.8 170.4,124.8 136.8,124.8 68,124.8 141.6,361.6 427.2,361.6 
+	511.2,124.8 "/>
+<g>
+	<rect x="166.4" y="185.6" style="fill:#FFFFFF;" width="255.2" height="16"/>
+	<rect x="166.4" y="237.6" style="fill:#FFFFFF;" width="166.4" height="16"/>
+</g>
+</svg>
+</div>
+  <div id="text">
+	Hang tight! We're crafting your unique product image. This might take a few seconds.<br>
+	Please wait while we add your item to the cart...
+  </div>
+</div> 
+{% endif %}

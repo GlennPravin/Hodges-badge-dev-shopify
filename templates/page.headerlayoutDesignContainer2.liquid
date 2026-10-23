@@ -1,0 +1,511 @@
+<style>
+  #main{
+    background-color:#f3f5f6;
+  }
+  .con_top_fixed_full{
+    max-width: 1800px;
+    background-color: #e7ebee;
+  }
+  .team{
+    margin-top:20px;
+    margin-bottom:-20px;
+    margin-left:auto;
+    margin-right:auto;
+      
+  }
+    .con_header_txt {
+        max-width: revert;
+        /*max-width: 1626px;*/
+        padding: 20px 0px 20px 0px;
+        border: 1px solid var(--border-color);
+        border: 1px solid var(--border-color);
+
+    }
+
+    @media screen and (min-width: 1000px) {
+        .team__block-item {
+            width: calc(14.33333% - -23px) ! important;
+		border-radius: 19px !important;
+        }
+
+        .mm {
+            margin: 2px!important;
+        }
+     
+        
+    }
+
+
+    @media screen and (min-width: 641px) {
+        .team__block-item {
+            margin: 4px;
+            flex: none;
+            width: calc(38% - 30px);
+          border-radius: 19px;
+        }
+    }
+
+    @media screen and (max-width: 641px) {
+        .team__block-item {
+/*             width: calc(51.33333% - 8px); */
+           width: calc(47.33333% - 8px);
+         border-radius: 19px;
+        }
+
+        .block_Zero_margin {
+            margin: 0px ! important;
+        }
+
+        .ml {
+            margin: 0px;
+        }
+
+        .team__block-list {
+            display: flex;
+            /* justify-content: center; */
+            flex-wrap: wrap;
+            border-radius: 0px;
+        }
+    }
+
+    .team__member {
+/*         border-radius: 0px; */
+        padding: 5px 5px 5px 5px ! important;
+        border: 1px solid var(--border-color) ! important;
+        /* border-radius: 3px; */
+        background: var(--secondary-background) ! important;
+    }
+
+    .title_head {
+        border: 1px solid var(--border-color) ! important;
+        background-color: white;
+    }
+  #main {
+        /* background-color: #e7ebee; */
+        background-color: #fff;
+    }
+
+    .con_outer {
+        padding: 5px 10px;
+        max-width: 450px;
+    }
+
+    .card-design {
+        border-radius: 8px;
+
+        /* margin-bottom: -4px;
+                                    margin-top: -4px; */
+        /* width: 100%; */
+    }
+
+
+    @media screen and (max-width: 920px) {
+
+        .contanier_border_right {
+            border: 5px solid #1e2d7d;
+            border-radius: 10px;
+
+        }
+    }
+
+    @media screen and (min-width: 1000px) and (max-width: 1336px) {
+        .con_outer {
+            padding: 5px 10px;
+            max-width: 450px;
+        }
+
+
+        /* .contanier_border_right {
+                                border: 10px solid;
+                                border-image-slice: 1;
+                                border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+                                border-width: 4px;
+                                border-bottom-right-radius: 10px;
+                                border-bottom-left-radius: 0px;
+                                border-top-left-radius: 0px;
+                                border-top-right-radius: 10px;
+                                border-radius: 10px;
+                            } */
+
+    }
+
+    @media screen and (min-width: 1337px) {
+        .con_outer {
+            padding: 5px 10px;
+            max-width: 450px;
+        }
+
+        /* .contanier_border_right {
+                                border: 10px solid;
+                                border-image-slice: 1;
+                                border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+                                border-width: 4px;
+                                border-bottom-right-radius: 10px;
+                                border-bottom-left-radius: 10px;
+                                border-top-left-radius: 10px;
+                                border-top-right-radius: 10px;
+                                border-radius: 10px;
+                            } */
+
+    }
+
+    .outer_con {
+        border-radius: 10px;
+        background-color: #e7ebee !important;
+        /* border-image-slice: 1; */
+        border-width: 1px;
+        max-width: 950px;
+        padding: 20px 15px 10px 15px;
+        -moz-box-shadow: inset 0 0 10px #b28e44;
+        -moz-box-shadow: inset 0 0 10px #00badb;
+        -webkit-box-shadow: inset 0 0 10px #1e2d7d;
+    }
+
+    .bor1 {
+        background-color: white;
+        border: 3px solid;
+        border-image-slice: 1;
+        border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+        font-weight: 500;
+        /* border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44); */
+    }
+  .bor2 {
+        border: 5px solid;
+        border-image-slice: 1;
+        border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+        font-weight: 500;
+        /* border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44); */
+    }
+
+/*     .bbttn {
+        width: 150px;
+        text-align: center;
+        color: #fff ! important;
+        font-size: 22px;
+        border-radius: 10px;
+        background-image: linear-gradient(to right, #c0923f 37%, #c0923f 51%, #1e2d7d 92%);
+        margin-top: 15px;
+        margin-bottom: 5px;
+        -moz-box-shadow: inset 0 0 10px #b28e44;
+        -moz-box-shadow: inset 0 0 10px #00badb;
+        -webkit-box-shadow: inset 0 0 10px #1e2d7d;
+        border: 2px white;
+    } */
+
+    .card-body {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .form__field {
+        background-color: #fff ! important;
+        font-weight: 400;
+      font-size:13px;
+    }
+
+    .border_collapse {
+        border: 10px solid;
+        border-image-slice: 1;
+        border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+        border-width: 3px;
+    }
+
+    .out_border {
+        background: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+        border-radius: 10px;
+    }
+
+
+    #myFormPopUp {
+        overflow-y: scroll !important;
+    }
+
+    #display_123 {
+        cursor: pointer;
+    }
+  .btn-4 {
+    width: 150px;
+        text-align: center;
+        color: #fff ! important;
+        font-size: 22px;
+    margin-top: 15px;
+        margin-bottom: 5px;
+        border-radius: 10px;
+        background-image: linear-gradient(to right, #c0923f 37%, #c0923f 51%, #1e2d7d 92%);
+border: 3px solid #fff! important;
+    }
+</style>
+<a href="#" class="line-item__title link text--strong" onclick="openFormPopUp()"
+    style="color: var(--primary-button-background);font-size: 18px; text-decoration:none !important;">
+    <div class="container con_top_fixed_full" style="background-color: #b28e44;padding:10px; ">
+        <div class="row">
+
+
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div style="text-align:center;">
+                    <h5 class="team__section-title heading h3" style="Color:white;">Keep up to date on Sales and
+                        Promotions: Join our Email List!
+                        >></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+<div class="container " style="margin-top:-15px;">
+    <header class="page__header page__header--centered"  >
+        <h1  class="page__title heading h1" style="color: #00badb ! important;
+    text-transform: uppercase;
+    font-size: 25px;" >{{ page.title }}</h1>
+    </header>
+
+    <div class="page__content rte" style="">
+        {{ page.content }}
+    </div>
+</div>
+
+<!-----------Start stock title start-------------->
+<div class="container title_head "style="margin-top:-40px;  background: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+    border-radius: 10px;
+    border: 5px solid #b28e44 !important;">
+    <header class="page__header page__header--centered">
+        <h5 id="Content_title_top1" class="page__title heading h5" style="font-weight: 600;margin:-20px; color: white;"></h5>
+    </header>
+</div>
+<!-----------Start stock title end-------------->
+
+<!-------------------->
+<!-----------Start stock design 1-------------->
+<div class="container" style=" margin-top: 3px;
+border: 5px solid #b28e44 !important;  background: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+    border-radius: 10px;
+    ">
+    <div class="team block_Zero_margin" style="padding-top: 17px;">
+
+        <div id="target1" class="team__block-list">
+        </div>
+
+
+    </div>
+</div>
+<br>
+<!-----------End stock design 1-------------->
+
+<!-----------Start stock title start-------------->
+<div class="container title_head " style=" background: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+    border-radius: 10px;
+    border: 5px solid #b28e44 !important;">
+    <header class="page__header page__header--centered">
+        <h5 id="Content_title_2" class="page__title heading h5" style="margin:-20px;font-weight: 600;color: white;"></h5>
+    </header>
+</div>
+<!-----------Start stock title end-------------->
+
+
+<!-----------Start stock design start-------------->
+<div class="container" style=" margin-top: 3px;
+border: 5px solid #b28e44 !important;  background: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+    border-radius: 10px;
+   ">
+    <div class="team block_Zero_margin" style="padding-top: 17px;">
+
+        <div id="target2" class="team__block-list">
+        </div>
+
+
+    </div>
+</div>
+<br>
+<!-----------End stock design -------------->
+<div class="modalpop  test  " id="myFormPopUp">
+    <div class=" container " style="border-radius: 10px;">
+
+        <div class="col-lg-12">
+            <div class="row" style="margin-right: -55px;
+    margin-top: -21px;
+    border-radius: 10px;">
+
+
+            </div>
+
+
+            <div class="container outer_con" style="margin-top:100px;">
+                <div style="float: right; width: 22px;">
+                    <button onclick="closeFormPopUp()" ><i class="fa fa-times" 
+                                                           style="color:#1e2d7d; font-size:20px;"
+                            aria-hidden="true"></i></button>
+                </div>
+                <div id="display_123">
+                    <form class="col-lg-12" style="margin-top:25px; padding: 23px;" id="mform" name="mform" method="POST">
+                        <div class="form__input-row">
+                            <div class="form__input-wrapper form__input-wrapper--labelled border_collapse">
+                                <input id="email" type="text" class="form__field form__field--text" style=" background-color:white !important;" /> 
+                                <label for="contact-form-email" class="form__floating-label"> Email
+                                    Address<span style="color: red;"> *</span>
+                                    <span id="bug" style="font-size: 10px; font-family: 'rubik' sans-serif; color: red;"></span>
+                                </label> 
+                            </div>
+                        </div>
+                     </form>
+                    <div class=" m-4 border_collapse"
+                        style="font-weight: 500; font-size: 15px; color: black; text-align: center; background-color: #fff;
+                               margin: 0px 23px 20px 23px !important; padding: 20px;">
+                        <p>So that we may send you information and offers of most interest to you, please indicate your
+                            interests.</p>
+                        <p>If you have indicated any interests previously with the email entered, they are shown below
+                            with
+                            check marks. Update as needed.</p>
+                    </div>
+                  
+                    <div class="container">
+                        <div class="row">
+                         
+                            <div class="col-lg-12" style="margin-bottom: -30px; padding: 0px !important;">
+                                <div class="card text-center border_collapse">
+                                    <div class="card-header">
+                                        <h5 class="card-title" style="padding-bottom: -38px; margin-bottom: 0px;">What
+                                            are
+                                            you interested in?</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 bor1">
+                                <div class="con_outer">
+                                    <div class="card-body">
+                                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                value="" id="flexCheckDefault" required /> <label class="form-check-label"
+                                                for="flexCheckDefault"> Athletic Awards </label></div>
+                                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                value="" id="flexCheckChecked" required /> <label class="form-check-label"
+                                                for="flexCheckChecked"> Cat Show Awards </label></div>
+                                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                value="" id="flexCheckChecked" required/> <label class="form-check-label"
+                                                for="flexCheckChecked"> College IDs/Awards </label></div>
+                                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                value="" id="flexCheckChecked" required/> <label class="form-check-label"
+                                                for="flexCheckChecked"> Dog Show Awards </label></div>
+                                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                value="" id="flexCheckChecked" required /> <label class="form-check-label"
+                                                for="flexCheckChecked"> Drug Free Incentives </label></div>
+                                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                value="" id="flexCheckChecked"required /> <label class="form-check-label"
+                                                for="flexCheckChecked"> Equestrian Awards </label></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 bor1">
+                                <div class=" con_outer">
+                                    <div class="card-body">
+                                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                value="" id="flexCheckDefault" /> <label class="form-check-label"
+                                                for="flexCheckDefault"> Fair Awards </label></div>
+                                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                value="" id="flexCheckChecked" /> <label class="form-check-label"
+                                                for="flexCheckChecked"> Gym/Cheer/Dance Awards </label></div>
+                                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                value="" id="flexCheckChecked" /> <label class="form-check-label"
+                                                for="flexCheckChecked"> Religious/Inspirational Awards </label></div>
+                                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                value="" id="flexCheckChecked" /> <label class="form-check-label"
+                                                for="flexCheckChecked"> School Awards </label></div>
+                                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                value="" id="flexCheckChecked" /> <label class="form-check-label"
+                                                for="flexCheckChecked"> Recognition Awards </label></div>
+                                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                value="" id="flexCheckChecked" /> <label class="form-check-label"
+                                                for="flexCheckChecked"> Swim Awards </label></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 text-center"><button
+                                    class="btn btn-waved text-white bbttn btn-4" onclick="toggle('123')" id="logbutton"
+                                    type="submit">Go</button>
+                            </div>
+
+                            <!-- <button id="show-element">Show it</button> -->
+                            <!-- <a id="display_123" href="javascript:toggle('123');">Show Discussion</a> -->
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="text-primary" id="toggle_123" style="display: none; margin: 50px;">
+                    <div class="bor2">
+                        <p style="text-align: center;color:#1e2d7d; font-size: 18px; margin-top:50px; margin-bottom: 50px;"><b>Thank
+                                You</b></p>
+                        <div style="margin-bottom: 100px; color: brown;">
+                            <p style="text-align: center; margin-top:10px">Thank you for signing up!</p>
+                            <p style="text-align: center; margin-top:5px">You'll be hearing from us soon.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        /*alert('red');*/
+        function openFormPopUp() {
+            document.getElementById("myFormPopUp").style.display = "block";
+        }
+        function closeFormPopUp() {
+            document.getElementById("myFormPopUp").style.display = "none";
+            a.style.display = 'none';
+            b.style.display = 'block';
+        }
+        function toggle(id) {
+            var mail = document.mform.email.value;
+            var m = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+           
+             if(mail==""){
+                document.getElementById("bug").innerHTML = "Email is required *";
+                 status = false;
+             }
+                 else if (!m.test(mail)) {
+            document.mform.email.focus;
+            document.getElementById("bug").innerHTML = "Invalid email address *";
+            status = false;
+            }
+         else {
+            document.mform.email.focus;
+            document.getElementById("bug").innerHTML = "";
+            status = true;
+        }
+        if (m.test(mail)==true) {
+            a = document.getElementById('toggle_' + id);
+            b = document.getElementById('display_' + id);
+            if (a.style.display == 'block') {
+                a.style.display = 'none';
+                b.innerHTML = 'Show Discussion';
+            }
+            else {
+                a.style.display = 'block';
+                b.style.display = 'none';
+            }
+        }
+          mform.reset();
+        }
+          
+    
+    
+        // function formValidation() {
+
+        //     var email = document.myForm.email.value;
+        //     var mailformat = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
+        //     if (!email.match(mailformat)) {
+        //         document.getElementById("emaillocation").innerHTML = "Email is not valid *";
+        //         status = false;
+        //         console.log(false);
+
+        //     } else {
+        //         document.getElementById("emaillocation").innerHTML = "";
+        //         status = true;
+        //         console.log(true);
+        //     }
+        // }
+
+    </script>
+
+
+
