@@ -1,0 +1,664 @@
+<style>
+    .faq__item {
+                   border: 1px solid var(--border-color);
+                   margin-bottom: 12px;
+                   background-color: whitesmoke;
+               }
+           
+               .bb {
+                   border-top: 1px solid var(--border-color) !important;
+                   border-left: 1px solid var(--border-color) !important;
+                   border-right: 1px solid var(--border-color) !important;
+                   border-bottom: 1px solid var(--border-color) !important;
+               }
+           
+               .border_a {
+                   border: 10px solid;
+                   background-color: whitesmoke;
+                   border-image-slice: 1;
+                   border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+                   border-width: 1px;
+                   padding: 25px 10px;
+               }
+           
+               .faq__item {
+                   border: 1px solid var(--border-color);
+                   margin-bottom: 12px;
+               }
+           
+               .para {
+                   text-align: justify;
+                   margin-top: 10px;
+                   font-size: 15px;
+                   font-weight: bold;
+               }
+           
+               li {
+                   list-style-position: inside;
+                   text-align: justify;
+               }
+           
+               .faq__group {
+                   margin-bottom: 20px;
+                   margin-bottom: 12px;
+               }
+           
+               .sml {
+                   max-width: 400px;
+                   max-height: 2800px;
+               }
+           
+               .con_outer {
+                   padding: 10px 10px;
+                   /*border: 1px solid var(--border-color);*/
+                   max-width: 1403px;
+               }
+           
+               .spa {
+                   font-size: small;
+                   text-align: justify;
+                   margin-top: 10px;
+               }
+           
+               #main {
+/*                    background-color: #dfe3e8; */
+                  background-color:#fff;
+               }
+           
+               .quick-links {
+                   border: none !important;
+               }
+           
+               .bor {
+                   border: 10px solid;
+                   background-color: whitesmoke;
+                   border-image-slice: 1;
+                   border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+                   border-width: 4px;
+                   padding: 25px 10px;
+               }
+           
+               .con_outer_top {
+                   max-width: 944px !important;
+               }
+               .inner_back {
+                   background-color: #fff;
+                   margin: -7px -12px -5px -12px;
+                   padding: 25px;
+                   border-radius: 10px;
+               }
+           
+               /* .out_border {
+                   background: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+                   border-radius: 10px!important;
+                   margin-top: 3px;
+                   padding: 25px 10px!important;
+               }
+            */
+               .border_collapse {
+                   border: 10px solid;
+           
+                   border-image-slice: 1;
+                   border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+                   border-width: 1px;
+               }
+           
+               .t1 {
+                   font-weight: 700;
+                   color: #00badb !important;
+                   margin-top: 13px;
+               }
+           
+               .p1 {
+                   font-weight: 600;
+               }
+           
+               .hor {
+                   border-image-slice: 1;
+                   border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+                   border-width: 1px;
+                   width: 93%;
+               }
+           
+               .topheading {
+                   color: var(--heading-color);
+                   font-size: 22px;
+                   font-weight: 500;
+               }
+           
+               .tabbor {
+                   border: 3px solid #00badb !important;
+                   font-size: 12px;
+           
+               }
+/*                .clr {
+               color: #1E2D7D ;
+               text-decoration: none ;
+               font-weight: 500;
+           }
+       
+           .clr:hover {
+               text-decoration: underline ;
+               color: #00badb;
+           } */
+           .outer_con{
+     margin-top:100px;
+    border-radius:10px;
+    background-color: #e7ebee !important;
+    border-width: 1px;
+        max-width: 950px;
+        padding: 20px 15px 10px 15px;
+        -moz-box-shadow: inset 0 0 10px #b28e44;
+        -moz-box-shadow: inset 0 0 10px #00badb;
+        -webkit-box-shadow: inset 0 0 10px #1e2d7d;"
+  }
+   .bor1 {
+        background-color: white;
+        border: 3px solid;
+        border-image-slice: 1;
+        border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+        font-weight: 500;
+        /* border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44); */
+    }
+  .bor2 {
+        border: 5px solid;
+        border-image-slice: 1;
+        border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+        font-weight: 500;
+        /* border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44); */
+    }
+  .out_border {
+        background: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+        
+    }
+  .card-body {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .form__field {
+        background-color: #fff ! important;
+        font-weight: 400;
+      font-size:13px;
+    }
+
+    .border_collapse {
+        border: 10px solid;
+        border-image-slice: 1;
+        border-image-source: linear-gradient(to left, #1e2d7d, #00badb, #b28e44);
+        border-width: 3px;
+    }
+   #myFormPopUp {
+        overflow-y: scroll !important;
+    }
+
+    #display_123 {
+        cursor: pointer;
+    }
+    
+  .btn-4 {
+    width: 150px;
+        text-align: center;
+        color: #fff ! important;
+        font-size: 22px;
+    margin-top: 15px;
+        margin-bottom: 5px;
+        border-radius: 10px;
+        background-image: linear-gradient(to right, #c0923f 37%, #c0923f 51%, #1e2d7d 92%);
+border: 3px solid #fff! important;
+    }
+
+    #main{
+/*    background-color:#f3f5f6; */ 
+       background-color:#fff;
+  }
+  .con_top_fixed_full{
+    max-width: 1800px;
+    background-color: #e7ebee;
+  }
+  .team{
+    margin-top:20px;
+    margin-bottom:-20px;
+    margin-left:auto;
+    margin-right:auto;
+      
+  }
+    .con_header_txt {
+        max-width: revert;
+        /*max-width: 1626px;*/
+        padding: 20px 0px 20px 0px;
+        border: 1px solid var(--border-color);
+        border: 1px solid var(--border-color);
+
+    }
+
+    @media screen and (min-width:1000px) {
+        .team__block-item {
+           width: calc(18.33333% - -23px) !important;
+        border-radius: 19px;
+          
+        }
+       
+
+        .mm {
+            margin: 2px!important;
+        }
+     
+        
+    }
+/*   @media screen and (min-width: 1366px){
+.team__block-item {
+   width: calc(16.33333% - -23px) ! important;
+ background-color:green;
+}
+   .mm {
+            margin: 2px!important;
+        }
+ }
+ */
+ @media screen and (max-width: 644px) {
+         .team__block-item {
+ /*             width: calc(51.33333% - 8px); */
+ /*            width: calc(47.33333% - 8px); */
+           width: calc(97.33333% - 8px);
+          border-radius: 19px;
+         }
+ 
+         .block_Zero_margin {
+             margin: 0px ! important;
+         }
+ 
+         .ml {
+             margin: 0px;
+         }
+ 
+          .team__block-list {
+             display: flex;
+             justify-content: center;
+             flex-wrap: wrap;
+             border-radius: 0px;
+         } 
+       .mR{
+        margin: -6px 0px;
+       }
+       .sub{
+         margin-top: 11px;
+          margin-bottom:40px !important;
+     }
+     }
+ 
+
+    @media screen and (min-width: 641px) {
+        .team__block-item {
+            margin: 4px;
+            flex: none;
+            width: calc(38% - 30px);
+          border-radius: 19px;
+        }
+    }
+
+    @media screen and (max-width: 641px) {
+        .team__block-item {
+/*             width: calc(51.33333% - 8px); */
+           width: calc(46.33333% - 8px);
+         border-radius: 19px;
+        }
+
+        block_Zero_margin {
+   margin: 0px ! important;
+        }
+
+        .ml {
+            margin: 0px;
+        }
+
+        /* .team__block-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            border-radius: 0px;
+        } */
+     
+
+    .team__member {
+
+        padding: 5px 5px 5px 5px ! important;
+        border: 1px solid var(--border-color) ! important;
+      
+        background: var(--secondary-background) ! important;
+    }
+
+    .title_head {
+        border: 1px solid var(--border-color) ! important;
+        background-color: white;
+         margin-top: -25px !important; 
+    }
+      .align{
+        margin-bottom:24px;
+    }
+       #main {
+       
+        background-color: #fff;
+    }
+
+    /* .con_outer {
+        padding: 5px 10px;
+        max-width: 450px;
+    } */
+
+    .card-design {
+        border-radius: 8px;
+
+      
+    }
+    @media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2)  { 
+       .team__block-item {
+/*             width: calc(51.33333% - 8px); */
+            width: calc(46.33333% - 8px); 
+        
+         border-radius: 19px;
+        }
+        .con_outer {
+           padding: 10px 1px;
+   max-width: 450px;
+        }
+
+        block_Zero_margin {
+   margin: 0px ! important;
+        }
+        .ml {
+            margin: 0px;
+        }
+
+        /* .team__block-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            border-radius: 0px;
+        } */
+     
+
+    .team__member {
+
+        padding: 8px 8px 8px 0px ! important;
+        border: 1px solid var(--border-color) ! important;
+      
+        background: var(--secondary-background) ! important;
+    }
+
+    .title_head {
+        border: 1px solid var(--border-color) ! important;
+        background-color: white;
+         margin-top: -25px !important; 
+    }
+      .align{
+        margin-bottom:24px;
+    }
+       #main {
+       
+        background-color: #fff;
+    }
+
+  
+    .card-design {
+        border-radius: 8px;
+
+      
+    }
+    }
+
+
+     @media screen and (max-width: 920px) {
+
+        .contanier_border_right {
+            border: 5px solid #1e2d7d;
+            border-radius: 10px;
+
+        }
+    }
+
+    @media screen and (min-width: 1000px) and (max-width: 1336px) {
+        .con_outer {
+            padding: 5px 10px;
+            max-width: 450px;
+        }
+
+
+      
+    }
+    
+
+    @media screen and (min-width: 1337px) {
+        .con_outer {
+            padding: 5px 10px;
+            max-width: 450px;
+        }
+
+    }
+    @media only screen and (min-device-width: 560px) and (max-device-width: 1136px) and (-webkit-min-device-pixel-ratio: 2) {
+   .team__block-item {
+            /* width: calc(51.33333% - 8px);  */
+width: calc(46.33333% - 8px);
+         border-radius: 19px;
+        }
+        .con_outer {
+           padding: 10px 1px;
+/*    max-width: 450px; */
+          max-width: 638px;
+        }
+
+        block_Zero_margin {
+   margin: 0px ! important;
+        }
+        .ml {
+            margin: 0px;
+        }
+}
+ 
+      
+      @media 
+  (max-device-width: 320px)
+   { 
+ .team__block-item {
+/*             width: calc(51.33333% - 8px); */
+           width: calc(47.33333% - -22px);
+        
+         border-radius: 19px;
+        }
+     .team__member {
+
+        padding: 5px 5px 5px 5px ! important;
+        border: 1px solid var(--border-color) ! important;
+      
+        background: var(--secondary-background) ! important;
+    }
+}
+      
+      
+      
+      
+    .clrtop {
+      color: Black ! important;
+     
+    }
+      
+  .clrtop:hover {
+    color:#fff ! important;
+    text-decoration:Underline ! important;
+    cursor:pointer;
+   
+  }
+/*       .back-to-top a{
+        color:black ! important;
+        font-size:25px ! important ;
+      }
+      .back-to-top a:hover{
+        color:yellow ! important;
+    text-decoration:Underline ! important;
+    cursor:pointer;
+      } */
+        
+      
+   </style>
+      
+   
+    <a href="#" class="line-item__title link text--strong" onclick="openFormPopUp()"
+     style="color: var(--primary-button-background);font-size: 18px; text-decoration:none !important;">
+     <div class="container con_top_fixed_full" style="background-color: #b28e44;padding:10px; ">
+         <div class="row">
+ 
+ 
+             <div class="col-lg-12 col-md-12 col-sm-12">
+                 <div style="text-align:center;">
+                     <h5 class="team__section-title heading h3" style="Color:white;">Keep up to date on Sales and
+                         Promotions: Join our Email List!
+                         >></h5>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </a>
+ <div class="container container--narrow " style="margin-top:-15px;margin-bottom:3px;">
+     <header class="page__header page__header--centered"  >
+         <h1  class="page__title heading h1" 
+     text-transform: uppercase;
+     font-size: 25px;" >{{ page.title }}</h1>
+     </header>
+ 
+     <div class="page__content rte" >
+         {{ page.content }}
+     </div>
+ </div>
+
+ <div class="container con_outer" style="border-radius: 10px; background-color: #fff; border-image-slice: 1; border-width: 1px; padding: 21px 15px 17px 15px; -moz-box-shadow: inset 0 0 10px #000000; -webkit-box-shadow: inset 0 0 10px #1e2d7d; margin-bottom: 17px;
+    margin-top: -40px;">
+<div class="container--narrow_fa con_outer" style="background: linear-gradient(to left, #1e2d7d, #00badb, #b28e44); padding: 25px 10px; border-radius: 10px;">
+    <div class="faq" style="background-color: #fff; margin: -21px -8px -21px -8px; padding: 25px; border-radius: 10px;">
+    <div class="faq__group-list">
+    <div class="faq__group">
+        <div class="container con_outer out_border " style="border: 5px solid #b28e44 !important;">
+       
+    <div class="faq__item-wrapper"><button id="Shipping" class="faq__question heading h4 topheading" aria-expanded="false" aria-controls="block-1559406893826" data-action="toggle-collapsible" style="padding:20px;"> <h5 id="Content_title_top1" class="page__title heading h5" style="font-weight: 600;margin:-10px 2px;color:white;"></h5> <span class="plus-button plus-button--large" style="color:white;"></span> </button>
+    <div id="block-1559406893826" class="faq__answer-wrapper" style="height: 0px;">
+   
+       
+           <div class="team block_Zero_margin" style="padding-top: 17px;">
+       
+               <div id="target1" class="team__block-list">
+               </div>
+       
+       
+           </div>
+       
+  </div>
+    </div>
+    </div>
+    </div>
+    <div class="faq__group-list">
+        <div class="faq__group">
+        <div class="container con_outer out_border " style="border: 5px solid #b28e44 !important;">
+    <div class="faq__item-wrapper"><button id="PaymentPolicieDiscounts" class="faq__question heading h4 topheading" data-action="toggle-collapsible" aria-expanded="false" aria-controls="block-page-faq-template-1" style="padding:20px"> <h5 id="Content_title_2" class="page__title heading h5" style="font-weight: 600;margin:-10px 2px;color:white;"></h5> <span class="plus-button plus-button--large" style="color:white;"></span> </button>
+    <div id="block-page-faq-template-1" class="faq__answer-wrapper" style="height: 0px;">
+   
+       
+           <div class="team block_Zero_margin" style="padding-top: 17px;">
+       
+               <div id="target2" class="team__block-list">
+               </div>
+       
+       
+           </div>
+       
+       </div>
+   
+    </div>
+    </div>
+    </div>
+
+    <div class="faq__group-list">
+        <div class="faq__group">
+    <div class="container con_outer out_border " style="border: 5px solid #b28e44 !important;">
+        <div class="faq__item-wrapper"><button id="PaymentPolicieDiscounts" class="faq__question heading h4 topheading" data-action="toggle-collapsible" aria-expanded="false" aria-controls="block-page-faq-template-1" style="padding:20px"> <h5 id="Content_title_3" class="page__title heading h5" style="font-weight: 600;margin:-10px 2px;color:white;"></h5> <span class="plus-button plus-button--large"style="color:white;"></span> </button>
+        <div id="block-page-faq-template-1" class="faq__answer-wrapper" style="height: 0px;">
+       
+           
+               <div class="team block_Zero_margin" style="padding-top: 17px;">
+           
+                   <div id="target3" class="team__block-list">
+                   </div>
+           
+           
+               </div>
+          
+           </div>
+       
+        </div>
+  </div>
+ </div>
+ <div class="faq__group-list">
+    <div class="faq__group">
+<div class="container con_outer out_border " style="border: 5px solid #b28e44 !important;">
+    <div class="faq__item-wrapper"><button id="PaymentPolicieDiscounts" class="faq__question heading h4 topheading" data-action="toggle-collapsible" aria-expanded="false" aria-controls="block-page-faq-template-1" style="padding:20px"> <h5 id="Content_title_4" class="page__title heading h5" style="font-weight: 600;margin:-10px 2px;color:white;"></h5> <span class="plus-button plus-button--large"style="color:white;"></span> </button>
+    <div id="block-page-faq-template-1" class="faq__answer-wrapper" style="height: 0px;">
+   
+       
+           <div class="team block_Zero_margin" style="padding-top: 17px;">
+       
+               <div id="target4" class="team__block-list">
+               </div>
+       
+       
+           </div>
+      
+       </div>
+   
+    </div>
+</div>
+</div>
+
+<div class="faq__group-list">
+    <div class="faq__group">
+<div class="container con_outer out_border " style="border: 5px solid #b28e44 !important;">
+    <div class="faq__item-wrapper"><button id="PaymentPolicieDiscounts" class="faq__question heading h4 topheading" data-action="toggle-collapsible" aria-expanded="false" aria-controls="block-page-faq-template-1" style="padding:20px"> <h5 id="Content_title_5" class="page__title heading h5" style="font-weight: 600;margin:-10px 2px;color:white;"></h5> <span class="plus-button plus-button--large" style="color:white;"></span> </button>
+    <div id="block-page-faq-template-1" class="faq__answer-wrapper" style="height: 0px;">
+   
+        
+           <div class="team block_Zero_margin" style="padding-top: 17px;">
+       
+               <div id="target5" class="team__block-list">
+               </div>
+       
+       
+           </div>
+     
+       </div>
+   
+    </div>
+</div>
+</div>
+
+
+<div class="faq__group-list">
+    <div class="faq__group">
+<div class="container con_outer out_border " style="border: 5px solid #b28e44 !important;">
+    <div class="faq__item-wrapper"><button id="PaymentPolicieDiscounts" class="faq__question heading h4 topheading" data-action="toggle-collapsible" aria-expanded="false" aria-controls="block-page-faq-template-1" style="padding:20px"> <h5 id="Content_title_6" class="page__title heading h5" style="font-weight: 600;margin:-10px 2px;color:white;"></h5> <span class="plus-button plus-button--large" style="color:white;"></span> </button>
+    <div id="block-page-faq-template-1" class="faq__answer-wrapper" style="height: 0px;">
+   
+        
+           <div class="team block_Zero_margin" style="padding-top: 17px;">
+       
+               <div id="target6" class="team__block-list">
+               </div>
+       
+       
+           </div>
+     
+       </div>
+   
+    </div>
+</div>
+</div>
+       
+   
+</div>
+</div>

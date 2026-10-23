@@ -1,0 +1,11 @@
+{% if request.path != '/'%}
+{% assign noindex_urls_json = shop.metafields.Crawling.Noindex_urls.value %}
+{% assign noindex_urls_array = noindex_urls_json.paths %}
+
+{% for url in noindex_urls_array %}
+{% if url == request.path %}
+  <meta name="robots" content="noindex, nofollow" />
+  {% break %}
+{% endif %}
+{% endfor %}
+{% endif %}

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+{% render 'visually_io_sdk' %}
+
+   <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KQ4QSWS');</script>
+<!-- End Google Tag Manager -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+    <meta name="referrer" content="origin">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cloudfront.barilliance.com/hodgesbadge.com/cbar.js.php" async></script>
+     <style>
+        table.product-table td {    
+            vertical-align: top; 
+        }
+        table.product-table th {    
+            padding-bottom: 10px;
+        }    
+    </style>
+    <title>{{ page_title }}
+    </title>
+<!-- ECI: START – Bing UET Tracking Code 10-28-2022 -->
+<!-- <script>(function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"5014221"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");</script>
+<noscript><img src="//bat.bing.com/action/0?ti=5014221&Ver=2" height="0" width="0" style="display:none; visibility: hidden;" /></noscript> -->
+<!-- ECI: End - Bing UET Tracking Code 10-28-2022-->
+  <!-- ECI: START-Google tag (gtag.js) 10-28-2022-->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1062689813"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-1062689813');
+  gtag('config', 'G-MP21HTPY61');
+</script> -->
+  <!-- ECI: END-Google tag (gtag.js) 10-28-2022-->
+    {{ content_for_header }}
+
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}
+
+  </head>
+  <body>
+   <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQ4QSWS"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+    {{ skip_to_content_link }}
+
+    <header class="banner" data-header role="banner">
+      <div class="wrap">
+        {{ content_for_logo }}
+      </div>
+    </header>
+
+    {{ order_summary_toggle }}
+    <div class="content" data-content>
+      <div class="wrap">
+        <div class="main">
+          <header class="main__header" role="banner">
+            {{ content_for_logo }}
+            {{ breadcrumb }}
+            {{ alternative_payment_methods }}
+
+          </header>
+          <main class="main__content" role="main">
+
+            {{ content_for_layout }}
+          </main>
+          <footer class="main__footer" role="contentinfo">
+            {{ content_for_footer }}
+          </footer>
+        </div>
+        <aside class="sidebar" role="complementary">
+          <div class="sidebar__header">
+            {{ content_for_logo }}
+          </div>
+          <div class="sidebar__content">
+
+            {{ content_for_order_summary }}
+
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    {{ tracking_code }}
+
+    <script>
+
+      (function($) {
+
+        $(document).on("page:load page:change", function() {
+
+            $('#error-for-reduction_code').text("Enter a valid key code"); 
+  
+           if ('{{shop.metafields.Keycode.notification.isEnabled}}' == 'true') {
+              $('#keyAlert').remove();
+              $(".order-summary__section--discount").prepend('<span id="keyAlert" style="font-weight: bold;">{{shop.metafields.Keycode.notification.Description }}</span>')
+            } 
+           
+           $('#checkout_shipping_address_address1').change(function() {   
+                  let postring = '{{shop.metafields.POBoxKeywords.keywords | join: ", "}}';
+                  let poArr = postring.split(',');
+                   $('#spAddress1').remove();
+                   $(poArr).each((index, po) => {  
+                  if ( $('#checkout_shipping_address_address1').val().toLowerCase().includes(po.toLowerCase())) 
+                    {                     
+                       $('#checkout_shipping_address_address1').parent().append('<span id="spAddress1" style="color:red">We can not ship to a PO Box. Please enter street address</span>')
+                       $('#checkout_shipping_address_address1').val('')
+                       $('#checkout_shipping_address_address1').focus();
+                        return false;
+                    }                                
+                    
+                  });
+                  
+                });
+                 $('#checkout_shipping_address_address2').change(function() {   
+                   let postring = '{{shop.metafields.POBoxKeywords.keywords | join: ", "}}';
+                  let poArr = postring.split(',');
+                   $('#spAddress2').remove();
+                   $(poArr).each((index, po) => {  
+                  if ( $('#checkout_shipping_address_address2').val().toLowerCase().includes(po.toLowerCase())) 
+                    {
+                      $('#checkout_shipping_address_address2').parent().append('<span id="spAddress2" style="color:red">We can not ship to a PO Box. Please enter street address</span>')
+                       $('#checkout_shipping_address_address2').val('')
+                       $('#checkout_shipping_address_address2').focus();
+                        return false;
+                    }                                
+                    
+                  });
+                  
+                });
+           $(window).on("load", function() {
+          $(".product__description__property.order-summary__small-text").filter(function() {
+            const previewicon = {{shop.metafields.PreviewIcon | json }};
+               if( $(this).text().split(':')[0].includes('CustomDesign'))
+               {
+                 let _text = $(this).text().split(':')[0].trim().toString(); 
+               {% comment %}  let _src = $(this).text().split(':')[1].trim().toString(); {% endcomment %}
+                  let _src = $(this).text().replace(_text + ":", "");
+                let extension = _src
+                .split(/[#?]/)[0]
+                .split('.')
+                .pop()
+                .trim();
+              extension = 0 + extension;
+               let preview = previewicon[extension];
+                  $(this).text(_text);
+                   if (preview) {
+                     $(this).append('<img src="' + preview + '"  width="100">');
+                     } else {
+                  $(this).append('<img src="'+_src+'"  width="100">');
+                     }
+               }
+               
+            });
+	});
+
+          $(".total-line--taxes th").text('Estimated Taxes');
+          if ($('#shipDate').length == 0) 
+            $("#main-header").after('</br><div id="shipDate"  data-toggle="tooltip" data-placement="top" title= "                 {{shop.metafields.helpText.deliveryDate}}" >Delivery Date:                  {{ checkout.line_items[0].properties["_deliveryDate"] }} <i class="fa fa-info-circle" style="font-size:16px;color:#ae1a1a"></i></div> ');
+          
+         
+
+          if ($('#shipDate').length > 0) {
+            $("#shipDate").hide();
+
+// $(".section--shipping-method .small-text").show();     
+            if (Shopify.Checkout.step == 'shipping_method') {
+              $(".section--shipping-method .small-text").filter(function() {
+                var shipmethods = {{shop.metafields.ShipMethod | json}}
+                if ($(this).parent().attr('data-shipping-method-label-title') == 'International Shipping' || $(this).parent().attr('data-shipping-method-label-title') == 'UPS WW STANDARD-CANADA') {
+                  $(this).css("color", "red");
+                }
+                $(this).text(shipmethods[$(this).parent().attr('data-shipping-method-label-title')]);
+              });
+
+// $(".section--shipping-method .small-text").text($(".section--shipping-method .small-text").parent().text());
+// $(".section--shipping-method .small-text").hide();   
+              $("#shipDate").show();
+            }
+
+          }
+          // if(Shopify.Checkout.step == 'payment_method'){
+          //   var paymentMethodSection = $('.section--payment-method').find('.section__header')
+          //    .append('<div style="margin-top: 2%;" > {{ shop.metafields.helpText.paymentNotes }} </div>');
+          // }
+          
+          hideHiddenChargeProducts();{% comment %}addOrtherChargesInSummary();{% endcomment %}mergeAddChargeWithProducts();
+
+
+
+        });
+
+        function mergeAddChargeWithProducts() {
+          let prop;
+          let totalAC;
+          let baseAC;
+          let merchandiseTotal = 0;
+          let sepupCharge = 0;
+          let moaCharge = 0;
+          let ppCharge = 0;
+          let dieCharge = 0;
+          let logoCharge = 0;
+          let qty = 0;
+          let variantIds = [];
+          let imgElement;
+          let canvasProp;
+          let canvasImage;
+          let totalPrice = 0;
+          const previewicon = {{shop.metafields.PreviewIcon | json }};
+          let discount_percentage = {{ shop.metafields.Discount.percentage}}
+		  {%- for lineitem in checkout.line_items -%}
+		  if ('{{lineitem.product.type}}' == "HiddenCharges") {
+
+              if ('{{lineitem.product.title}}'.includes('Setup Charges')) {
+                sepupCharge += {{lineitem.original_price}};
+                totalPrice +=  {{lineitem.original_price}}/100;
+              }
+              if ('{{lineitem.product.title}}'.includes('Minimum Order')) {
+                moaCharge += {{lineitem.final_price}};
+              }
+              if ('{{lineitem.product.title}}'.includes('Premium Processing')) {
+                
+                ppCharge += ({{lineitem.final_price}} * {{lineitem.quantity}});
+              }
+              if ('{{lineitem.product.title}}'.includes('Flat Charges')) {
+
+                if ('{{lineitem.properties['ChargeType']}}'.includes('Die')) {
+                  dieCharge += {{lineitem.original_price}} * {{lineitem.quantity}};
+                  totalPrice +=  {{lineitem.original_line_price}}/100;
+
+                }
+                if ('{{lineitem.properties['ChargeType']}}'.includes('Logo')) {
+                  logoCharge += ({{lineitem.original_price}} * {{lineitem.quantity}});
+                  totalPrice +=  {{lineitem.original_line_price}}/100;
+                }
+
+
+              }
+
+            }
+
+            if ('{{lineitem.product.type}}' !== "HiddenCharges") {
+
+              prop = {{lineitem.properties | json}};
+			  canvasProp = prop;
+              totalAC = prop.filter(function(p) {
+                return p[0] == "_totalAc";
+              });
+              baseAC = prop.filter(function(x) {
+                return x[0] == "_baseAc";
+              })
+              let itemAc = 0;
+	      let itemBc = 0;
+              if (totalAC.length > 0) {
+                itemAc = totalAC[0][1] * 100;
+              }
+		if (totalAC.length > 0) {
+                itemBc = baseAC[0][1];
+              }
+              qty = {{lineitem.quantity}};
+              let itemPrice = {{lineitem.original_price}} * qty;
+
+              // let finalPrice = ((itemPrice + itemAc) / 100);
+              let finalPrice = ((itemPrice) / 100);
+              
+              let spPrice = '$' + finalPrice.toFixed(2).toString();
+              let variable ={}
+              canvasProp.forEach(function(i) {
+                variable[i[0]]=i[1];
+              });
+              let obj = Object.keys(variable);
+            //   var value = obj.filter((i)=> i.includes("_CustomDesign") || i.includes("_CustomDesignCenter"))
+            //   console.log(value)
+            //   console.log(variable[value])
+
+              var varIds = variantIds.filter(v => v == {{lineitem.variant_id}});
+
+              let spanPrice = $("tr[data-variant-id='{{lineitem.variant_id}}']").find(".product__price span")[varIds.length];
+              variantIds.push({{lineitem.variant_id}});
+              $(spanPrice).text(spPrice);
+              
+			  let Price = $("tr[data-variant-id='{{lineitem.variant_id}}']").find(".product__description .product__description__name.order-summary__emphasis")[varIds.length];
+              let productPrice = {{lineitem.original_price}}/100;
+              // if(itemBc){
+              //   base = productPrice + parseFloat(itemBc);
+              //   productPrice = base.toFixed(2)
+              // } 
+               if($("span.reduction-code").length > 0 && $("li.reduction-code").length > 0 ){
+                // if($(Price).next(".product__description__property.order-summary__small-text[style='font-weight: 700; color: #01bddd;']").length == 0){
+                $(Price).after("<span class='product__description__property order-summary__small-text'style='font-weight: 700; color: #01bddd;' >Price : $" + productPrice + "</span>")
+                // }
+                if (variable['_canvasImage']) {
+                  imgElement = $(Price).parent().prev().find('.product-thumbnail__image');
+                  $(imgElement).attr('src', variable['_canvasImage']);
+                } 
+                if(variable["_CustomDesignCenter"] || variable["_CustomDesign"] ){
+                 let value =  variable["_CustomDesignCenter"] != undefined ?  "_CustomDesignCenter":"_CustomDesign"
+                 let extension = variable[value].split(/[#?]/)[0].split('.').pop().trim();
+               extension = 0 + extension;
+                              let preview = previewicon[extension] ?? variable[value];
+                  const $span = $('<span>', {
+                              class: 'product__description__property order-summary__small-text',
+                              text: value.split("_")[1] 
+                            });
+                  const $img = $('<img>', {
+                    src: preview, 
+                    width: 100 
+                  });
+                  $span.append($img);
+                 $(Price).parent().append($span)
+               }
+              } else{
+              $(window).on("load", function() {
+                // if($(Price).next(".product__description__property.order-summary__small-text[style='font-weight: 700; color: #01bddd;']").length == 0){
+                $(Price).after("<span class='product__description__property order-summary__small-text'style='font-weight: 700; color: #01bddd;' >Price : $" + productPrice + "</span>")
+                // }
+                if (variable['_canvasImage']) {
+                  imgElement = $(Price).parent().prev().find('.product-thumbnail__image');
+                  $(imgElement).attr('src', variable['_canvasImage']);
+                } 
+                if(variable["_CustomDesignCenter"] || variable["_CustomDesign"] ){
+                let value =  variable["_CustomDesignCenter"] != undefined ?  "_CustomDesignCenter":"_CustomDesign"
+                let extension = variable[value].split(/[#?]/)[0].split('.').pop().trim();
+               extension = 0 + extension;
+               let preview = previewicon[extension] ?? variable[value];
+                const $span = $('<span>', {
+                              class: 'product__description__property order-summary__small-text',
+                              text: value.split("_")[1] 
+                            });
+                  const $img = $('<img>', {
+                    src: preview, 
+                    width: 100 
+                  });
+                  $span.append($img);
+                 $(Price).parent().append($span)
+               }
+                  });
+                }
+              merchandiseTotal += finalPrice;
+
+            }
+
+
+          {% endfor %}
+
+          let merTotal = '$' + merchandiseTotal.toFixed(2).toString();
+          $(".total-line--subtotal .total-line__name").text("Merchandise Total")
+          $(".total-line--subtotal .total-line__price span").text(merTotal)
+          console.log('subtotal', $(".total-line--subtotal .total-line__name").text())
+
+
+         if($("span.reduction-code").length > 0 || $("li.reduction-code").length > 0 ){
+            if( $(".total-line--discountprice").length == 0){
+              let discount = (totalPrice + merchandiseTotal) * (discount_percentage/100)
+              // addOrtherChargesInSummary('( -$'+ Math.floor(discount * 100) / 100  +' )', "Total Discount", Math.floor(discount * 100) / 100, "discountprice");
+              $("li.reduction-code").each((index, ele) => {
+              $(ele).hide();
+              });
+              $("del.order-summary__small-text").each((index,ele)=>{
+                $(ele).next().hide();
+                $(ele).hide();
+              })
+              }
+          }else{
+            $(".total-line--discountprice").remove();
+          }
+          if (ppCharge > 0) {
+             var tag_button = document.getElementsByClassName('tag__button');
+              if (tag_button.length > 0) {
+                document.querySelector('.tag__button').click();
+              }   
+            $(".order-summary__section--discount").hide();
+            let ppAmnt = '$' + (
+              ppCharge / 100
+            ).toFixed(2).toString();
+            addOrtherChargesInSummary(ppAmnt, "Premium Processing Charges", ppCharge, "ppCharge");
+          }
+
+          if (moaCharge > 0) {
+            let moaAmnt = '$' + (
+              moaCharge / 100
+            ).toFixed(2).toString();
+            addOrtherChargesInSummary(moaAmnt, "Minimum Order Charges", moaCharge, "moaCharge");
+          }
+
+          if (sepupCharge > 0) {
+            let setAmnt = '$' + (
+              sepupCharge / 100
+            ).toFixed(2).toString();
+            addOrtherChargesInSummary(setAmnt, "Setup Charges", sepupCharge, "setupCharge");
+          }
+
+          if (dieCharge > 0) {
+            let dieAmnt = '$' + (
+              dieCharge / 100
+            ).toFixed(2).toString();
+            addOrtherChargesInSummary(dieAmnt, "Die Charges", dieCharge, "dieCharge");
+          }
+
+          if (logoCharge > 0) {
+            let logoAmnt = '$' + (
+              logoCharge / 100
+            ).toFixed(2).toString();
+            addOrtherChargesInSummary(logoAmnt, "Logo Charges", logoCharge, "logoCharge");
+          }
+
+          if (merchandiseTotal > 0) {
+            $(".total-line--subtotal").hide();
+            addOrtherChargesInSummary(merTotal, "Merchandise Total", merchandiseTotal * 100, "MerchandiseTotal");
+          }
+        //   let defaultAddresCount = {{ customer.addresses_count }}
+        //   if(defaultAddresCount > 1){
+        //   $('.field__input--select').val('');
+        //   $('.address-fields input[type="text"]').val('');
+        //   }
+
+          
+
+        }
+
+        function hideHiddenChargeProducts() {
+          $(".product__description__variant").hide();
+          $("tr[data-product-type='HiddenCharges']").hide();
+
+          $(".product__description__property").filter(function() {
+            if ($(this).text().indexOf('Base Additional Charge') > -1) 
+              $(this).hide();
+            
+
+
+
+            if ($(this).text().indexOf('.~') > -1) {
+
+              $(this).text($(this).text().split('.~')[1]);
+            }
+          });
+
+        }
+
+        function addOrtherChargesInSummary(amount, title, amounttarget, amountClass) {
+
+          let $tr = $("tr.total-line--subtotal");
+
+          let trAddChrg = ({amnt, titl, amnttarget, amntClass}) => `<tr class="total-line total-line--${amntClass}">
+            <th class="total-line__name" scope="row">${titl}</th>
+            <td class="total-line__price">
+                <span class="order-summary__emphasis skeleton-while-loading" data-checkout-${amntClass}-price-target="${amnttarget}">
+                   ${amnt}
+                </span>
+            </td>
+        </tr>`;
+          $tr.after([{
+              amnt: amount,
+              titl: title,
+              amnttarget: amounttarget,
+              amntClass: amountClass
+            }].map(trAddChrg).join(''));
+
+        }
+ 
+      })(Checkout.$);
+    </script>
+<script>
+    try {
+        fetch('/cart.json')
+            .then(response => response.json()) // convert to json
+            .then(function (json) {
+                var eci_products = [];
+                var eci_subtotal = json.total_price / 100;
+                json.items.forEach(function (i, index) {
+                    if (i.handle != "premium-processing-charges") {
+                        eci_products.push({
+                            item_id: i.product_id,
+                            item_name: i.title,
+                            affiliation: "Hodges Badge",
+                            currency: "USD",
+                            index: index,
+                            price: i.price / 100,
+                            quantity: i.quantity
+                        });
+                    }
+                })
+                if (Shopify.Checkout.step == "contact_information") {
+                    gtag("event", "begin_checkout", {
+                        currency: "USD",
+                        value: eci_subtotal,
+                        items: eci_products
+                    });
+                }
+                document.addEventListener("click", function (e) {
+
+                    var tgt = e.target;
+                    if (Shopify.Checkout.step == "shipping_method" && tgt.id == "continue_button") {
+                        gtag("event", "add_shipping_info", {
+                            currency: "USD",
+                            value: eci_subtotal,
+                            shipping_tier: document.querySelector('.input-radio:checked').closest(
+                                    '.content-box__row').querySelector('.radio__label__primary')
+                                .getAttribute('data-shipping-method-label-title'),
+                            items: eci_products
+                        });
+                    }
+                    if (Shopify.Checkout.step == "payment_method" && tgt.id == "continue_button") {
+                        gtag("event", "add_payment_info", {
+                            currency: "USD",
+                            value: eci_subtotal,
+                            payment_type: "Credit Card",
+                            items: eci_products
+                        });
+                    }
+                })
+
+            }) //print data to console
+            .catch(err => console.log('Request Failed', err));
+    } catch (err) {}
+</script>
+  </body>
+
+</html>
