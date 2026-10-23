@@ -93,8 +93,9 @@ const PromotionReorder = "{{ promotionReorderHandle }}";
         <div class="card card--sticky hidden-pocket">
           <div class="card__section card__section--tight">
             <div class="card__linklist">
+              <a href="/pages/account-page#profile" class="card__linklist-item link" data-account-profile-link>My profile</a>
               <a href="{{ routes.account_url }}" class="card__linklist-item link text--strong">{{ 'customer.general.orders' | t }}</a>
-              <a href="{{ routes.account_addresses_url }}" class="card__linklist-item link">{{ 'customer.general.addresses' | t }}</a>
+              <a href="/pages/account-page#addresses" class="card__linklist-item link">{{ 'customer.general.addresses' | t }}</a>
               <a href="/pages/tax-details" class="card__linklist-item link">My tax-Exempt</a>
               <a href="{{ routes.account_logout_url }}" class="card__linklist-item link" data-no-instant>{{ 'customer.general.logout' | t }}</a>
             </div>
@@ -114,8 +115,9 @@ const PromotionReorder = "{{ promotionReorderHandle }}";
               </header>
 
               <div class="value-picker__choice-list">
+                <a href="/pages/account-page#profile" class="value-picker__choice-item" data-account-profile-link>My profile {% render 'icon', icon: 'check-2' %}</a>
                 <a href="{{ routes.account_url }}" class="value-picker__choice-item is-selected">{{ 'customer.general.orders' | t }} {% render 'icon', icon: 'check-2' %}</a>
-                <a href="{{ routes.account_addresses_url }}" class="value-picker__choice-item">{{ 'customer.general.addresses' | t }} {% render 'icon', icon: 'check-2' %}</a>
+                <a href="/pages/account-page#addresses" class="value-picker__choice-item">{{ 'customer.general.addresses' | t }} {% render 'icon', icon: 'check-2' %}</a>
                 <a href="/pages/tax-details" class="card__linklist-item link">My tax-Exempt {% render 'icon', icon: 'check-2' %}</a>
                 <a href="{{ routes.account_logout_url }}" class="value-picker__choice-item" data-no-instant>{{ 'customer.general.logout' | t }} {% render 'icon', icon: 'check-2' %}</a>
               </div>

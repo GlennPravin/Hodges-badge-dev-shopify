@@ -1,3 +1,21 @@
+<script>
+  (function () {
+    var hash = (window.location.hash || "").replace("#", "");
+    if (hash === "addresses" || hash === "profile") {
+      document.documentElement.setAttribute("data-account-tab", hash);
+    }
+  })();
+</script>
+<style>
+  html[data-account-tab="addresses"] .account-page-2-orders-content,
+  html[data-account-tab="profile"] .account-page-2-orders-content {
+    display: none !important;
+  }
+
+  .account-page-2-addresses-section > .container {
+    display: none !important;
+  }
+</style>
 <style>
   .slideshow-container {
     max-width: 600px;
@@ -82,8 +100,9 @@
                 {%- endfor -%}
             {%- endif -%}  
           
+            <a href="/pages/account-page#profile" class="card__linklist-item link" data-account-profile-link>My profile</a>
             <a href="{{ routes.account_url }}" class="card__linklist-item link text--strong">{{ 'customer.general.orders' | t }}</a>
-            <a href="{{ routes.account_addresses_url }}" class="card__linklist-item link">{{ 'customer.general.addresses' | t }}</a>
+            <a href="/pages/account-page#addresses" class="card__linklist-item link">{{ 'customer.general.addresses' | t }}</a>
             <a href="/pages/tax-details" class="card__linklist-item link">My tax-Exempt</a>
             <a href="{{ routes.account_logout_url }}" class="card__linklist-item link" data-no-instant>{{ 'customer.general.logout' | t }}</a>
           </div>
@@ -104,8 +123,9 @@
               </header>
 
               <div class="value-picker__choice-list">
+                <a href="/pages/account-page#profile" class="value-picker__choice-item" data-account-profile-link>My profile {% render 'icon', icon: 'check-2' %}</a>
                 <a href="{{ routes.account_url }}" class="value-picker__choice-item is-selected">{{ 'customer.general.orders' | t }} {% render 'icon', icon: 'check-2' %}</a>
-                <a href="{{ routes.account_addresses_url }}" class="value-picker__choice-item">{{ 'customer.general.addresses' | t }} {% render 'icon', icon: 'check-2' %}</a>
+                <a href="/pages/account-page#addresses" class="value-picker__choice-item">{{ 'customer.general.addresses' | t }} {% render 'icon', icon: 'check-2' %}</a>
                  <a href="/pages/tax-details" class="card__linklist-item link">My tax-Exempt {% render 'icon', icon: 'check-2' %}</a>
                 <a href="{{ routes.account_logout_url }}" class="value-picker__choice-item" data-no-instant>{{ 'customer.general.logout' | t }} {% render 'icon', icon: 'check-2' %}</a>
               </div>
@@ -114,7 +134,7 @@
         </div>
       </div>
 
-      <div class="layout__section">
+      <div class="layout__section account-page-2-orders-content">
         <div class="card">
           <div class="{% if customer.orders.size == 0 %}card__section card__section--tight{% else %}card__header card__header--tight{% endif %}">
             <h1 class="heading h1">{{ 'customer.general.orders' | t }} {% if customer.orders.size > 0 %}({{ customer.orders.size }}){% endif %}</h1>
@@ -160,6 +180,12 @@
                   </tr>
                 </thead>
                 <tbody>
+                  hi
+                  {% if customer.b2b? %}
+                    pravin
+                    {% else %}
+                    ggfh
+                  {% endif %}
                   {% for order in customer.orders %}
                     {% if forloop.index0 >= start and forloop.index0 <= end %}
                       <tr>

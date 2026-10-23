@@ -1,3 +1,17 @@
+(function () {
+  try {
+    var path = (window.location.pathname || "").replace(/\/+$/, "") || "/";
+    var savedTab = sessionStorage.getItem("accountPage2Tab");
+    if (path === "/account/addresses" || (savedTab === "addresses" && path === "/account")) {
+      window.location.replace("/pages/account-page#addresses");
+      return;
+    }
+    if (path === "/account") {
+      window.location.replace("/pages/account-page");
+    }
+  } catch (e) {}
+})();
+
 /**
  * Include your custom JavaScript here.
  *
@@ -4792,7 +4806,7 @@ function initializeDeliveryDate(hasOnlyStock) {
 
   $("#deliveryDate").flatpickr({
     enableTime: false,
-    dateFormat: "m/d/Y",
+    dateFormat: "m-d-Y",
     disable: [
       function (date) {
         return isDeliveryDateDisabled(date, hasOnlyStock);
@@ -4820,7 +4834,7 @@ function initializeEventDate(hasOnlyStock) {
 $("#eventDate").flatpickr({
   enableTime: false, //allowInput: true,
   minDate: "today",
-  dateFormat: "m/d/Y",
+  dateFormat: "m-d-Y",
   disable: [
     function (date) {
       // date = toCSTdate(date);

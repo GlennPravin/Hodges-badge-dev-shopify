@@ -2,6 +2,11 @@
 
 <html class="no-js" lang="{{ request.locale.iso_code }}">
   <head>
+{%- if customer and request.path == '/account/addresses' -%}
+  <script>window.location.replace('/pages/account-page#addresses');</script>
+{%- elsif customer and request.path == '/account' -%}
+  <script>window.location.replace('/pages/account-page');</script>
+{%- endif -%}
 {% comment %}  {% render 'visually_io_sdk' %}  {% endcomment %}
 
 	{% include 'autoketing-seo' %}

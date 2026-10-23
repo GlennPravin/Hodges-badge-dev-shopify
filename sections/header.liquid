@@ -277,15 +277,35 @@
                 <span class="header__action-item-title hidden-pocket hidden-lap">{{ 'header.general.login' | t }}</span>
               {%- endif -%}
 
-              <div class="header__action-item-content">
-                <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="header__action-item-link header__account-icon icon-state hidden-desk" aria-label="{{ 'header.general.account' | t }}" aria-controls="account-popover" aria-expanded="false" data-action="toggle-popover" {% if customer %}data-follow-link="phone"{% endif %}>
-                  <span class="icon-state__primary">{%- render 'icon', icon: 'account' -%}</span>
-                  <span class="icon-state__secondary">{%- render 'icon', icon: 'close' -%}</span>
-                </a>
+              {%- assign account_page_path = '/pages/account-page' -%}
+              {%- assign current_return_path = request.path | default: '/' -%}
+              {%- if routes.storefront_login_url != blank -%}
+                {%- assign account_login_with_return = routes.storefront_login_url -%}
+              {%- else -%}
+                {%- assign account_return_encoded = current_return_path | url_encode -%}
+                {%- assign account_login_with_return = '/customer_authentication/login?return_to=' | append: account_return_encoded -%}
+              {%- endif -%}
 
-                <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="header__action-item-link hidden-pocket hidden-lap" aria-controls="account-popover" aria-expanded="false" data-action="toggle-popover">
-                  {{ 'header.general.account' | t }} {% render 'icon', icon: 'arrow-bottom' %}
-                </a>
+              <div class="header__action-item-content">
+                {%- if customer -%}
+                  <a href="{{ account_page_path }}" class="header__action-item-link header__account-icon icon-state hidden-desk" aria-label="{{ 'header.general.account' | t }}" aria-controls="account-popover" aria-expanded="false" data-action="toggle-popover" data-follow-link="phone">
+                    <span class="icon-state__primary">{%- render 'icon', icon: 'account' -%}</span>
+                    <span class="icon-state__secondary">{%- render 'icon', icon: 'close' -%}</span>
+                  </a>
+
+                  <a href="{{ account_page_path }}" class="header__action-item-link hidden-pocket hidden-lap" aria-controls="account-popover" aria-expanded="false" data-action="toggle-popover">
+                    {{ 'header.general.account' | t }} {% render 'icon', icon: 'arrow-bottom' %}
+                  </a>
+                {%- else -%}
+                  <a href="{{ account_login_with_return }}" class="header__action-item-link header__account-icon icon-state hidden-desk" aria-label="{{ 'header.general.account' | t }}" data-no-instant>
+                    <span class="icon-state__primary">{%- render 'icon', icon: 'account' -%}</span>
+                    <span class="icon-state__secondary">{%- render 'icon', icon: 'close' -%}</span>
+                  </a>
+
+                  <a href="{{ account_login_with_return }}" class="header__action-item-link hidden-pocket hidden-lap" data-no-instant>
+                    {{ 'header.general.account' | t }}
+                  </a>
+                {%- endif -%}
 
                 <div id="account-popover" class="popover {% if customer %}popover--logged{% else %}popover--large popover--unlogged{% endif %}" aria-hidden="true">
                   {%- render 'icon', icon: 'nav-triangle-borderless' -%}
@@ -293,8 +313,9 @@
                   {%- if customer -%}
                     <div class="popover__inner popover__inner--no-padding">
                       <div class="popover__linklist">
-                        <a class="popover__link-item" href="{{ routes.account_url }}">{{ 'customer.general.orders' | t }}</a>
-                        <a class="popover__link-item" href="{{ routes.account_addresses_url }}">{{ 'customer.general.addresses' | t }}</a>
+                        <a class="popover__link-item" href="/pages/account-page#profile">My profile</a>
+                        <a class="popover__link-item" href="/pages/account-page">{{ 'customer.general.orders' | t }}</a>
+                        <a class="popover__link-item" href="/pages/account-page#addresses">{{ 'customer.general.addresses' | t }}</a>
                          <a class="popover__link-item" href="/pages/tax-details">My tax-Exempt</a>
                         <a class="popover__link-item" href="{{ routes.account_logout_url }}" data-no-instant>{{ 'customer.general.logout' | t }}</a>
                       </div>
@@ -305,6 +326,8 @@
                       <div id="header-login-panel" class="popover__panel popover__panel--default is-selected">
                         <div class="popover__inner">
                           {%- form 'customer_login', name: 'login', class: 'form', id: 'header_customer_login' -%}
+                            <input type="hidden" name="return_to" value="{{ current_return_path }}">
+                            <input type="hidden" name="checkout_url" value="{{ current_return_path }}">
                             <header class="popover__header">
                               <h2 class="popover__title heading">{{ 'customer.login.login' | t }}</h2>
                               <p class="popover__legend">{{ 'customer.login.description' | t }}</p>

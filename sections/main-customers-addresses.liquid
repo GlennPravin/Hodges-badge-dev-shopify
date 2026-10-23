@@ -1,4 +1,4 @@
-<section data-section-id="{{ section.id }}" data-section-type="account">
+<section class="account-page-2-addresses-section" data-section-id="{{ section.id }}" data-section-type="account">
   <div class="container container--flush">
     <div class="page__sub-header">
       <nav aria-label="{{ 'general.breadcrumb.title' | t }}" class="breadcrumb">
@@ -23,8 +23,9 @@
         <div class="card card--sticky hidden-pocket">
           <div class="card__section card__section--tight">
             <div class="card__linklist">
+              <a href="/pages/account-page#profile" class="card__linklist-item link" data-account-profile-link>My profile</a>
               <a href="{{ routes.account_url }}" class="card__linklist-item link">{{ 'customer.general.orders' | t }}</a>
-              <a href="{{ routes.account_addresses_url }}" class="card__linklist-item link text--strong">{{ 'customer.general.addresses' | t }}</a>
+              <a href="/pages/account-page#addresses" class="card__linklist-item link text--strong">{{ 'customer.general.addresses' | t }}</a>
               <a href="/pages/tax-details" class="card__linklist-item link">My tax-Exempt</a>
               <a href="{{ routes.account_logout_url }}" class="card__linklist-item link" data-no-instant>{{ 'customer.general.logout' | t }}</a>
             </div>
@@ -44,8 +45,9 @@
               </header>
 
               <div class="value-picker__choice-list">
+                <a href="/pages/account-page#profile" class="value-picker__choice-item" data-account-profile-link>My profile {% render 'icon', icon: 'check-2' %}</a>
                 <a href="{{ routes.account_url }}" class="value-picker__choice-item">{{ 'customer.general.orders' | t }} {% render 'icon', icon: 'check-2' %}</a>
-                <a href="{{ routes.account_addresses_url }}" class="value-picker__choice-item is-selected">{{ 'customer.general.addresses' | t }} {% render 'icon', icon: 'check-2' %}</a>
+                <a href="/pages/account-page#addresses" class="value-picker__choice-item is-selected">{{ 'customer.general.addresses' | t }} {% render 'icon', icon: 'check-2' %}</a>
                 <a href="/pages/tax-details" class="card__linklist-item link">My tax-Exempt{% render 'icon', icon: 'check-2' %}</a>
                 <a href="{{ routes.account_logout_url }}" class="value-picker__choice-item" data-no-instant>{{ 'customer.general.logout' | t }} {% render 'icon', icon: 'check-2' %}</a>
               </div>
@@ -82,10 +84,8 @@
           {%- else -%}
             {%- paginate customer.addresses by 8 -%}
               <div class="address-list">
+                {%- if paginate.current_page == 1 -%}
                 <div class="address-list__item">
-                {%- if address.id == customer.default_address.id -%}
-                    {%- continue -%}
-                  {%- endif -%}
                   <div class="address-list__item-top">
                     <p class="heading h6">{{ 'customer.addresses.default_address' | t }}</p>
                        {% for item in  customer.metafields.CustomerInfo.osasId %}
@@ -100,8 +100,9 @@
                   <div class="address-list__action-list">
                     <button class="link link--accented" data-action="open-modal" aria-controls="modal-address-{{ customer.default_address.id }}">{{ 'customer.addresses.edit' | t }}</button>
                     <button class="link link--accented" onclick="Shopify.CustomerAddress.destroy({{ customer.default_address.id }}); return false">{{ 'customer.addresses.delete' | t }}</button>
-                  </div>              
+                  </div>
                 </div>
+                {%- endif -%}
 
                 {%- assign address_count = paginate.current_offset | plus: 2 -%}
 

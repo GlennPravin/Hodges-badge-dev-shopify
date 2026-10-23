@@ -21,6 +21,8 @@
     {%- endif -%}
 
     {%- form 'customer_login', name: 'login', class: 'form form--main', id: 'customer_login', style: login_default_visibility -%}
+      <input type="hidden" name="return_to" value="/" id="login-return-to">
+      <input type="hidden" name="checkout_url" value="/" id="login-checkout-url">
       <header class="form__header">
         <h1 class="form__title heading h1">{{ 'customer.login.login' | t }}</h1>
         <p class="form__legend">{{ 'customer.login.description' | t }}</p>
@@ -94,6 +96,26 @@
       document.getElementById('customer_login').style.display = 'none';
       document.getElementById('recover_customer_password').style.display = 'block';
     }
+
+    (function () {
+      var returnPath = "/";
+      var params = new URLSearchParams(window.location.search);
+      var queryReturn = params.get("return_to");
+      if (queryReturn && queryReturn.charAt(0) === "/") {
+        returnPath = queryReturn;
+      } else if (document.referrer) {
+        try {
+          var ref = new URL(document.referrer);
+          if (ref.origin === window.location.origin && ref.pathname.indexOf("/account/login") === -1) {
+            returnPath = ref.pathname + ref.search;
+          }
+        } catch (e) {}
+      }
+      var returnField = document.getElementById("login-return-to");
+      var checkoutField = document.getElementById("login-checkout-url");
+      if (returnField) returnField.value = returnPath;
+      if (checkoutField) checkoutField.value = returnPath;
+    })();
   </script>
 </section>
 

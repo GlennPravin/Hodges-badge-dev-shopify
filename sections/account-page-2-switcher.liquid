@@ -1,0 +1,998 @@
+{%- if customer == blank -%}
+  <script>
+    window.location.href = "/customer_authentication/login?return_to=" + encodeURIComponent("/pages/account-page" + window.location.search);
+  </script>
+{%- endif -%}
+
+{% render 'account-page-2-order-detail' %}
+
+<style>
+  body.account-page-2--orders .account-page-2-panel--addresses,
+  body.account-page-2--orders .account-page-2-panel--profile {
+    display: none !important;
+  }
+
+  body.account-page-2--addresses .account-page-2-panel--orders,
+  body.account-page-2--addresses .account-page-2-panel--profile {
+    display: none !important;
+  }
+
+  body.account-page-2--profile .account-page-2-panel--orders,
+  body.account-page-2--profile .account-page-2-panel--addresses,
+  body.account-page-2--profile .account-page-2-order-details {
+    display: none !important;
+  }
+
+  body.account-page-2--order-detail .account-page-2-panel--orders,
+  body.account-page-2--order-detail .account-page-2-panel--addresses,
+  body.account-page-2--order-detail .account-page-2-panel--profile {
+    display: none !important;
+  }
+
+  .account-page-2-panel--profile {
+    display: none;
+    width: 100%;
+  }
+
+  body.account-page-2--profile .account-page-2-panel--profile {
+    display: block !important;
+  }
+
+  .account-profile__intro {
+    margin: 0 0 18px;
+  }
+
+  .account-profile__title {
+    margin: 0;
+    color: var(--heading-color);
+    font-size: 32px;
+    line-height: 1.15;
+  }
+
+  .account-profile__subtitle {
+    margin: 8px 0 0;
+    color: #6b7280;
+    font-size: 15px;
+  }
+
+  .account-page-2-profile-message {
+    margin-bottom: 16px;
+  }
+
+  .account-profile {
+    margin: 0;
+    padding: 28px 28px 22px;
+    border: 1px solid #e6e8eb;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  }
+
+  .account-profile__kicker {
+    margin: 0 0 16px;
+    color: #8b919a;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .account-profile__holder {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+
+  .account-profile__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(var(--primary-button-background-rgb), 0.14);
+    color: var(--primary-button-background);
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .account-profile__holder-label {
+    color: var(--primary-button-background);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .account-profile__rule {
+    margin: 18px 0;
+    border: 0;
+    border-top: 1px solid #eceff3;
+  }
+
+  .account-profile__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-bottom: 22px;
+  }
+
+  .account-profile__label {
+    display: block;
+    margin-bottom: 6px;
+    color: #8b919a;
+    font-size: 14px;
+  }
+
+  .account-profile__value {
+    display: block;
+    color: #243041;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  input.account-profile__input[type="text"] {
+    display: none;
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid #d7dbe2;
+    border-radius: 8px;
+    background: #fff;
+    color: #243041;
+    font-size: 16px;
+    text-transform: none;
+  }
+
+  .account-profile.is-editing .account-profile__value[data-profile-value] {
+    display: none;
+  }
+
+  .account-profile.is-editing .account-profile__input {
+    display: block;
+  }
+
+  .account-profile__email {
+    margin-bottom: 4px;
+  }
+
+  .account-page-2-profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 22px;
+  }
+
+  .account-page-2-profile-actions .button {
+    min-width: 148px;
+    padding: 0 22px;
+    border-radius: 8px;
+  }
+
+  @media screen and (max-width: 640px) {
+    .account-profile {
+      padding: 20px 16px 16px;
+    }
+
+    .account-profile__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .account-page-2-profile-address-form {
+    display: none !important;
+  }
+
+  .account-page-2-order-details,
+  .account-page-2-order-detail,
+  .account-page-2-order-detail[hidden] {
+    display: none !important;
+  }
+
+  body.account-page-2--order-detail .account-page-2-order-details {
+    display: block !important;
+    width: 100%;
+  }
+
+  body.account-page-2--order-detail .account-page-2-order-detail.is-active {
+    display: block !important;
+  }
+
+  .account-page-2-panels > .layout__section {
+    margin: 0;
+    width: 100%;
+    flex: none;
+  }
+
+  .account-page-2-panels .table-wrapper,
+  .account-page-2-panels .table {
+    width: 100%;
+  }
+</style>
+
+{%- assign profile_first_name = customer.first_name -%}
+{%- assign profile_last_name = customer.last_name -%}
+{%- assign profile_initial = profile_first_name | slice: 0 | upcase -%}
+{%- if profile_initial == blank -%}
+  {%- assign profile_initial = customer.email | slice: 0 | upcase -%}
+{%- endif -%}
+
+<div class="account-page-2-panel--profile" data-profile-first="{{ profile_first_name | escape }}" data-profile-last="{{ profile_last_name | escape }}">
+  <header class="account-profile__intro">
+    <h1 class="account-profile__title">Profile</h1>
+    <p class="account-profile__subtitle">Manage your account details and preferences.</p>
+  </header>
+
+  <p class="alert account-page-2-profile-message" data-profile-message hidden></p>
+
+  <form id="account-page-2-profile-form" class="account-profile" action="{{ request.path }}" method="post" data-customer-id="{{ customer.id }}">
+    <p class="account-profile__kicker">Account details</p>
+    <div class="account-profile__holder">
+      <span class="account-profile__avatar">{{ profile_initial | escape }}</span>
+      <span class="account-profile__holder-label">Account holder</span>
+    </div>
+
+    <hr class="account-profile__rule">
+
+    <p class="account-profile__kicker">Personal information</p>
+    <div class="account-profile__grid">
+      <div>
+        <span class="account-profile__label">First name</span>
+        <span class="account-profile__value" data-profile-value="first_name">{% if profile_first_name != blank %}{{ profile_first_name | escape }}{% else %}—{% endif %}</span>
+        <input id="profile-first-name" class="account-profile__input" type="text" name="first_name" value="{{ profile_first_name | escape }}" autocomplete="given-name" data-profile-name>
+      </div>
+      <div>
+        <span class="account-profile__label">Last name</span>
+        <span class="account-profile__value" data-profile-value="last_name">{% if profile_last_name != blank %}{{ profile_last_name | escape }}{% else %}—{% endif %}</span>
+        <input id="profile-last-name" class="account-profile__input" type="text" name="last_name" value="{{ profile_last_name | escape }}" autocomplete="family-name" data-profile-name>
+      </div>
+    </div>
+
+    <div class="account-profile__email">
+      <span class="account-profile__label">Email address</span>
+      <span class="account-profile__value">{{ customer.email | escape }}</span>
+      <input type="hidden" name="email" value="{{ customer.email | escape }}" data-profile-email data-account-email="{{ customer.email | escape }}">
+    </div>
+
+    <div class="account-page-2-profile-actions">
+      <button type="button" class="button button--primary" data-profile-edit>Edit profile</button>
+      <button type="submit" class="button button--primary" data-profile-save hidden>Save</button>
+    </div>
+  </form>
+</div>
+
+{%- if customer.default_address -%}
+  {% form 'customer_address', customer.default_address, id: 'account-page-2-profile-address-form', class: 'account-page-2-profile-address-form' %}
+    <input type="hidden" name="address[first_name]" value="{{ customer.default_address.first_name | escape }}">
+    <input type="hidden" name="address[last_name]" value="{{ customer.default_address.last_name | escape }}">
+    <input type="hidden" name="address[company]" value="{{ customer.default_address.company | escape }}">
+    <input type="hidden" name="address[address1]" value="{{ customer.default_address.address1 | escape }}">
+    <input type="hidden" name="address[address2]" value="{{ customer.default_address.address2 | escape }}">
+    <input type="hidden" name="address[city]" value="{{ customer.default_address.city | escape }}">
+    <input type="hidden" name="address[zip]" value="{{ customer.default_address.zip | escape }}">
+    <input type="hidden" name="address[country]" value="{{ customer.default_address.country | escape }}">
+    <input type="hidden" name="address[province]" value="{{ customer.default_address.province | escape }}">
+    <input type="hidden" name="address[phone]" value="{{ customer.default_address.phone | escape }}">
+    <input type="hidden" name="address[default]" value="1">
+  {% endform %}
+{%- endif -%}
+
+<script>
+  (function () {
+    var accountUrl = {{ routes.account_url | json }};
+    var addressesUrl = {{ routes.account_addresses_url | json }};
+    var logoutUrl = {{ routes.account_logout_url | json }};
+    var homeUrl = {{ routes.root_url | json }};
+    var accountPageUrl = {{ request.path | json }};
+    var taxDetailsUrl = "/pages/tax-details";
+    var breadcrumbArrow = '<svg focusable="false" class="icon icon--arrow-right" viewBox="0 0 8 12" role="presentation"><path stroke="currentColor" stroke-width="2" d="M2 2l4 4-4 4" fill="none" stroke-linecap="square"></path></svg>';
+
+    function normalizePath(url) {
+      try {
+        return new URL(url, window.location.origin).pathname.replace(/\/+$/, "") || "/";
+      } catch (e) {
+        return String(url || "").replace(/\/+$/, "") || "/";
+      }
+    }
+
+    var accountPath = normalizePath(accountUrl);
+    var addressesPath = normalizePath(addressesUrl);
+    var logoutPath = normalizePath(logoutUrl);
+    var taxDetailsPath = normalizePath(taxDetailsUrl);
+
+    function getLinkPath(link) {
+      return normalizePath(link.getAttribute("href") || "");
+    }
+
+    function pageUrlWithoutOrder() {
+      var url = new URL(window.location.href);
+      url.searchParams.delete("order_name");
+      url.searchParams.delete("address_page");
+      url.hash = "";
+      return url.pathname + url.search;
+    }
+
+    function orderDetailPageUrl(orderKey) {
+      var url = new URL(window.location.href);
+      url.searchParams.set("order_name", orderKey);
+      url.hash = "";
+      return url.pathname + url.search;
+    }
+
+    function ordersPageUrl() {
+      return pageUrlWithoutOrder();
+    }
+
+    function setOrdersUrl() {
+      var url = new URL(window.location.href);
+      url.searchParams.delete("order_name");
+      url.searchParams.delete("page");
+      url.searchParams.delete("address_page");
+      url.hash = "";
+      history.replaceState(null, "", url.pathname + url.search);
+    }
+
+    function addressesPageUrl() {
+      return ordersPageUrl() + "#addresses";
+    }
+
+    function addressesListPage() {
+      var page = 1;
+      var active = document.querySelector(".account-page-2-panel--addresses .pagination__nav-item.is-active");
+      if (active) {
+        var rendered = parseInt(active.textContent, 10);
+        if (rendered > 1) page = rendered;
+      }
+      try {
+        var urlPage = parseInt(new URL(window.location.href).searchParams.get("page") || "1", 10);
+        if (urlPage > page) page = urlPage;
+      } catch (e) {}
+      return page;
+    }
+
+    function orderNameKey(value) {
+      return String(value || "").replace(/[#\s]/g, "");
+    }
+
+    function findOrderDetailByName(orderName) {
+      var key = orderNameKey(orderName);
+      if (!key) return null;
+      var match = null;
+      document.querySelectorAll(".account-page-2-order-detail").forEach(function (el) {
+        var elKey = orderNameKey(el.getAttribute("data-order-key"));
+        var elNumber = orderNameKey(el.getAttribute("data-order-number"));
+        if (elKey === key || elNumber === key) match = el;
+      });
+      return match;
+    }
+
+    function rememberAddressesTab() {
+      try {
+        sessionStorage.setItem("accountPage2Tab", "addresses");
+      } catch (e) {}
+    }
+
+    function consumeAddressesTab() {
+      try {
+        var saved = sessionStorage.getItem("accountPage2Tab");
+        if (saved !== "addresses") return false;
+        sessionStorage.removeItem("accountPage2Tab");
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function consumeProfileTab() {
+      try {
+        var saved = sessionStorage.getItem("accountPage2Tab");
+        if (saved !== "profile") return false;
+        sessionStorage.removeItem("accountPage2Tab");
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function profilePageUrl() {
+      return ordersPageUrl() + "#profile";
+    }
+
+    function addReturnToField(form, returnUrl) {
+      var input = form.querySelector('input[name="return_to"]');
+      if (!input) {
+        input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "return_to";
+        form.appendChild(input);
+      }
+      input.value = returnUrl;
+    }
+
+    function getAddressFrame() {
+      var name = "accountPage2AddressFrame";
+      var iframe = document.querySelector('iframe[name="' + name + '"]');
+      if (!iframe) {
+        iframe = document.createElement("iframe");
+        iframe.name = name;
+        iframe.setAttribute("name", name);
+        iframe.style.display = "none";
+        iframe.setAttribute("aria-hidden", "true");
+        document.body.appendChild(iframe);
+      }
+      return iframe;
+    }
+
+    function reloadAddressesPage() {
+      rememberAddressesTab();
+      window.location.reload();
+    }
+
+    function submitThroughFrame(form) {
+      rememberAddressesTab();
+      addReturnToField(form, ordersPageUrl());
+
+      try {
+        var iframe = getAddressFrame();
+        form.setAttribute("target", iframe.name);
+        HTMLFormElement.prototype.submit.call(form);
+      } catch (e) {}
+
+      setTimeout(reloadAddressesPage, 1200);
+    }
+
+    function setupAddressForms() {
+      document.querySelectorAll('form[action*="/account/addresses"]').forEach(function (form) {
+        if (form.id === "account-page-2-profile-address-form" || form.classList.contains("account-page-2-profile-address-form")) return;
+        addReturnToField(form, ordersPageUrl());
+
+        if (form.getAttribute("data-account-page-2-bound")) return;
+        form.setAttribute("data-account-page-2-bound", "true");
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          submitThroughFrame(form);
+        }, true);
+      });
+    }
+
+    function buildAddressPostForm(action, params) {
+      var form = document.createElement("form");
+      form.method = "post";
+      form.action = action;
+      form.acceptCharset = "UTF-8";
+      form.style.display = "none";
+
+      Object.keys(params).forEach(function (name) {
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = params[name];
+        form.appendChild(input);
+      });
+
+      var token = document.querySelector('form[action*="/account/addresses"] input[name="authenticity_token"]');
+      if (token && !params.authenticity_token) {
+        var tokenInput = document.createElement("input");
+        tokenInput.type = "hidden";
+        tokenInput.name = "authenticity_token";
+        tokenInput.value = token.value;
+        form.appendChild(tokenInput);
+      }
+
+      document.body.appendChild(form);
+      return form;
+    }
+
+    window.Shopify = window.Shopify || {};
+    Shopify.CustomerAddress = Shopify.CustomerAddress || {};
+    Shopify.CustomerAddress.destroy = function (id, message) {
+      if (!window.confirm(message || "Are you sure you wish to delete this address?")) {
+        return false;
+      }
+
+      submitThroughFrame(buildAddressPostForm("/account/addresses/" + id, {
+        _method: "delete",
+        return_to: ordersPageUrl()
+      }));
+      return false;
+    };
+
+    function isTaxDetailsLink(link) {
+      return getLinkPath(link) === taxDetailsPath;
+    }
+
+    function isLogoutLink(link) {
+      return getLinkPath(link) === logoutPath;
+    }
+
+    function isOrderDetailLink(link) {
+      if (findOrderDetail(link)) return true;
+      var path = getLinkPath(link);
+      return path.indexOf(accountPath + "/orders/") === 0;
+    }
+
+    function isBackToOrdersLink(link) {
+      return link.classList.contains("account-page-2-back-to-orders");
+    }
+
+    function isAccountPageLink(link) {
+      return getLinkPath(link) === normalizePath(accountPageUrl);
+    }
+
+    function linkHash(link) {
+      var href = link.getAttribute("href") || "";
+      var hashIndex = href.indexOf("#");
+      return hashIndex === -1 ? "" : href.slice(hashIndex + 1);
+    }
+
+    function isAddressesLink(link) {
+      if (isLogoutLink(link) || isTaxDetailsLink(link) || isOrderDetailLink(link)) return false;
+      if (linkHash(link) === "addresses") return true;
+      return getLinkPath(link) === addressesPath;
+    }
+
+    function isProfileLink(link) {
+      if (link.hasAttribute("data-account-profile-link")) return true;
+      if (isLogoutLink(link) || isTaxDetailsLink(link) || isOrderDetailLink(link)) return false;
+      return linkHash(link) === "profile";
+    }
+
+    function isAddressPaginationLink(link) {
+      return !!(link.closest(".account-page-2-panel--addresses") && link.closest(".pagination"));
+    }
+
+    function isOrdersLink(link) {
+      if (isAddressPaginationLink(link)) return false;
+      if (isLogoutLink(link) || isTaxDetailsLink(link) || isOrderDetailLink(link) || isBackToOrdersLink(link) || isAddressesLink(link) || isProfileLink(link)) return false;
+      var path = getLinkPath(link);
+      return path === accountPath || path === normalizePath(accountPageUrl);
+    }
+
+    function setBreadcrumb(items) {
+      var sections = getAccountSections();
+      var list = sections.orders && sections.orders.querySelector(".breadcrumb__list");
+      if (!list) return;
+
+      list.innerHTML = items.map(function (item, index) {
+        var isLast = index === items.length - 1;
+        var content = isLast
+          ? '<span class="breadcrumb__link" aria-current="page">' + item.label + "</span>"
+          : '<a class="breadcrumb__link link" href="' + item.href + '">' + item.label + "</a>" + breadcrumbArrow;
+        return '<li class="breadcrumb__item">' + content + "</li>";
+      }).join("");
+    }
+
+    function setOrdersBreadcrumb() {
+      setBreadcrumb([
+        { label: "Home", href: homeUrl },
+        { label: "My account", href: accountPageUrl },
+        { label: "My orders" }
+      ]);
+    }
+
+    function setAddressesBreadcrumb() {
+      setBreadcrumb([
+        { label: "Home", href: homeUrl },
+        { label: "My account", href: accountPageUrl },
+        { label: "My addresses" }
+      ]);
+    }
+
+    function setProfileBreadcrumb() {
+      setBreadcrumb([
+        { label: "Home", href: homeUrl },
+        { label: "My account", href: accountPageUrl },
+        { label: "My profile" }
+      ]);
+    }
+
+    function setOrderDetailBreadcrumb(orderKey) {
+      setBreadcrumb([
+        { label: "Home", href: homeUrl },
+        { label: "My account", href: accountPageUrl },
+        { label: "Order #" + orderKey }
+      ]);
+    }
+
+    function findOrderDetail(link) {
+      var path = getLinkPath(link);
+      var match = null;
+      document.querySelectorAll(".account-page-2-order-detail").forEach(function (el) {
+        if (normalizePath(el.getAttribute("data-order-path") || "") === path) {
+          match = el;
+        }
+      });
+      if (!match && link.textContent) {
+        var key = String(link.textContent).replace(/[#\s]/g, "");
+        if (key) {
+          match = document.querySelector('.account-page-2-order-detail[data-order-key="' + key + '"]');
+        }
+      }
+      return match;
+    }
+
+    function showOrderDetail(detailEl) {
+      if (!detailEl) return;
+
+      document.body.classList.remove("account-page-2--addresses", "account-page-2--profile");
+      document.body.classList.add("account-page-2--orders", "account-page-2--order-detail");
+
+      document.querySelectorAll(".account-page-2-order-detail").forEach(function (el) {
+        var isActive = el === detailEl;
+        el.classList.toggle("is-active", isActive);
+        if (isActive) {
+          el.removeAttribute("hidden");
+        } else {
+          el.setAttribute("hidden", "");
+        }
+      });
+
+      var key = detailEl.getAttribute("data-order-key") || "";
+      window.lineItem1 = (window.accountPage2LineItems && window.accountPage2LineItems[key]) || [];
+      window.reorder = (window.accountPage2Reorders && window.accountPage2Reorders[key]) || [];
+      lineItem1 = window.lineItem1;
+      reorder = window.reorder;
+      history.replaceState(null, "", orderDetailPageUrl(key));
+      setOrderDetailBreadcrumb(key);
+    }
+
+    function getAccountSections() {
+      var sections = document.querySelectorAll('[data-section-type="account"]');
+      return {
+        orders: sections[0] || null,
+        addresses: sections[1] || null
+      };
+    }
+
+    function setAccountTab(tab) {
+      var nextTab = tab === "addresses" ? "addresses" : tab === "profile" ? "profile" : "orders";
+      document.documentElement.setAttribute("data-account-tab", nextTab);
+      document.body.classList.remove("account-page-2--order-detail", "account-page-2--addresses", "account-page-2--orders", "account-page-2--profile");
+      document.body.classList.add("account-page-2--" + nextTab);
+
+      document.querySelectorAll(".account-page-2-order-detail").forEach(function (el) {
+        el.classList.remove("is-active");
+        el.setAttribute("hidden", "");
+      });
+
+      if (nextTab === "orders") {
+        setOrdersUrl();
+      }
+
+      var sections = getAccountSections();
+      if (!sections.orders) return;
+
+      sections.orders.querySelectorAll(".card__linklist a[href], .value-picker__choice-list a[href]").forEach(function (link) {
+        if (isOrdersLink(link)) {
+          link.classList.toggle("text--strong", nextTab === "orders");
+          link.classList.toggle("is-selected", nextTab === "orders");
+        }
+        if (isAddressesLink(link)) {
+          link.classList.toggle("text--strong", nextTab === "addresses");
+          link.classList.toggle("is-selected", nextTab === "addresses");
+        }
+        if (isProfileLink(link)) {
+          link.classList.toggle("text--strong", nextTab === "profile");
+          link.classList.toggle("is-selected", nextTab === "profile");
+        }
+      });
+
+      if (nextTab === "addresses") {
+        setAddressesBreadcrumb();
+      } else if (nextTab === "profile") {
+        setProfileBreadcrumb();
+      } else {
+        setOrdersBreadcrumb();
+      }
+    }
+
+    function setupPanels() {
+      var sections = getAccountSections();
+      if (!sections.orders) return;
+
+      var ordersLayout = sections.orders.querySelector(".layout");
+      var ordersPanel = sections.orders.querySelector(".layout > .layout__section:not(.layout__section--secondary)");
+      if (!ordersLayout || !ordersPanel) return;
+
+      var wrapper = ordersLayout.querySelector(".account-page-2-panels");
+      if (!wrapper) {
+        wrapper = document.createElement("div");
+        wrapper.className = "layout__section account-page-2-panels";
+        ordersPanel.parentNode.insertBefore(wrapper, ordersPanel);
+        wrapper.appendChild(ordersPanel);
+      }
+
+      ordersPanel.classList.add("account-page-2-panel--orders");
+
+      if (sections.addresses) {
+        var addressesPanel = sections.addresses.querySelector(".layout > .layout__section:not(.layout__section--secondary)");
+        if (addressesPanel) {
+          addressesPanel.classList.add("account-page-2-panel--addresses");
+          if (addressesPanel.parentElement !== wrapper) {
+            wrapper.appendChild(addressesPanel);
+          }
+          var leftover = sections.addresses.querySelector(".container");
+          if (leftover) leftover.style.display = "none";
+        }
+      }
+
+      var orderDetails = document.querySelector(".account-page-2-order-details");
+      if (orderDetails && orderDetails.parentElement !== wrapper) {
+        wrapper.appendChild(orderDetails);
+      }
+
+      var profilePanel = document.querySelector(".account-page-2-panel--profile");
+      if (profilePanel && profilePanel.parentElement !== wrapper) {
+        wrapper.appendChild(profilePanel);
+      }
+
+      sections.orders.querySelectorAll(".card__linklist a[href], .value-picker__choice-list a[href]").forEach(function (link) {
+        if (isAddressesLink(link)) {
+          link.setAttribute("href", "/pages/account-page#addresses");
+        } else if (isOrdersLink(link)) {
+          link.setAttribute("href", "/pages/account-page");
+        }
+      });
+
+      insertProfileLinks();
+    }
+
+    function insertProfileLinks() {
+      var sections = getAccountSections();
+      if (!sections.orders) return;
+
+      sections.orders.querySelectorAll(".card__linklist, .value-picker__choice-list").forEach(function (list) {
+        var ordersLink = null;
+        list.querySelectorAll("a[href]").forEach(function (link) {
+          if (!ordersLink && isOrdersLink(link)) ordersLink = link;
+        });
+        if (!ordersLink) return;
+
+        var profileLink = list.querySelector("[data-account-profile-link]");
+        if (!profileLink) {
+          var isPicker = list.classList.contains("value-picker__choice-list");
+          profileLink = document.createElement("a");
+          profileLink.setAttribute("href", "/pages/account-page#profile");
+          profileLink.setAttribute("data-account-profile-link", "");
+          profileLink.className = isPicker ? "value-picker__choice-item" : "card__linklist-item link";
+          profileLink.textContent = "My profile";
+          if (isPicker) {
+            var icon = list.querySelector("svg");
+            if (icon) profileLink.appendChild(icon.cloneNode(true));
+          }
+        }
+
+        if (ordersLink.previousElementSibling !== profileLink) {
+          ordersLink.insertAdjacentElement("beforebegin", profileLink);
+        }
+      });
+    }
+
+    document.addEventListener("click", function (event) {
+      var link = event.target.closest("a[href]");
+      if (!link) return;
+
+      if (isTaxDetailsLink(link) || isLogoutLink(link)) {
+        return;
+      }
+
+      if (isAddressPaginationLink(link)) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        var pageUrl = new URL(link.href, window.location.origin);
+        pageUrl.hash = "addresses";
+        document.documentElement.setAttribute("data-account-tab", "addresses");
+        rememberAddressesTab();
+        window.location.href = pageUrl.pathname + pageUrl.search + pageUrl.hash;
+        return;
+      }
+
+      if (isProfileLink(link)) {
+        event.preventDefault();
+        setAccountTab("profile");
+        history.replaceState(null, "", profilePageUrl());
+        return;
+      }
+
+      if (isBackToOrdersLink(link) || isOrdersLink(link)) {
+        event.preventDefault();
+        setAccountTab("orders");
+        return;
+      }
+
+      if (isAddressesLink(link)) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (addressesListPage() > 1) {
+          document.documentElement.setAttribute("data-account-tab", "addresses");
+          rememberAddressesTab();
+          window.location.href = "/pages/account-page?address_page=1#addresses";
+          return;
+        }
+        setAccountTab("addresses");
+        history.replaceState(null, "", addressesPageUrl());
+        return;
+      }
+
+      if (isOrderDetailLink(link)) {
+        var detailEl = findOrderDetail(link);
+        if (!detailEl) {
+          try {
+            detailEl = findOrderDetailByName(new URL(link.href, window.location.origin).searchParams.get("order_name"));
+          } catch (e) {}
+        }
+        if (!detailEl) return;
+        event.preventDefault();
+        event.stopPropagation();
+        showOrderDetail(detailEl);
+      }
+    }, true);
+
+    function namesMatch(left, right) {
+      return String(left || "").trim().toLowerCase() === String(right || "").trim().toLowerCase();
+    }
+
+    function showProfileMessage(text, ok) {
+      var message = document.querySelector("[data-profile-message]");
+      if (!message) return;
+      message.hidden = false;
+      message.textContent = text;
+      message.classList.toggle("alert--success", !!ok);
+      message.classList.toggle("alert--error", !ok);
+    }
+
+    function readProfileExpected() {
+      try {
+        var raw = sessionStorage.getItem("accountPage2ProfileExpected");
+        sessionStorage.removeItem("accountPage2ProfileExpected");
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function setupProfileForm() {
+      var form = document.getElementById("account-page-2-profile-form");
+      if (!form || form.getAttribute("data-account-page-2-bound")) return;
+      form.setAttribute("data-account-page-2-bound", "true");
+
+      var editButton = form.querySelector("[data-profile-edit]");
+      var saveButton = form.querySelector("[data-profile-save]");
+      var nameFields = form.querySelectorAll("[data-profile-name]");
+      var emailField = form.querySelector("[data-profile-email]");
+
+      function setEditing(on) {
+        form.classList.toggle("is-editing", on);
+        nameFields.forEach(function (field) {
+          field.readOnly = !on;
+          if (!on) {
+            var valueEl = form.querySelector('[data-profile-value="' + field.getAttribute("name") + '"]');
+            if (valueEl) valueEl.textContent = field.value.trim() || "—";
+          }
+        });
+        if (editButton) editButton.hidden = on;
+        if (saveButton) saveButton.hidden = !on;
+      }
+
+      nameFields.forEach(function (field) {
+        field.addEventListener("input", function () {
+          field.classList.toggle("is-filled", field.value.trim() !== "");
+        });
+      });
+
+      if (editButton) {
+        editButton.addEventListener("mousedown", function (event) {
+          event.preventDefault();
+        });
+        editButton.addEventListener("click", function () {
+          setEditing(true);
+          nameFields.forEach(function (field) {
+            field.blur();
+          });
+        });
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var firstField = form.querySelector("[name='first_name']");
+        var lastField = form.querySelector("[name='last_name']");
+        var first = firstField ? firstField.value.trim() : "";
+        var last = lastField ? lastField.value.trim() : "";
+        var email = emailField ? emailField.value.trim() : "";
+        var accountEmail = emailField ? (emailField.getAttribute("data-account-email") || "") : "";
+        var panel = document.querySelector(".account-page-2-panel--profile");
+
+        if (!first || !last || email.toLowerCase() !== accountEmail.toLowerCase()) {
+          showProfileMessage("Profile could not be saved.", false);
+          return;
+        }
+
+        var customerId = form.getAttribute("data-customer-id") || "";
+        if (!customerId) {
+          showProfileMessage("Profile could not be saved.", false);
+          return;
+        }
+
+        var currentFirst = panel ? panel.getAttribute("data-profile-first") : "";
+        var currentLast = panel ? panel.getAttribute("data-profile-last") : "";
+        if (namesMatch(first, currentFirst) && namesMatch(last, currentLast)) {
+          setEditing(false);
+          showProfileMessage("Profile saved.", true);
+          return;
+        }
+
+        var saveUrl = "https://hops-connect.dev.hodgesbadge.com/ShopifyCustomer/UpdateCustomerName"
+          + "?customer_id=" + encodeURIComponent(customerId)
+          + "&first_name=" + encodeURIComponent(first)
+          + "&last_name=" + encodeURIComponent(last);
+
+        fetch(saveUrl, { method: "POST" })
+          .then(function (response) {
+            if (!response.ok) {
+              showProfileMessage("Profile could not be saved.", false);
+              return;
+            }
+            try {
+              sessionStorage.setItem("accountPage2Tab", "profile");
+              sessionStorage.setItem("accountPage2ProfileExpected", JSON.stringify({ first: first, last: last }));
+            } catch (e) {}
+            window.location.href = profilePageUrl();
+          })
+          .catch(function () {
+            showProfileMessage("Profile could not be saved.", false);
+          });
+      });
+
+      setEditing(false);
+    }
+
+    function init() {
+      setupPanels();
+      setupAddressForms();
+      setupProfileForm();
+      var expected = readProfileExpected();
+      var hash = (window.location.hash || "").replace("#", "");
+      if (hash === "addresses" || (hash !== "profile" && consumeAddressesTab())) {
+        setAccountTab("addresses");
+        history.replaceState(null, "", addressesPageUrl());
+        return;
+      }
+      if (hash === "profile" || consumeProfileTab()) {
+        setAccountTab("profile");
+        history.replaceState(null, "", profilePageUrl());
+        if (expected) {
+          var panel = document.querySelector(".account-page-2-panel--profile");
+          var saved = panel
+            && namesMatch(panel.getAttribute("data-profile-first"), expected.first)
+            && namesMatch(panel.getAttribute("data-profile-last"), expected.last);
+          showProfileMessage(saved ? "Profile saved." : "Profile could not be saved.", saved);
+        }
+        return;
+      }
+
+      var orderName = "";
+      try {
+        orderName = new URL(window.location.href).searchParams.get("order_name") || "";
+      } catch (e) {}
+      var detailEl = findOrderDetailByName(orderName);
+      if (detailEl) {
+        showOrderDetail(detailEl);
+        return;
+      }
+
+      setAccountTab("orders");
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Account page tabs"
+}
+{% endschema %}
