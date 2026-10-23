@@ -1,0 +1,112 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "product_meta": {
+          "type": "product_meta",
+          "settings": {
+            "show_vendor": false,
+            "show_sku": false,
+            "show_product_id": true,
+            "show_reviews_badge": false,
+            "show_share_buttons": true
+          }
+        },
+        "variant_selector": {
+          "type": "variant_selector",
+          "settings": {
+            "selector_mode": "block",
+            "color_mode": "color",
+            "show_quantity_selector": true,
+            "show_taxes_included": false,
+            "show_inventory_quantity": false,
+            "low_inventory_threshold": 0,
+            "hide_variations_options": true
+          }
+        },
+        "liquid_4n8NBE": {
+          "type": "liquid",
+          "disabled": true,
+          "settings": {
+            "title": "product title",
+            "liquid": "{{ product.title }}",
+            "display_mode": "show_all"
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_payment_button": true
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "display_mode": "show_all"
+          }
+        }
+      },
+      "block_order": [
+        "product_meta",
+        "variant_selector",
+        "liquid_4n8NBE",
+        "buy_buttons",
+        "description"
+      ],
+      "settings": {
+        "image_size": "small",
+        "enable_video_looping": false,
+        "enable_image_zoom": true,
+        "zoom_effect": "outside",
+        "carousel_effect": "fade"
+      }
+    },
+    "alireviews-section-1672727047313": {
+      "type": "apps",
+      "disabled": true,
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "16575197266a6ed7a8": {
+      "type": "relativeProducts",
+      "settings": {
+        "heading": "Related Products",
+        "show_quick_buy": false
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "disabled": true,
+      "settings": {
+        "heading": "You may also like",
+        "show_quick_buy": false
+      }
+    },
+    "recently-viewed-products": {
+      "type": "recently-viewed-products",
+      "disabled": true,
+      "settings": {
+        "title": "Recently viewed",
+        "show_quick_buy": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "alireviews-section-1672727047313",
+    "16575197266a6ed7a8",
+    "product-recommendations",
+    "recently-viewed-products"
+  ]
+}

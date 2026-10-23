@@ -1,0 +1,75 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "pf-4d6a3bb4": {
+      "type": "pf-4d6a3bb4",
+      "blocks": {
+        "hulk_form_builder_form_block_yfjjgP": {
+          "type": "shopify://apps/hulk-form-builder/blocks/form-block/b6b8dd14-356b-4725-a4ed-77232212b3c3",
+          "settings": {
+            "form_uuid": "w-XHaEy693pfD-9KMIKD4g",
+            "form_settings": false,
+            "font_color": "#000000",
+            "size": 14,
+            "input_background_color": "#FFF",
+            "input_background_color_focus": "#F4DADA",
+            "input_border_radius": 1,
+            "input_border_color": "#ebe9e9",
+            "input_border_color_focus": "#2D2727",
+            "input_font_color": "#3D3131",
+            "input_size": 14,
+            "border_color": "#FFFFFF",
+            "border_radius": 2,
+            "border": 1,
+            "fill_color": "#EBE9E9",
+            "padding": 35,
+            "form_width": 600,
+            "btn_text": "Submit",
+            "sub_btn_txt_color": "#F3F3F3",
+            "sub_btn_bg_color": "#3F3333",
+            "sub_btn_font_size": 14,
+            "sub_btn_bdr_color": "#FFFFFF",
+            "sub_btn_bdr_rad": 3,
+            "sub_btn_bdr_width": 1,
+            "fonts": "Times New Roman"
+          }
+        }
+      },
+      "block_order": [
+        "hulk_form_builder_form_block_yfjjgP"
+      ],
+      "settings": {
+        "pf_cd73e61b_value": "<span style=\"font-weight: bold;\">Contact us today!</span>",
+        "pf_bfd9d8fe_value": "<span style=\"font-weight: bold;\">Customer Service is available:</span>",
+        "pf_eefefebb_value": "8:30AM to 5:30PM EST Monday - Friday<br>We are closed Saturday and Sunday.<br><br><span style=\"font-weight: bold;\">Email<br></span>For Information: <a href=\"mailto:info@hodgesbadge.com\" style=\"color: rgb(0, 71, 178); text-decoration-line: underline;\">info@hodgesbadge.com</a><br><span style=\"font-weight: bold;\"><br>For Customer Service:<br></span><a href=\"mailto:customerservice@hodgesbadge.com\" style=\"color: rgb(0, 71, 178); text-decoration-line: underline;\">customerservice@hodgesbadge.com</a>",
+        "pf_90ee1c1b_value": "<span style=\"font-weight: bold;\">Phone and Fax Numbers:</span>",
+        "pf_47798b12_value": "National toll free:<br>Phone: <a href=\"tel:18005562440\">800.556.2440</a><br>Fax: 800.292.7377<br>",
+        "pf_af451469_value": "Local: (RI)<br>Phone: <a href=\"tel:14016822000\">401.682.2000</a><br>Fax: 401.682.2329",
+        "pf_25f8070f_value": "<span style=\"font-weight: bold;\">Headquarters:</span>",
+        "pf_b13ee427_value": "205 Clock Tower Square<br>Portsmouth, RI 02871",
+        "pf_71fec67e_value": "<strong>Manufacturing:</strong>",
+        "pf_e1b4c741_value": "6440 Enduro Drive<br>Washington, MO 63090",
+        "pf_986ed541_value": "Divider",
+        "pf_a0a001fa_value": "<span style=\"font-weight: bold;\">Effortless Selection with Exceptional Service</span>",
+        "pf_0dbc434d_value": "When it comes to finding the right award for your event, the process can be overwhelming and costly, especially when you’re pressed for time and budget. Our USA-based Customer Service team at Hodges Badge Company is skilled and experienced at guiding you through the vast sea of choices with ease and precision.",
+        "pf_e94ff7bc_value": "Whether you are searching for something specific, or perhaps you’re in need of a little inspiration, our customer service representatives are ready to help you, armed with knowledge, creativity, and a friendly demeanor to assist you in selecting the perfect awards for your event.",
+        "pf_b9b31c41_value": "Imagine having a personal navigator, someone who listens intently to your needs, understands the importance of your event, and offers tailored solutions that hit the mark every time. That's the kind of exceptional service we pride ourselves on and invite you to please read our <a href=\"/pages/customer-testimonials-trust-pilot\" target=\"_self\"><span style=\"color: rgb(0, 92, 171);\">5 star reviews</span></a>. We understand that time is of the essence, and with our expertise, we ensure that your voyage through our selection is both swift and satisfying.",
+        "pf_a7acbc14_value": "Our dedication to exceptional service doesn’t end once you’ve found the perfect award. We're with you every step of the way, ensuring that your order is fulfilled with care and delivered on time for the big event. It’s this commitment to making your experience as effortless and enjoyable as possible that sets us apart.",
+        "pf_a8d66de0_value": "Let Hodges Badge Company, Inc. be your trusted partner in celebrating excellence.  Give us a call today!",
+        "pf_9450c4b6_value": "Your <strong>FIRST PLACE for AWARDS®</strong>, Family Owned and Operated Since 1920",
+        "pf_5f00f667_value": "<span style=\"color: rgb(0, 92, 171);\"><u><a href=\"/pages/customer-testimonials-trust-pilot\" target=\"_self\">Customer Testimonials<br></a><a href=\"/pages/about-us\" target=\"_self\"><span style=\"color: rgb(0, 92, 171);\">About Us</span></a><br><a href=\"/pages/hbc-timeline\" target=\"_self\">Hodges History</a></u></span>"
+      }
+    }
+  },
+  "order": [
+    "pf-4d6a3bb4"
+  ]
+}

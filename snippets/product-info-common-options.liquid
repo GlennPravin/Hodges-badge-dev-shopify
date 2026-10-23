@@ -1,0 +1,699 @@
+
+<style>
+  @media screen and (min-width: 768px) and (max-width: 800px){
+  .choose-value-container {
+    width: calc(57% - 3px);
+    display: inline-flex;
+    height: 30px;
+    position: absolute;
+    top: auto;
+    right: 25px;
+}
+    
+.set_width_div_input {
+    margin-right: -27px;
+}
+.set_width_mob{
+  width:33% ! important;
+}
+.fix_choose {
+    margin-right: 1px;
+    padding-left: 0px;
+    width: 43% ! important;
+}
+  }
+
+  @media screen and (min-width: 801px) and (max-width: 819px){
+  .choose-value-container {
+    width: calc(57% - 3px);
+    display: inline-flex;
+    height: 30px;
+    position: absolute;
+    top: auto;
+    right: 25px;
+}
+    
+.set_width_div_input {
+    margin-right: -8px;
+}
+.fix_choose {
+    margin-right: 1px;
+    padding-left: 0px;
+    width: 43% ! important;
+}
+  }
+
+  @media screen and (min-width: 820px) and (max-width: 843px){
+  .choose-value-container {
+    width: calc(57% - 3px);
+    display: inline-flex;
+    height: 30px;
+    position: absolute;
+    top: auto;
+    right: 25px;
+}
+.set_width_mob{
+  width:33% ! important;
+}
+.set_width_div_input {
+    margin-right: 0px;
+}
+.fix_choose {
+    margin-right: 8px;
+    padding-left: 0px;
+    width: 33% ! important;
+}
+  }
+  @media screen and (min-width: 844px) and (max-width: 912px){
+.fix_choose {
+    margin-right: 8px;
+    padding-left: 0px;
+    width: 35% ! important;
+}
+.set_width_div_input {
+    margin-right: 3px;
+}
+.set_width_mob{
+  width:35% ! important;
+}
+.choose-value-container {
+    width: calc(57% - 4px);
+    display: inline-flex;
+    height: 30px;
+    position: absolute;
+    top: auto;
+    right: 25px;
+}
+
+}
+
+@media screen and (min-width: 913px) and (max-width: 1023px){
+  .choose-value-container {
+    width: calc(56% - 3px);
+    display: inline-flex;
+    height: 30px;
+    position: absolute;
+    top: auto;
+    right: 25px;
+}
+    .set_width_mob{
+      width:33% ! important;
+    }
+.set_width_div_input {
+  margin-right: 11px;
+}
+.fix_choose {
+    margin-right: 1px;
+    padding-left: 0px;
+    width: 33% ! important;
+}
+  }
+
+  .or_clause{
+      font-size:12px;
+    }
+  
+    .center_class {
+     background-color:#fff;
+     padding-left:15px ! important; 
+       padding-right:5px ! important;
+       padding-top:5px ! important;
+       padding-bottom:3px ! important;
+    
+}
+  .either_grp{
+     background-color:#f3f5f6;
+     padding-left:15px ! important; 
+       padding-right:5px ! important;
+       padding-top:5px ! important;
+       padding-bottom:3px ! important;
+    border: 0px;
+    margin-bottom: 5px;
+  }
+  
+    @media screen and (min-width: 1181px) and (orientation: landscape) {
+   .uploader-preview{
+      position: relative;
+      left: 220px;
+    }
+   .image_position {
+      top:-17px;
+    }
+    }
+    @media screen and (min-width: 1181px) and (orientation: portrait) {
+   .uploader-preview{
+      left: 137px;
+    position: relative;
+    }
+.image_position {
+      top:-17px;
+    }
+    }
+  
+</style>
+
+
+
+{% comment %} {%- assign CommonOptions = product.metafields.CommonOptions -%} {% endcomment %}
+{%- assign family = product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.optionFamilyId | strip -%}
+{%- assign strName = product.metafields.PriceInfo.QuantityRangePrices.value.OptionId -%}
+{%- assign printonBack = shop.metafields.printOnBack.optionIds.value | split: "," -%}
+{%- assign CommonOptions = shop.metafields.optionFamily[family].value.commonOptions -%}
+{%- assign optionsLimit =  shop.metafields.optionFamily[family].value.optionsLimit -%}
+<script>
+  var popupOptions = {{CommonOptions | json}};
+  var popup_Options = {{shop.metafields.CommonOptions | json}};
+</script>
+<div class="product-form__option info-option">
+  <ul id="CommonOptions" >
+    {%- for option in CommonOptions -%}
+      {%- if option == strName -%}
+        {%- continue-%}
+        {%- endif-%}
+      {%- assign common_option = shop.metafields.CommonOptions[option].value -%}
+      {%- assign content_length = common_option.values.size -%}
+      {%- if common_option.values.size >0 and common_option['isUploadEnabled']==false -%}
+        
+        {%- if common_option['isViewOption'] -%}
+          {%- assign common_type = 'dependent-popup' -%}
+        {%- else -%}
+          {%- assign common_type = 'dependent-select' -%}
+        {%- endif-%}
+      {%- else -%}
+        {%- if content_length <= 0 -%}
+          {%- if common_option.isUploadEnabled  -%}
+            {%- assign common_type = 'input-file' -%}
+              {%- else -%}
+            {%- assign common_type = 'input-text' -%}
+          {%- endif -%}
+        {%- elsif content_length > 0 -%}
+          {%- if common_option['isViewOption'] -%}
+            {%- assign common_type = 'popup' -%}
+          {%- else -%}
+            {%- assign common_type = 'select' -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+     
+      {%- assign content_length = common_option.values.size -%}
+      <li class="list-group-item" 
+        data-type="{{ common_type }}" 
+        data-option-id="{{ common_option['optionId'] }}" 
+        style="border: 1px !important;" >
+        {%- if common_option.values.size >0 and common_option['isUploadEnabled']==false -%}
+          {%- if common_option['isViewOption'] -%}
+          
+              <div id="{{common_option['optionId']}}_popup" class="popup" ></div>
+              {% comment %} <script>
+              
+                var popupOptions = {{CommonOptions | json}}; 
+                var popup_Options = {{shop.metafields.CommonOptions | json}};
+            
+              </script> {% endcomment %}
+              {%- if common_option.values.size >0-%}
+              
+                {% comment %} <div class="">
+                
+                  <label class="product-form__option-name text--strong" 
+                    for="{{ common_option['optionId'] }}">
+                    {{ common_option['label'] }}
+                    {% if common_option['isRequired'] %} * {% endif %}
+                  </label>
+                  <input id="{{common_option['optionId']}}_btn" 
+                    type="button" 
+                    class="btn choose-value" 
+                    value="Select an Option" 
+                    onclick="popUpM('{{common_option.optionId}}', popupOptions, popup_Options)" 
+                    {% if common_option["optionMessage"] %} 
+                      data-toggle="tooltip" 
+                      data-placement="top" 
+                      title="{{ common_option["optionMessage"] }}" 
+                      data-html="true" 
+                    {% endif %} >
+                </div>
+              
+                <div class="pop-chosen-value" 
+                  data-option-id="{{common_option['optionId']}}" >
+                  <a  onclick="clearChoosenValue(this)" class="close" href="#">&times;</a>
+                  <input name="{{common_option['optionId']}}_id" 
+                    id="{{common_option['optionId']}}_id" 
+                    type="hidden" 
+                    value="" 
+                    data-key="{{ common_option['optionId'] }}" 
+                    data-charge="{{ common_option['additionalCharge'] }}" 
+                    data-chargeCode="" 
+                    data-charge-type="{{ common_option["chargeType"]}}" />
+                  <img loading='lazy' alt="" name="{{common_option['optionId']}}_image" 
+                    id="{{common_option['optionId']}}" 
+                    src="" >
+                  <div name="{{common_option['optionId']}}_text" 
+                    id="{{common_option['optionId']}}_txt" ></div>
+                </div>
+              {%- else -%} {% endcomment %}
+                {% comment %} <div class="card"  style="padding:10px;"> {% endcomment %}
+                  <label class="product-form__option-name text--strong" 
+                    for="{{ common_option['optionId'] }}">
+                    {{ common_option['label'] }}
+                    {% if common_option['isRequired'] %} * {% endif %}
+                  </label>
+                  <div class="choose-value-container">   
+                    <script> 
+                  
+                      ac["{{ common_option.optionId }}"] = [
+                        {%- for meta_ref_values in common_option.values  -%}
+                          
+                          
+                            {% if forloop.index > 1 %} , {% endif %}
+                            {{ meta_ref_values | json }}
+                        
+                        {%- endfor -%}
+                        
+                      ]; 
+                    </script>
+                    
+                   <input type="text" 
+                    
+                      id="{{common_option['optionId']}}_dn" 
+                     {% if common_option['IsRetainOptionsInVariants'] %}data-value="retainOptionsVariant"{%endif%}
+                      data-charge="" 
+                      data-chargeCode="" 
+                      data-dn="" 
+                      data-label="{{ common_option['label'] }}" 
+                      name="{{common_option['optionId']}}" 
+                      class="autocomplete" 
+                      data-key="{{common_option['optionId']}}" 
+                      {% if printonBack contains common_option['optionId'] %}  
+                      onchange="canvasColorization(this),validateprintOnBack(this)"
+                      {% else %}
+                      onchange="canvasColorization(this)"
+                    {% endif %}
+                      />
+                    <input class="btn choose-button set_width_mob" readonly="readonly"
+                      onclick="popUp('{{common_option.optionId}}', popupOptions, popup_Options)" 
+                      {% if common_option["optionMessage"] %} 
+                        data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="{{ common_option["optionMessage"] }}" 
+                        data-html="true" 
+                      {% endif %} 
+                      value="(Or) Choose" > 
+                  </div>
+                  <div class="pop-chosen-value" 
+                    data-option-id="{{common_option['optionId']}}" >
+                    <a  onclick="clearChoosenValue(this)" class="close" >&times;</a>
+                    <input name="{{common_option['optionId']}}_id" 
+                     {% if common_option['isRequired'] %} required {% endif %}
+                      id="{{common_option['optionId']}}_id" 
+                      type="hidden" 
+                      value="" 
+                      class="meta-reference-master" 
+                      data-key="{{ common_option['optionId'] }}" 
+                      data-charge="{{ common_option['additionalCharge'] }}" 
+                      data-chargeCode="" 
+                      data-charge-type="{{ common_option["chargeType"]}}" />
+                    <img alt="" loading='lazy' class="img_border_i" name="{{common_option['optionId']}}_image" 
+                      id="{{common_option['optionId']}}" 
+                      src="" />
+                    <div name="{{common_option['optionId']}}_text" 
+                      id="{{common_option['optionId']}}_txt" ></div>
+                  </div>
+                
+              {%- endif -%} 
+                <div id="dependent-values-container" data-id="{{common_option['optionId']}}" >
+                
+                    {%- for meta_ref_values in common_option.values -%}
+                    
+                        {%- if meta_ref_values.dependOption != "" and meta_ref_values.dependOption != null -%}
+                        
+                          <div class="dependent-values" data-meta-ref-id="{{ meta_ref_values.id }}" >
+                           <label class="" style="color:#1e2d7d;font-weight:700;width: 51% ! important;">
+                              Add a design to your Rosette Center:
+                           </label>
+                            </br>
+                            <div style="border:1px solid black;padding:3px;padding-left: 20px;">
+                            <label class="product-form__option-name text--strong"
+                              for="{{ meta_ref_values.id }}">
+                             Stock Design for Center
+                            </label>
+                            {% comment %} <label class="product-form__option-name text--strong" 
+                              for="{{ meta_ref_values.id }}">
+                              {{ meta_ref_values.label }} *
+                            </label> {% endcomment %}
+                            <script>
+                          
+                              var dependOptions = {{CommonOptions | json}};
+                              
+                            </script>
+                      
+                            {%- assign meta_first_id = meta_ref_values.values.metaReferenceValues[0] -%}
+                            {%- assign meta_first_object = shop.metafields.DependentValues[meta_first_id]['values'][0] -%}
+                            {%- assign showChosenOptionDetails = false -%}
+                            {%- assign chosenOptionId = "" -%}
+                            {%- assign chosenOptionImage = "" -%}
+                            {%- assign chosenOptionName = "" -%}
+                            {%- if meta_ref_values.values.additionalCharge > 0 -%}
+                              {%- assign showChosenOptionDetails = true -%}
+                              {%- assign chosenOptionId = meta_first_object['id'] -%}
+                              {%- assign chosenOptionImage = meta_first_object['image'] -%}
+                              {%- assign chosenOptionName = meta_first_object['name'] -%}
+                            {%- endif-%}
+                            <input id="{{ meta_ref_values.id }}_btn" 
+                              name="{{ meta_ref_values.id }}" 
+                              type="button" readonly="readonly"
+                              class="btn choose-value  set_width_select btn_stockValue" 
+                              value="Select a Stock Design" 
+                              onclick="popUpD('{{ meta_ref_values.id }}','{{common_option.optionId}}','{{meta_ref_values.dependOption}}')" 
+                              {% if meta_ref_values["optionMessage"] %} 
+                                data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="{{ meta_ref_values["optionMessage"] }}" 
+                                data-html="true" 
+                              {% endif %} >
+                            <div 
+                              class="pop-chosen-value {%- if showChosenOptionDetails -%} {{ " show " }} {%- endif -%}" 
+                              data-option-id="{{ meta_ref_values.id }}" >
+                              <a  onclick="clearChoosenValue(this)" class="close" >&times;</a>
+                              <input data-bind="autocomplete" 
+                                data-designId="{{meta_ref_values.dependOption}}" 
+                                name="{{common_option['optionId']}}~{{ meta_ref_values.id }}" 
+                                data-label="{{ meta_ref_values.label }}" 
+                                id="{{ meta_ref_values.id }}_id" 
+                                type="hidden" 
+                                value="{{ chosenOptionId }}" 
+                                class="meta-reference-master" 
+                                data-key="{{meta_ref_values.id}}" 
+                                data-design="Stock" 
+                                data-chargeCode="" 
+                                data-charge=""  />
+                              <img alt="" loading='lazy' class="img_border_i" name="{{ meta_ref_values.id }}_image" 
+                                id="{{ meta_ref_values.id }}" 
+                                src="{{ chosenOptionImage }}" >
+                              <div name="{{ meta_ref_values.id }}_text" 
+                                id="{{ meta_ref_values.id }}_txt" >
+                                {{ chosenOptionName }}
+                              </div>
+                            </div>
+                            <div class="popup" 
+                              name="{{ meta_ref_values.id }}" 
+                              id="{{ meta_ref_values.id }}_popup" 
+                              {% if meta_ref_values["optionMessage"] %} 
+                                data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="{{ meta_ref_values["optionMessage"] }}" 
+                                data-html="true" 
+                              {% endif %} >
+                            </div>
+                            <div class="">
+                              <span class="or_clause_text" style="color:red; font-weight:500;margin-left: 50px;">Or </span>
+                            </div>
+                            <div class="product-form__option info-option" data-selector-type="select">
+                              <label for="{{common_option['optionId']}}" 
+                                class="product-form__option-name text--strong seqeor">
+                                Custom Upload for Center: 
+                              </label>
+<input id="uploadclick" 
+                                name="uploadclick" 
+                                type="button" readonly="readonly"
+                                class="btn choose-value  set_width_select" 
+                                value="Upload Your Design" 
+                               >
+                              <div id="yourZoom_centerUploader"  data-uploader="item" data-uploader-ref="" style="">
+                                  <input type="hidden"   data-designId="{{meta_ref_values.dependOption}}"  data-option-id="{{common_option['optionId']}}_uploadCenter" name="{{common_option['optionId']}}_uploadCenter" data-uploader="ref" value="">
+                                <div style="" class="attachments customization-form">                                  
+                                   <div class="image_position" style="font-size:12px;color:black;position: relative; left: 20px;" data-uploader="chooser" data-uploader-key="Center" data-uploader-label="">
+                                    <div class="uploader-item">	
+                                      <div  class="uploader-preview" title="">
+                                        <a data-control="choose">
+                                          <img loading='lazy' alt="" src="">
+                                          <img loading='lazy' id='preview' alt="" src="">
+                                        </a>
+                                
+                                <label class="filename"></label>
+                                      </div>                                      
+                                      <label class="uploader-item-label"></label>
+                                      <a onclick="clearCenterUploadedValue()" id="uploader-close" class="close" >×</a>
+                                    </div>
+                                   </div>
+                                  </div>
+                               </div>
+
+                                <div>
+                                  <div class=""  >
+                                    <span class="or_clause_text" style="color:red; font-weight:500;margin-left: 50px;">Or </span>
+                                  </div>
+                                  <label for="" 
+                                    class="product-form__option-name text--strong">
+                                    Design # on file w/ Hodges for Center
+                                  
+                                  </label>
+                               <!-- <i class="fa fa-info-circle" title="{{ shop.metafields.helpText.PreviousDesignLimit.value }}" style="font-size:16px;color:#ae1a1a"></i> -->
+                                  <label data-toggle="tooltip" 
+                               data-placement="top" 
+                               title= "{{shop.metafields.helpText.PreviousDesignLimit.value}}" style="
+                               width: 20px;">
+                               <i class="fa fa-info-circle" style="font-size:15px;color:#00badb"></i></label>
+                                  
+                  
+                                  <input type="text" 
+                                    id="enterCenterUploadfile" maxlength="7" class="set_width_select previouslimit"              
+                                    data-option-id="{{ eitheror_option.optionId }}_enterCenterUploadfile" 
+                                    name="{{ eitheror_option.optionId }}_enterCenterUploadfile"
+                                    oninput="validate_splChar_ontype(this)"
+                                  /><br>
+                                 <span id="error-messageCenter" style="display:none;color:red;font-size:12px;">A maximum of 6 characters are allowed</span>
+                                  <span class="error {{ eitheror_option.optionId }}_enterCenterUploadfile" style="display:none;color:red;font-size:12px;"></span>
+
+                                </div>
+                              </div>
+
+<!--                               <br> -->
+                              {% comment %} <input class=""  
+                                data-label="{{ common_option['label'] }}" 
+                                type="file" 
+                                name="{{ common_option.optionId}}" 
+                                id="{{ common_option.optionId}}"  
+                                {% if common_option["optionMessage"] %} 
+                                  data-toggle="tooltip" 
+                                  data-placement="top" 
+                                  title="{{ common_option["optionMessage"] }}" 
+                                  data-html="true" 
+                                {% endif %} /> {% endcomment %}
+                            </div>
+                          
+                        </div>
+                        {%- endif-%}
+                    
+                    {%- endfor -%}
+                  </div>
+          {%- else -%}   
+              <label class="product-form__option-name text--strong" 
+                    for="{{ common_option['optionId'] }}">
+                    {{ common_option['label'] }}
+              </label>    
+             <select {% if common_option['stockCustomRider'] %} class="{{ common_option['stockCustomRider'] }}" {% endif %}
+            data-label="{{ common_option['label'] }}" {% comment %} class="meta-reference-master" {% endcomment %}
+            {% if printonBack contains common_option['optionId']  %}  
+              onchange="validateprintOnBack(this)"
+            {% endif %}
+            name="{{ common_option['optionId'] }}" id="{{ common_option['optionId'] }}" {% if
+            common_option["optionMessage"] %} data-toggle="tooltip" data-placement="top" title="{{ common_option["
+            optionMessage"] }}" data-html="true" {% endif %} {% if common_option['isRequired'] %} required {% endif %}>
+                {% if common_option['isRequired'] %} required {% endif %} >
+                <option value=""> - Select an Option - </option>
+                {%- for meta_ref_values in common_option.values -%}                
+                  
+                    <option value="{{ meta_ref_values.id }}" {% if meta_ref_values.sequence == 0 %} selected {% endif %} data-seq = "{{ meta_ref_values.sequence }}">{{ meta_ref_values.name }}</option>
+                  
+                {%- endfor -%}
+              </select>
+              <div id="dependent-values" >
+              {%- for meta_ref_id in common_option.metaReferenceValues -%}
+                {%- if shop.metafields.MetaReference[meta_ref_id] -%}
+                  {%- assign meta_ref_values = shop.metafields.MetaReference[meta_ref_id] -%}
+                  {%- if meta_ref_values.values.valueType == "DependentValues" -%}
+                    <div class="dependent-values" 
+                      data-meta-ref-id="{{ meta_ref_values.values.id }}" >
+                      <label class="product-form__option-name text--strong" 
+                        for="{{ meta_ref_values.values.id }}">Stock Design </label>
+                        <select name="{{ meta_ref_values.values.id }}" 
+                          id="{{ meta_ref_values.values.id }}" 
+                          {% if meta_ref_values["optionMessage"] %} 
+                            data-toggle="tooltip" 
+                            data-placement="top" 
+                            title="{{ meta_ref_values["optionMessage"] }}" 
+                            data-html="true" 
+                          {% endif %} >
+                          <option value="">- Select an Option -</option>
+                          {%- for depentend_value_id in meta_ref_values.values.metaReferenceValues -%}
+                            {%- if shop.metafields.DependentValues[depentend_value_id] -%}
+                              {%- assign dependent_values_list = shop.metafields.DependentValues[depentend_value_id] -%}
+                                {%- for dv_item in dependent_values_list.values -%}
+                                  <option value="{{ dv_item.id }}" >{{ dv_item.name }}</option>
+                                {%- endfor -%}
+                            {%- endif-%}
+                          {%- endfor-%}
+                        </select>
+                    </div>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif-%}
+        {%- else -%}
+          {%- if content_length <= 0 -%}
+            {%- if common_option.isUploadEnabled  -%}
+            <div class="product-form__option  info-option">
+          
+              <label class="product-form__option-name text--strong" 
+                for="{{ common_option['optionId'] }}"  >
+                {{ common_option['label'] }} 
+                {% if common_option['isRequired'] %} * {% endif %}
+              </label>
+              <input class="" 
+                data-label="{{ common_option['label'] }}" 
+                type="file" 
+                name="{{ common_option['optionId'] }}" 
+                id="{{ common_option['optionId'] }}" 
+                {% if common_option['isRequired'] %} required {% endif %} 
+                {% if common_option["optionMessage"] %} 
+                  data-toggle="tooltip" 
+                  data-placement="top" 
+                  title="{{ common_option.optionMessage }}" 
+                  data-html="true" 
+                {% endif %} 
+                data-key="{{ common_option['optionId'] }}" 
+                data-charge="{{ common_option['additionalCharge'] }}" 
+                data-chargeCode=""  
+                data-charge-type="{{ common_option["chargeType"]}}" />
+            </div>
+            {%- else -%}
+            <div class="product-form__option info-option">
+              <label for="{{ common_option['optionId'] }}" 
+                class="product-form__option-name text--strong">
+                {{ common_option['label'] }} 
+                {% if common_option['isRequired'] %} * {% endif %}
+              </label>
+              <input type="text" 
+                data-label="{{ common_option['label'] }}" 
+                id="{{ common_option['optionId'] }}" 
+                class="" 
+                name="{{ common_option['optionId'] }}" 
+                {% if common_option['isRequired'] %} required {% endif %} 
+                placeholder="{{ common_option['label'] }}" 
+                {% if common_option["optionMessage"] %} 
+                  data-toggle="tooltip" 
+                  data-placement="top" 
+                  title="{{ common_option["optionMessage"] }}"
+                  data-html="true" 
+                {% endif %} 
+                  {%- assign limit= common_option['optionDisplay']  -%}
+                {% if optionsLimit[ common_option['optionId']]  %}
+                  {%- assign limit=optionsLimit[ common_option['optionId']] -%}
+                {% endif %} 
+                data-key="{{ common_option['optionId'] }}" 
+                data-charge="{{ common_option['additionalCharge'] }}" 
+                data-charge-type="{{ common_option["chargeType"]}}" 
+               data-option-display={{limit }} maxlength = {{limit}} >
+            </div>
+            {%- endif -%}
+          {%- elsif content_length > 0 -%}
+            <div class="product-form__option info-option" data-selector-type="select">
+              <label for="streamer-size" class="product-form__option-name text--strong">
+                {{ common_option.label }}: {% if common_option['isRequired'] %} * {% endif %}
+              </label>
+              {%- if common_option['isViewOption'] -%}
+              <div id="{{common_option['optionId']}}_popup" class="popup" ></div>
+              {% comment %} <script>
+                var popupOptions = {{CommonOptions | json}};
+                var popup_Options = {{shop.metafields.CommonOptions | json}};
+              </script> {% endcomment %}
+              <div class="choose-value-container">
+                <script> 
+                  ac["{{ common_option.optionId }}"] = {{ common_option['values'] | json}}; 
+                </script>
+                 {%- if common_option['input_type'] -%}
+                  <div class="record_btn">
+                  <input id="{{common_option['optionId']}}_dn"
+                  data-dn="" 
+                  data-charge="" 
+                  data-chargeCode=""
+                  data-label="{{ common_option['label'] }}" 
+                  name="{{common_option['optionId']}}"
+                  type="button" readonly="readonly"
+                  class="btn set_width_mob WithoutAutoComplete"
+                  onclick="popUp('{{common_option.optionId}}', popupOptions, popup_Options)"
+                  value="Choose a {{ common_option.label }}" 
+                  data-key="{{common_option['optionId']}}"/> </div>
+                {%- else -%}
+                <input type="text" 
+                  id="{{common_option['optionId']}}_dn" 
+                  data-dn="" 
+                  data-charge="" 
+                  data-chargeCode="" 
+                  data-label="{{ common_option['label'] }}" 
+                  name="{{common_option['optionId']}}" 
+                  class="autocomplete" 
+                  data-key="{{common_option['optionId']}}"
+                  {% if printonBack contains common_option['optionId'] %}  
+                    onchange="canvasColorization(this),validateprintOnBack(this)"
+                  {% else %}
+                    onchange="canvasColorization(this)"
+                  {% endif %}
+                />
+                <input class="btn set_width_mob" readonly="readonly"
+                  onclick="popUp('{{common_option.optionId}}', popupOptions, popup_Options)" 
+                  {% if common_option["optionMessage"] %} 
+                    data-toggle="tooltip" 
+                    data-placement="top" 
+                    title="{{ common_option["optionMessage"] }}" 
+                    data-html="true" 
+                  {% endif %} 
+                  value="(Or) Choose" >
+                {%- endif -%}
+              </div>
+
+              <div class="pop-chosen-value" 
+                data-option-id="{{common_option['optionId']}}" >
+                <a  onclick="clearChoosenValue(this)" class="close" >&times;</a>
+                <input id="{{common_option['optionId']}}_id" 
+                  type="hidden" 
+                  value="" 
+                  {% comment %} class="meta-reference-master"  {% endcomment %}
+                  data-key="{{ common_option['optionId'] }}" 
+                  data-charge="{{ common_option['additionalCharge'] }}" 
+                  data-chargeCode="" 
+                  data-charge-type="{{ common_option["chargeType"]}}" 
+                  {% if common_option['isRequired'] %} required {% endif %} />
+                <img loading='lazy' class="img_border_i" name="{{common_option['optionId']}}" 
+                  loading="lazy" 
+                  id="{{common_option['optionId']}}" 
+                  src="" />
+                <div name="{{common_option['optionId']}}_text" 
+                  id="{{common_option['optionId']}}_txt" ></div>
+              </div>
+              {%- else -%}
+            
+              <select {% if common_option['stockCustomRider'] %} class="{{ common_option['stockCustomRider'] }}" {% endif %}
+            data-label="{{ common_option['label'] }}" name="{{ common_option['optionId'] }}"
+            id="{{ common_option['optionId'] }}" {% if common_option['isRequired'] %} required {% endif %} {% if
+            common_option["optionMessage"] %} data-toggle="tooltip" data-placement="top" title="{{ common_option["
+            optionMessage"] }}" data-html="true" {% endif %}>
+                <option  value=""  selected>- Select an Option - </option>
+                {%- for block_swatch in common_option.values -%}
+                  {%- capture block_swatch_id -%}{{block_swatch.id}}-{{forloop.index}}{%- endcapture -%}
+                  <option value="{{ block_swatch.id }}" >{{ block_swatch.name | escape }}</option>
+                {%- endfor -%}
+              </select>
+              {%- endif -%}
+            </div>
+            {%- endif -%}
+          {%- endif -%}
+        <div class="error {{common_option['optionId']}}"></div>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+<script>
+ $($('.or_clause')[0]).closest('li').addClass('center_class')
+</script>

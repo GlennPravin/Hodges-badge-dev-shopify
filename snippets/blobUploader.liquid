@@ -1,0 +1,949 @@
+<style>
+  /*modal styles*/
+  .modal_align_cart2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    z-index: 1000;
+    visibility: visible;
+    opacity: 3;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    background: rgba(0, 0, 0, 0.35);
+  }
+  .modal-header1 {
+    /* display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -ms-flex-pack: justify;
+    justify-content: space-between; */
+    padding: 2px;
+    border-bottom: 1px solid #dee2e6;
+    border-top-left-radius: calc(0.3rem - 1px);
+    border-top-right-radius: calc(0.3rem - 1px);
+  }
+  #close {
+    color: #3f3939;
+    position: relative;
+    top: -25px;
+    right: -12px;
+    float: right;
+    font-size: 34px;
+    cursor: pointer;
+  }
+  #close:hover {
+    color: red;
+
+  }
+    #fileName {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80px;
+    overflow: hidden;
+    font-size: 12px;
+    text-align: center;
+  }
+  #error {
+    color: black;
+    background-color: #e95e5e;
+    position: absolute;
+    margin-left: -14px;
+    margin-right: 7px;
+    padding: 2px;
+    bottom: 36px;
+    font-size: 12px;
+    display: none;
+  }
+  #errorcls {
+    position: absolute;
+    right: 7px;
+    bottom: 89px;
+    font-size: 21px;
+    color: black;
+    cursor: pointer;
+    display: none;
+  }
+  .modal-contentnew_cart2 {
+    background: #fff;
+    margin: 0 auto;
+    width: 58%;
+    position: relative;
+    z-index: 41;
+    top: 10%;
+    padding: 19px 23px 15px;
+    border-radius: 12px;
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  }
+  .modalfooter {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    padding: 0.75rem 0.75rem 0;
+    border-top: 1px solid #dee2e6;
+    border-bottom-right-radius: calc(0.3rem - 1px);
+    border-bottom-left-radius: calc(0.3rem - 1px);
+  }
+  /*modal style end */
+  /*loader*/
+  .button_upload_ok.loading {
+    background-color: #CCC;
+    /*padding-right: 40px;*/
+  }
+  .button_upload_ok.loading:after {
+    content: "";
+    position: absolute;
+    border-radius: 100%;
+    left: 90.5%;
+    bottom: 5.2%;
+    width: 0;
+    height: 0;
+    margin-top: -2px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-left-color: #FFF;
+    border-top-color: #FFF;
+    animation: spin 0.6s infinite linear, grow 0.3s forwards ease-out;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(359deg);
+    }
+  }
+  @keyframes grow {
+    to {
+      width: 14px;
+      height: 14px;
+      margin-top: -8px;
+      right: 13px;
+    }
+  }
+  /*end loader*/
+  /*buttons style*/
+  #cancelbtn {
+    background-color: #1e2d7d;
+    color: white;
+    font-weight: var(--text-font-bolder-weight);
+    font-size: var(--base-text-font-size);
+    width: 20%;
+    height: 35px;
+    padding-bottom: 5px;
+    margin-right: 10px;
+  }
+
+  #but_upload_ok {
+    background-color: #1e2d7d;
+    color: white;
+    font-weight: var(--text-font-bolder-weight);
+    font-size: var(--base-text-font-size);
+    width: 20%;
+    height: 35px;
+    padding-bottom: 0;
+    padding-top: 3px;
+    cursor: pointer;
+    text-align: center;
+    margin-right: 10px;
+  }
+  .selectbtn {
+    color: white;
+    font-weight: var(--text-font-bolder-weight);
+    font-size: var(--base-text-font-size);
+    width: 55%;
+    height: 35px;
+    border: none;
+    padding-bottom: 5px;
+    margin-top: 20px;
+    margin-left: 46px;
+    background-color: var(--primary-button-background);
+  }
+  /*content style*/
+  .main {
+    display: flex;
+    flex-direction: row;
+  }
+  .left1 {
+    width: 30%;
+  }
+  .right1 {
+    height: 320px;
+    width: 70%;
+    border-left: 1px solid #dee2e6;
+  }
+  #heading {
+    background-color: #1e2d7d;
+    color: white;
+    padding: 6px;
+    margin: 0;
+  }
+  #err {
+    color: red;
+    position: relative;
+    font-size: 12px;
+    bottom: -88%;
+    left: 167%;
+    margin-top: 3px;
+    margin-left: 44px;
+    display: none;
+  }
+  .containerupload {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 2px;
+    overflow-y: auto;
+    max-height: 285px
+  }
+
+  /*end content*/
+  /*preview*/
+  .selectedImg {
+    border: 3px solid #1e2d7d;
+  }
+  #previews {
+    width: 90px;
+    margin-left: 55px;
+  }
+  .getImg {
+    width: 70px;
+    height: 70px;
+    margin: 5px;
+    object-fit: scale-down;
+  }
+ .modal_design_alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    z-index: 1000;
+    visibility: visible;
+    opacity: 3;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    background: rgba(0, 0, 0, 0.35);
+  }
+  .modal-content_popup {
+    background: #fff;
+    margin: 0 auto;
+    width: 30%;
+    position: relative;
+    z-index: 41;
+    top: 25%;
+    display: flex;
+    flex-direction: column;
+    padding: 19px 23px 15px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem;
+    outline: 0;
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  }
+  .removecancel {
+    float: right;
+/*     width: 20%;
+    padding: 4px;
+    background-color: #80808094;
+    font-weight: 700; */
+  }
+  .removevalue {
+    float: right;
+    margin-left: 25px;
+    background-color: #141d51;
+    color: white;
+/*     padding: 4px;
+    width: 20%; */
+    /*border-radius: 14px;*/
+  }
+   .removevalue:hover {
+    color: white;
+  }
+    .font_content {
+    width: 30%;
+    margin-left: 55% !important;
+  }
+    #fileerr{
+    display: none;
+    color: red;
+    position: relative;
+    font-size: 12px;
+    left: -3%;
+  }
+  /*end preview*/
+  /*mobile responsive*/
+  @media(max-width:480px) {
+    /* Styles */
+ .font_content {
+      width: 93% !important;
+      margin: auto !important;
+    }
+    .modal_align_cart2 {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0 auto;
+      z-index: 1000;
+      visibility: visible;
+      opacity: 3;
+      transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+      background: rgba(0, 0, 0, 0.35);
+    }
+    .modal-header1 {
+      /* display: -ms-flexbox;
+      display: flex;
+      font-size: 12px;
+      -ms-flex-align: start;
+      align-items: flex-start;
+      -ms-flex-pack: justify;
+      justify-content: space-between; */
+      padding: 2px;
+      border-bottom: 1px solid #dee2e6;
+      border-top-left-radius: calc(0.3rem - 1px);
+      border-top-right-radius: calc(0.3rem - 1px);
+    }
+    #close {
+      color: #3f3939;
+      position: relative;
+      top: -25px;
+      right: -12px;
+      float: right;
+      font-size: 34px;
+      cursor: pointer;
+    }
+ .modal-content_popup {
+      background: #fff;
+      margin: 0 auto;
+      width: 80%;
+      position: relative;
+      z-index: 41;
+      top: 25%;
+      display: flex;
+      flex-direction: column;
+      padding: 19px 23px 15px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 0.3rem;
+      outline: 0;
+      -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    }
+    .modal-contentnew_cart2 {
+      background: #fff;
+      margin: 0 auto;
+      width: 85%;
+      position: relative;
+      z-index: 41;
+      top: 15%;
+      padding: 19px 23px 15px;
+      -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    }
+    .modalfooter {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      -ms-flex-align: center;
+      align-items: center;
+      -ms-flex-pack: end;
+      justify-content: flex-end;
+      padding: 0.75rem 0 0 0.75rem;
+      border-top: 1px solid #dee2e6;
+      border-bottom-right-radius: calc(0.3rem - 1px);
+      border-bottom-left-radius: calc(0.3rem - 1px);
+    }
+    /*modal style end */
+
+    /*buttons style*/
+    #cancelbtn {
+      background-color: #1e2d7d;
+      color: white;
+      font-weight: var(--text-font-bolder-weight);
+      font-size: var(--base-text-font-size);
+      width: 20%;
+      height: 35px;
+      padding-bottom: 5px;
+      margin-right: 10px;
+    }
+
+    #but_upload_ok {
+      background-color: #1e2d7d;
+      color: white;
+      font-weight: var(--text-font-bolder-weight);
+      font-size: var(--base-text-font-size);
+      width: 45%;
+      height: 35px;
+      padding-bottom: 0;
+      padding-top: 3px;
+      cursor: pointer;
+      text-align: center;
+      margin-right: 10px;
+    }
+    .selectbtn {
+      color: white;
+      font-weight: var(--text-font-bolder-weight);
+      font-size: 10px;
+      width: 80%;
+      height: 35px;
+      border: none;
+      padding-bottom: 5px;
+      margin-top: 20px;
+      margin-left: 3px;
+      background-color: var(--primary-button-background);
+    }
+    /*content style*/
+    .main {
+      display: flex;
+      flex-direction: row;
+    }
+    .left1 {
+      width: 30%;
+    }
+    .right1 {
+      /* height: 320px; */
+      height: 200px;
+      background-color: rgb(255, 255, 255);
+      width: 70%;
+      border-left: 1px solid #dee2e6;
+    }
+    .containerupload {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin-top: 2px;
+      overflow-y: auto;
+      /* max-height: 285px */
+      max-height: 165px;
+
+    }
+    #heading {
+      background-color: #1e2d7d;
+      color: white;
+      padding: 6px;
+      margin: 0;
+      font-size: 10px;
+    }
+    .getImg {
+      width: 83px;
+      height: 83px;
+      margin: 5px;
+      object-fit: scale-down;
+    }
+    #previews {
+      width: 70px;
+      margin-left: 2px;
+    }
+    #err {
+      color: red;
+      font-size: 9px;
+      position: relative;
+      left: 68%;
+      bottom: -87%;
+      margin-top: 3px;
+      margin-left: -8px;
+      display: none;
+    }
+     #error {
+      color: black;
+      background-color: #e95e5e;
+      position: absolute;
+      margin-left: -14px;
+      margin-right: 7px;
+      padding: 2px;
+      bottom: 36px;
+      font-size: 9px;
+      display: none;
+    }
+    #errorcls {
+      position: absolute;
+      right: 6px;
+      bottom: 102px;
+      font-size: 20px;
+      color: black;
+      cursor: pointer;
+      display: none;
+    }
+    .button_upload_ok.loading:after {
+      content: "";
+      position: absolute;
+      border-radius: 100%;
+      left: 84.5%;
+      bottom: 5.4%;
+      width: 0;
+      height: 0;
+      margin-top: -2px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-left-color: #FFF;
+      border-top-color: #FFF;
+      animation: spin 0.6s infinite linear, grow 0.3s forwards ease-out;
+    }
+  }
+  /*end*/
+</style>
+
+
+
+<div class="modalpop modal_align_cart"
+  id="formupload"
+  style="display:none;">
+
+  <!-- Modal content -->
+
+  <div class="modal-contentnew_cart2 ">
+    <span onclick="Form_upload_close()" id="close">&times;
+    </span>
+    <div class="modal-header1">Select a File to attach to your order by either uploading a new file or selecting a previously uploaded file.<br>
+      <span style="color:red;font-size:12px">{{ shop.metafields.CustomDesign.Note.value }}<br>
+     <span class="UploadDesignNotes" style="color: red; font-weight: bold; display:inline;"> {{ shop.metafields.UploadDesign.Notes.value }}</span></span>
+    </div>
+    <div class="modalbody">
+
+      <div class="main">
+        <div class="left1">
+          <input
+            class="selectbtn"
+            type="button"
+            value="Upload File"
+            id="upfile1">
+          <input
+            type="file"
+            id="file1"
+            style="display:none;">
+          <p id="err">* Please select file to proceed</p>
+          <div>
+            <p id="error">
+              <b>Your upload failed.</b>
+              Please be sure that the file you selected was a permitted file type, and try again. The following types are permitted: JPG, PNG, GIF, TIF, PSD, AI, PDF, EPS, SVG, DOC, XLS, CSV, TXT. If you cannot successfully upload your artwork, please email your artwork and web order number found on your order confirmation to
+              <a href="mailto:info@hodgesbadge.com">info@hodgesbadge.com</a>
+              after your order has been placed.</p>
+            <span onclick="error_close()" id="errorcls">&times;</span>
+          </div>
+          <div id="previews"></div>
+          <div></div>
+        </div>
+        <div class="right1">
+          <p id="heading">Select a Previously Uploaded File</p>
+          <div class="containerupload ">
+            <img alt="" loading='lazy'  id="" src="">
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modalfooter">
+       <p id="fileerr">Invalid file name. Please remove special characters.</p>
+      <button
+        id="but_upload_ok"
+        class="button_upload_ok"
+        onclick="blobUpload()">OK</button>
+
+    </div>
+ </div>
+</div>
+
+<div
+  class="modalpop modal_design_alert"
+  id="design_alerts"
+  style="display:none;">
+  <!-- Modal content -->
+  <div class="modal-content_popup ">
+    <div class="modalbody">
+      <h1 style="font-weight:700; font-size:15px;text-align:center;"></h1>
+    </div>
+    <div style="margin-top: 16px;">
+      <button class="btn btn-secondary removecancel" onclick="checkdesign()">
+        OK</button>
+    </div>
+  </div>
+</div>
+
+<div class="modalpop modal_design_alert"
+  id="design_alert"
+  style="display:none;">
+  <!-- Modal content -->
+  <div class="modal-content_popup ">
+    <div class="modalbody">
+      <h1 style="font-weight:700; font-size:15px;text-align:center;">
+        Are you sure you want to remove this design?</h1>
+    </div><br>
+    <img loading='lazy' 
+      id=""
+      class="stock-popup"
+      src=""
+      alt=""
+      style="width: 70px; margin: auto;height: 70px;object-fit: scale-down;">
+    <br>
+    <div>
+      <button class="btn removevalue" onclick="removevalue()"> YES</button>
+      <button class="btn btn-secondary removecancel" onclick="removecancel()"> NO</button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modalpop modal_design_alert"
+  id="design_cart_alert"
+  style="display:none;">
+  <div class="modal-content_popup">
+    <div class="modalbody">
+      <h1 style="font-weight:700; font-size:18px;text-align:center;">
+        You have not selected a design, are you sure?</h1>
+    </div><br>
+    <div>
+      <button class="btn removevalue" onclick="cartalert_yes()"> YES</button>
+      <button class="btn btn-secondary removecancel" onclick="cartalertremove()"> NO</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- disclaimer alert popup for customizer -->
+<div
+  class="modalpop modal_design_alert"
+  id="disclaimer_alert"
+  style="display:none;">
+  <div class="modal-content_popup" style="width:50%;">
+    <div class="modalbody">
+      <h1 style="font-weight:700; font-size:18px;text-align:center;">
+        {{ shop.metafields.helpText.disclaimerWarningMsg.value }}</h1>
+    </div><br>
+    <div>
+      <button class="btn btn-secondary removecancel" onclick="$('#disclaimer_alert').css('display','none')">
+        CLOSE
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modalpop modal_design_alert" id="fontFamilyPopup" style="display:none;background:none">
+  <div class="modal-content_popup font_content">
+    <div class="modalHead">
+      <span id="printName" style="font-weight:600;color:#1e2d7d;"></span>
+      <span style="color:red;cursor:pointer;float:right" 
+  onclick="$('#fontFamilyPopup').css('display', 'none');$('.showborder').removeClass('showborder');">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </span>
+    </div>
+    <div class="modalbody" style="width: 100%; padding: 5%;">
+      <div class="font-customization-container">
+        <div class="font-customization-pair">
+          <label class="label-width">Font Family :</label>
+          <select class="fontFamilyEdit equal-width"></select>
+        </div>
+        <div class="font-customization-pair">
+          <label class="label-width">Font Size :</label>
+          <select class="fontSizeEdit equal-width"></select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div
+  class="modalpop modal_design_alert"
+  id="Modal_video"
+  style="display:none;">
+  <div class="modal-content_popup" style="width:50%!important;">
+    <div class="modalHead">
+      <span id="title_before" class="modal-title">
+        <b>CUSTOMIZER</b>
+      </span>
+      <span style="color:red;cursor:pointer;float:right" onclick="closepopup()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </span>
+    </div>
+    <hr>
+    <div class="modalbody"></div>
+    <hr>
+    <div>
+      <button class="btn btn-sm btn-secondary removecancel" onclick="closepopup()">
+        CLOSE
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modalpop modal_design_alert"
+  id="View_image"
+  style="display:none;">
+  <div class="modal-content_popup customizer_image">
+    <div>
+    <span style="color:red;cursor:pointer;float:right" onclick="closepopup()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </span>
+      </div>
+    <div class="modalHead">
+      <div class="view_custom_canvas">
+         <img src="" style="max-width: none;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modalpop modal_design_alert"
+  id="View_FAQimage"
+  style="display:none;">
+  <div class="View_FAQimage_popup">
+    <div>
+    <span class="close-faqImage" onclick="closeimagepopup()">
+        <i class="fa fa-times close-icon" aria-hidden="true"></i>
+      </span>
+      </div>
+    <div class="modalHead">
+      <div class="FAQ_src">
+         <img src="">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="unsavedChangesModal" class="modalsave" style="display: none;">
+  <div class="modal-contentsave">
+    {% comment %} <div class="modal-headersave">
+      <h2>Leave page with unsaved changes?</h2>
+    </div>  {% endcomment %}
+    <div class="modal-bodysave">
+      <p>{{ shop.metafields.helpText.ReloadMessage.value }}</p>
+    </div>
+    <div class="modal-footersave">
+      <button id="stayBtn" class="btnsave">Stay</button>
+      <button id="leaveBtn" class="btnsave btn-danger">Leave page</button>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="modalpop modal_design_alert" id="Modal_question" style="display:none;">
+  <div class="modal-content_popup" style="width:55%!important;overflow-y: auto;top:9%;height: 85%;">
+    <div class="modalHead">
+      <span style="color:red;cursor:pointer;float:right" onclick="closepopup()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </span>
+    
+    <b style="color:red">READ ME FIRST</b>
+    <br><br>
+    <p>Here is some insight on your page layout. For additional information on how to customize your award,
+      view our <span style="text-decoration: underline; color: blue; cursor: pointer;" onclick="openCustomizerFAQ()">customizer FAQ</span> page.
+      </p>
+    </div>
+    <hr>
+    <div id="externalContent" style="width: 100%; height: 300px; overflow-y: auto;">
+      <b style="text-align: center">Display Panel</b>
+       <p>This section displays a visual of the product.</p>
+       <b>Customization Menu</b>
+       <p>This section contains all of the customization options that you need for designing your award. To begin, select all of the necessary options and watch your customization appear on your award in the display panel.</p>
+       <b>Customizer</b>      
+       <p>This view will display a visual representation of your award, which will change in real time as you design it using the customization options in the customization menu.</p>
+       <b>Product Image Panel</b>
+       <p>Click on these thumbnail images for examples.You have the ability to switch between the customizer and some preset example images, which will show in the display panel.</p>
+       <b>Variations Box</b>
+       <p>This section will display a preview of your variations. To quickly switch between them, you can easily click on any thumbnail for a shortcut to its customizer and customization options.</p>
+       <br>
+      <img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/MicrosoftTeams-image_5.png?v=1706785096">
+    </div>
+    
+    <hr>
+    <div>
+      <button class="btn btn-sm btn-secondary removecancel" onclick="closepopup()">
+        CLOSE
+      </button>
+    </div>
+
+   
+  </div>
+</div> -->
+
+
+<div
+  class="modalpop modal_design_alert"
+  id="Modal_question"
+  style="display:none;">
+  <div class="modal-content_popup faq-questions">
+    <div>
+      <b>CUSTOMIZER FREQUENTLY ASKED QUESTIONS</b>
+      <span style="color: red; cursor: pointer; float: right;" onclick="closeCustomizerFAQ()">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </span>
+    </div>
+    <br><br>
+   <div style="overflow-x: auto;margin-top: -23px;">
+    <div class="faq-question">
+      <button id="answer" onclick="toggleAnswer('faq1',this)">
+        <i class="fa fa-caret-down arrowicon"></i>
+      </button>
+      <label for="answer" style="font-weight: bold;margin: 0;">Read Me First!</label>
+    </div>
+
+    <div
+      class="faq-answer1"
+      id="faq1"
+      style="display: block;margin-left: 2%; margin-top:2%; font-size: 13px;">
+      <b style="text-align: center">Display Panel</b>
+      <p>This section displays a visual of the product.</p>
+      <b>Customization Menu</b>
+      <p>This section contains all of the customization options that you need for designing your award. To begin, select all of the necessary options and watch your customization appear on your award in the display panel.</p>
+      <b>Customizer</b>
+      <p>This view will display a visual representation of your award, which will change in real time as you design it using the customization options in the customization menu.</p>
+      <b>Product Image Panel</b>
+      <p>
+        Click on these thumbnail images for examples.You have the ability to switch between the customizer and some preset example images, which will show in the display panel.</p>
+      <b>Variations Box</b>
+      <p>Select the “To order more like this” button to toggle on this feature. This section will display a preview of your variations. To quickly switch between them, you can easily click on the thumbnails for a shortcut to a specific variation and its customization options.</p>
+      <img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Customizer-FAQ1.png?v=1724322705" onclick="viewfaqImage(this)">
+      <br><br>
+      </div>
+
+
+    <div class="faq-question">
+      <button id="answer1" onclick="toggleAnswer('faq3',this)">
+        <i class="fa fa-caret-right arrowicon"></i>
+      </button>
+      <b>
+        <label for="answer1" style="font-weight: bold;margin: 0;"> How do ribbon colors and print colors work?</label></b>
+    </div>
+
+    <div
+      class="faq-answer"
+      id="faq3"
+      style="display: none; margin-left: 2%; margin-top:2%; margin-bottom: 2%; font-size: 13px;">
+      <p>Select a ribbon color using the Dropdown View or click the “Choose” button to open a Large View. Once you click on a color, your ribbon will change immediately to that selection. Print colors can also be selected this way. To see the color of your print, simply start entering text in the print lines.</p>
+      <img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/DropDownView-Ribbon.png?v=1716354898" style="width: 60%;" onclick="viewfaqImage(this)">
+      <br><br>
+      <img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/LargeView-Ribbon.png?v=1716354907" style="width: 78%;" onclick="viewfaqImage(this)">
+      </div>
+
+    <div class="faq-question">
+      <button id="answer2" onclick="toggleAnswer('faq4',this)">
+        <i class="fa fa-caret-right arrowicon"></i>
+      </button>
+      <b><label for="answer2" style="font-weight: bold;margin: 0;">How do I stylize the text in my print lines?</label></b>
+    </div>
+
+    <div
+      class="faq-answer"
+      id="faq4"
+      style="display: none; margin-left: 2%; margin-top:2%;margin-bottom: 2%; font-size: 13px;">
+      <p>You have the ability to stylize the text on each individual print line. To do so, pick a print line and click on its corresponding Pencil option. From there, you can adjust the font family, which changes the style of your font. You can also change the size of your font. As you switch through these options, the text in the print line on the ribbon display panel will change accordingly.</p>
+      <img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/PencilOption-Ribbon.png?v=1716355169" onclick="viewfaqImage(this)">
+      <br><br>
+      <p>You also have the ability to change all of your print lines together rather than one-by-one. The font family and font size that you choose for this one option will carry over to all print lines. This shortcut will save time.</p>
+      <img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/ApplyAll-font.png?v=1716355275" style="width: 64%;" onclick="viewfaqImage(this)">
+
+      </div>
+
+    <div class="faq-question">
+      <button id="answer3" onclick="toggleAnswer('faq5',this)">
+        <i class="fa fa-caret-right arrowicon"></i>
+      </button>
+      <b><label for="answer3" style="font-weight: bold;margin: 0;">How do I add spaces in between my print lines?</label></b>
+    </div>
+
+    <div
+      class="faq-answer"
+      id="faq5"
+      style="display: none; margin-left: 2%; margin-top:2%;margin-bottom: 2%; font-size: 13px;">
+      <p>You have the ability to control the spacing between each of your print lines. To do so, click on the Plus option to add a spacer between any two print lines. You can also use spacers consecutively for additional spacing. As you add or remove these, the print line positions on the display panel will change accordingly.</p>
+      <img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Spaces-Ribbon.png?v=1716355464" onclick="viewfaqImage(this)">
+
+      </div>
+
+    <div class="faq-question">
+      <button id="answer4" onclick="toggleAnswer('faq6',this)">
+        <i class="fa fa-caret-right arrowicon"></i>
+      </button>
+      <b><label for="answer4" style="font-weight: bold;margin: 0;">Will my designs be visible on the customizer?</label></b>
+      </div>
+
+    <div
+      class="faq-answer"
+      id="faq6"
+      style="display: none; margin-left: 2%; margin-top:2%; margin-bottom: 2%; font-size: 13px;">
+      Stock designs will appear on your ribbon. Once you select a stock design, you will see it appear on the customizer in the display panel. Similarly, breaker designs will also be visible on your award.
+      <div>
+        <br>
+        <img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/StockDesign-Ribbon.png?v=1716355559" onclick="viewfaqImage(this)">
+        <br><br><p>Conversely, when using a custom design, your exact file/upload will not be rendered. Due to the large variation of file formats that we accept (.JPG, .PNG, .GIF, .TIF, .PSD, .AI, .PDF, .EPS, .SVG, .DOC, .XLS, .CSV, .TXT), as well as our need to prepare your artwork for accurate representation, we will not display the actual design on your award. Instead, a placeholder design will appear to help you visualize and adjust its positioning on the customizer.</p>
+        <img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Customizer-design.png?v=1724322720" onclick="viewfaqImage(this)">
+
+      </div>
+    </div>
+
+
+    <div class="faq-question" style="clear:left">
+      <button id="answer5" onclick="toggleAnswer('faq7',this)">
+        <i class="fa fa-caret-right arrowicon"></i>
+      </button>
+      <b><label for="answer5" style="font-weight: bold;margin: 0;">How do I move and reorder the customizations on my award?</label></b>
+    </div>
+
+    <div
+      class="faq-answer"
+      id="faq7"
+      style="display: none; margin-left: 2%; margin-top:2%; margin-bottom: 2%; font-size: 13px;">
+      <p>You can change the order of your print lines, breaker design or stock/custom design by using the Move tool as shown below. With your mouse cursor, simply click and hold onto the Move tool and drag your print line up or down the page to its desired position. Once you release the Move tool with your mouse button, your print line will be dropped in that new spot. You will immediately see the changes on your award.</p>
+      <img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Printline-Ribbon.png?v=1716356000" style="width: 70%;" onclick="viewfaqImage(this)"><br>
+    </div>
+
+
+    <div class="faq-question">
+      <button id="answer6" onclick="toggleAnswer('faq8',this)">
+        <i class="fa fa-caret-right arrowicon"></i>
+      </button>
+      <b><label for="answer6" style="font-weight: bold;margin: 0;">What is the “To order more like this” feature and why should I use it?
+      </label></b>
+    </div>
+    <div
+      class="faq-answer"
+      id="faq8"
+      style="display: none; margin-left: 2%; margin-top:2%; margin-bottom: 2%; font-size: 13px;">
+      <p>This helpful feature gives you the ability to create a variation of your award. It best applies in situations where the same product needs to be ordered more than once to accommodate different places, divisions, colors, and/or quantities.</p>
+      <img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Customizer-variation1.png?v=1724322748" style="width: 95%;" onclick="viewfaqImage(this)">
+      <br><br>
+      <img src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Customizer-variation2.png?v=1724322762" style="width: 95%;" onclick="viewfaqImage(this)">
+
+       <br>
+      <div class="faq-question" style="margin-left: 2%;margin-top: 2%;">
+        <b>Why should I use the “To order more like this” feature?</b>
+        <br>
+        <p style="margin-top: 1%;">This feature will save you time and money!</p>
+      </div>
+    </div>
+
+
+    <div class="faq-question">
+      <button id="answer7" onclick="toggleAnswer('faq9',this)">
+        <i class="fa fa-caret-right arrowicon"></i>
+      </button>
+      <b><label for="answer7" style="font-weight: bold;margin: 0;">Will the customizer be an accurate representation of my final product?<label></b>
+    </div>
+
+    <div
+      class="faq-answer"
+      id="faq9"
+      style="display: none; margin-left: 2%; margin-top:2%; margin-bottom: 2%; font-size: 13px;">
+      <p>The award that you design on the customizer will be a very close approximation to the final product; however, keep in mind of the following:</p>
+      <b style="margin-left: 4%;">Colors</b>
+      <p style="margin-left: 4%;">Please note that your device, display screen settings, resolutions, individual monitor calibration, and the like can significantly affect the appearance and perception of colors. As a result, the colors displayed on your screen may slightly differ from the true hues and textures. Please take into consideration that we believe that the colors of the physical product tend to be much more vibrant than the colors displayed online.</p>
+      <b style="margin-left: 4%;">Fonts</b>
+      <p style="margin-left: 4%;">Please note that your device and the same device settings mentioned above may also affect the true representation of your font. As a result, font styles and sizes displayed on your screen may not precisely reflect the appearance of the actual typography on your final product. Rest assured, our talented team of production artists will make any necessary adjustments to provide a superior reproduction of your text, designs, and layout.</p>
+    </div>
+
+   </diV>
+  </div>
+</div>

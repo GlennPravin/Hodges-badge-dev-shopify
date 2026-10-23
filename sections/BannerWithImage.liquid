@@ -1,0 +1,432 @@
+<style>
+  .align_center_mob_img{
+    padding: 0px ! important;
+  }
+  @media screen and (min-width: 1000px){
+  .block_alignment_set{
+    /*     min-height: 100px ! important; */
+    min-height: 130px ! important;
+  }
+  }
+  .set_width{
+    padding:10px ! important;
+  }
+@media screen and (min-width: 1000px){
+/* .promo-block__image-wrapper {
+    background-size: 100%;
+} */
+  
+  .promo-block__heading {
+    margin-bottom: 0px ! important;
+    font-size: 22px;
+}
+  .item_height{
+     height: 150px ;
+  }
+  .block_item_new{
+    width: 100%;
+    height: 168px ! important;
+    position: relative ! important;
+/*     top: -177px ! important; */
+  }
+  .promo-block__image-wrapper {
+    background-repeat: no-repeat;
+    background-position: right calc(85% + 0px);
+   background-size: 100%;
+    transition: opacity .2s ease-in-out,background-position .35s ease-in-out;
+}
+  .block_list_fix{
+    margin-top: -43px;
+  }
+/*   .promo_block_set{
+    top: -129px;
+  } */
+/*   .promo-block__inner {
+    position: relative;
+    z-index: 1;
+/*     top: -47px; */
+    bottom: 76%;
+} */
+   .desktop_image{
+     background-position: top;
+    }
+}
+  .head_sub:hover {
+ text-decoration:underline;
+}
+  .form-check-input1 {
+    position: static;
+    margin-top: .3rem;
+    margin-left: -1.25rem;
+}
+  input {
+    line-height: normal;
+    border-radius: 0;
+}
+  @media screen and (max-width: 1000px){
+    .mob_view{
+      display:block;
+    }
+/*      .block_item_new{
+    width: 100%;
+    height: 168px ! important;
+    position: relative ! important;
+    top: -177px ! important;
+  } */
+    .promo-block {
+    min-height: 129px;
+      top: -22px;
+}
+    .block-list__item>:first-child {
+    /* margin: -22px; */
+        margin: 5px;
+}
+  }
+   @media screen and (min-width: 1001px){
+      .mob_view{
+      display:none;
+    }
+  }
+   @media screen and (max-width: 1000px){
+    .desktop_image{
+      display:none;
+    }
+  }
+   @media screen and (min-width: 1001px){
+      .desktop_image{
+      display:block;
+    }
+  }
+   @media screen and (max-width: 1000px){
+    .promo-block__inner{
+     padding: 26px;
+    font-size: 18px;
+    }
+     .promo-block__heading{
+       font-size: 18px;
+     }
+     .set_bg_color_mob{
+       background-color:transparent ! important;
+     }
+  }
+  </style>
+{%- if section.settings.show_BannerImage -%}
+<section class="section" data-section-id="{{ section.id }}" data-section-type="image-with-text">
+  {% assign subheading = section.settings.subheading %}
+  {% assign subttext = section.settings.subttext %}
+   {% assign headlink = section.settings.heading_link.headlink %}
+  {% assign ban_size =   section.settings.banner_position  %}
+  {% assign background_mob =   section.settings.background_mob  %}
+
+   
+  {% if  ban_size == "height_110" %}
+  {% if  subheading != blank and headlink == blank  %}
+
+ <style>
+   @media screen and (min-width: 1000px){
+                   .promo-block__inner {
+  
+      position: absolute;
+top: 48%;
+transform: translate(0, -50%);
+padding: 10px;               
+                     
+}
+   }
+      @media screen and (max-width: 1000px){
+                   .promo-block__inner {
+  
+      position: absolute;
+top: 45%;
+transform: translate(0, -50%);
+padding: 34px;               
+                     
+}
+   }
+  
+  </style>
+ 
+  {% endif %}
+  
+{% elsif  ban_size == "height_65" %}
+ <style>
+   @media screen and (min-width: 1000px){
+                   .promo-block__inner {
+  
+      position: absolute;
+top: 31%;
+transform: translate(0, -50%);
+padding: 10px;               
+                     
+}
+   }
+      @media screen and (max-width: 1000px){
+                   .promo-block__inner {
+  
+      position: absolute;
+top: 52%;
+transform: translate(0, -50%);
+padding: 34px;               
+                     
+}
+   }
+   .promo-block {
+    position: relative;
+    display: flex;
+    min-height: 240px;
+    padding-left: 0px ! important;
+    padding-right: 0px ! important;
+    border-radius: 3px;
+    overflow: hidden;
+}
+  </style>
+{% else %}
+  Hi nothing!
+{% endif %}
+<div id="banner-image" class="container" >
+{%- if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled != true-%}
+  <div class=" block_list_fix" >
+    <a style="Width:100%;" {% if section.settings.link_image %} href="{{ section.settings.link_image }}"{% endif %}>
+          <div   class=" set_bg_color_mob promo-block_new--{{ section.settings.banner_position  }}   "  style="width:100%;background-color: {{section.settings.background}};" >
+            <div  style="" {% if section.settings.button_link %}href="{{ section.settings.button_link }}"{% endif %} class="block_alignment_set promo_block_set promo-block promo-block--{{ section.settings.content_position | replace: '_', '-' }} {% if section.settings.show_overlay %}promo-block--overlay{% endif %} promo-block--{{ section.settings.section_size }}">
+              {%- if section.settings.image -%}
+                {%- if section.settings.stretch_image -%}
+                  {%- capture bgset -%}{{ section.settings.image | img_url: '600x' }} [--phone] | {{ section.settings.image | img_url: '800x' }} 800w, {{ section.settings.image | img_url: '1000x' }} 1000w, {{ section.settings.image | img_url: '1200x' }} 1200w{%- endcapture -%}
+                {%- else -%}
+                  {%- capture bgset -%}{{ section.settings.image | img_url: 'x480' }} [--phone] | {{ section.settings.image | img_url: 'x800' }}{%- endcapture -%}
+                {%- endif -%}
+                <div  class="promo-block__image-clip  promo-block_new--{{ section.settings.banner_position  }}  ">
+                  
+                  <div  class="promo-block__image-wrapper desktop_image {% if section.settings.stretch_image %}promo-block__image-wrapper--cover{% endif %} lazyload image--fade-in" data-bgset="{{ bgset }}"></div>
+          
+                </div>
+              {%- endif -%}
+                       <div class="align_center_mob_img container mob_view"  style="background-color: {{section.settings.background_mob}};height: 108px;">
+             <div class="align_center_mob_img container  mob_view"  >
+    {%- capture image -%}
+                {%- if section.settings.imagemob != blank -%}
+      <div class="image-with-text__image-container" style="width: 100% ! important;">
+        {%- if section.settings.imagemob -%}
+          <div class="aspect-ratio" style=" padding-bottom: 134px;">
+            {%- capture supported_sizes -%}{%- render 'image-size', sizes: '300,400,500,600,700,800,900,1000,1100,1200', image: section.settings.imagemob -%}{%- endcapture -%}
+            {%- assign image_url = section.settings.imagemob | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+            <img class="lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" alt="{{ section.settings.image.alt | escape }}">
+            <noscript>
+              <img src="{{ section.settings.imagemob | img_url: '800x' }}" alt="{{ section.settings.image.alt | escape }}">
+            </noscript>
+          </div>
+        {%- else -%}
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
+        {%- endif -%}
+    {%- endcapture -%}
+    <div class="image-with-text">
+      {%- if section.settings.image_position == 'left' -%}
+        {{ image }}
+        {{ text }}
+      {%- else -%}
+        {{ text }}
+        {{ image }}
+      {%- endif -%}
+    </div>
+  </div>
+                     
+                  </div>
+              <div class="promo-block__inner"  >
+               
+                {%- if section.settings.show_heading_inline -%}
+                {%- if subheading != blank -%}
+    <p  style="color: {{section.settings. text_color}} " class="promo-block__heading heading h3 ">{{subheading}}</p>
+                
+  {%- endif -%}
+           {%- endif -%}     
+                 {%- if section.settings.show_heading_link -%}
+                {%- if section.settings.heading_link != blank -%}
+                <a {% if section.settings.link %} href="{{ section.settings.link }}"{% endif %}><p  style="color: {{section.settings. link_text_color}} " class="promo-block__heading heading h3 ">{{section.settings.heading_link}}</p></a>
+                
+  {%- endif -%}
+           {%- endif -%}   
+            
+                  
+        {%- if subttext != blank -%}
+                  <p style="color: {{section.settings. text_color_text}}; " class="promo-block__content">{{ subttext }}</p>
+                {%- endif -%}
+               
+                        
+                
+              </div>  
+
+            </div>
+          </div>
+        </a>
+      </div>
+  </div>
+{%- endif -%}
+</section>
+{%- endif -%}
+ <script>
+    {%- if section.settings.show_BannerImage -%}
+      document.documentElement.style.setProperty('--Banner and Image-bar-button-width', document.querySelector('.Banner and Image-bar__button').clientWidth + 'px');
+    {%- else -%}
+      document.documentElement.style.removeProperty('--Banner and Image-bar-button-width');
+    {%- endif -%}
+    document.documentElement.style.setProperty('--Banner and Image-bar-height', document.getElementById('shopify-section-{{ section.id }}').clientHeight + 'px');
+  </script>
+{% schema %}
+{
+  "name": "Banner and Image",
+  "settings": [
+{
+      "type": "checkbox",
+      "id": "show_BannerImage",
+      "label": "show Banner Image",
+      "default": true
+    },
+
+    {
+      "type": "checkbox",
+      "id": "expand_items",
+      "label": "Expand blocks to fill row",
+      "default": false
+    },
+ {
+          "type": "select",
+          "id": "banner_position",
+          "label": "banner_position",
+          "options": [
+            {
+             "value": "height_110",
+              "label": "height_110"
+            },
+            {
+              "value": "height_65",
+              "label": "height_65"
+            }
+           
+          ],
+          "default": "height_110"
+        },
+ {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "950 x 130px .png with transparency recommended"
+        },
+        {
+          "type": "url",
+          "id": "link_image",
+          "label": "Banner Image Link"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay opacity",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "checkbox",
+          "id": "stretch_image",
+          "label": "Stretch image (1000 x 500px .jpg recommended)",
+          "default": false
+        },
+       {
+          "type": "color",
+          "id": "background",
+          "label": "Background",
+          "default": "#000000"
+        },
+{
+      "type": "checkbox",
+      "id": "show_heading_inline",
+      "label": "Heading Inline",
+      "default": true
+    },
+     {
+        "type": "text",
+        "id": "subheading",
+        "label": "Heading",
+        "default": "Your heading"
+      },
+{
+          "type": "color",
+          "id": "text_color",
+          "label": "Titlecolor",
+          "default": "#ffffff"
+        },
+{
+      "type": "checkbox",
+      "id": "show_heading_link",
+      "label": "Heading  link",
+      "default": false
+    },
+{
+        "type": "text",
+        "id": "heading_link",
+        "label": "Heading and Link",
+        "default": "link Your heading"
+      },
+    {
+          "type": "color",
+          "id": "link_text_color",
+          "label": "Link Titlecolor",
+          "default": "#ffffff"
+        },
+  
+{
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+
+
+        
+       
+   
+        {
+          "type": "select",
+          "id": "content_position",
+          "label": "Content position",
+          "options": [
+            {
+              "value": "bottom_left",
+              "label": "left"
+            },
+            {
+              "value": "bottom_center",
+              "label": " center"
+            },
+            {
+              "value": "bottom_right",
+              "label": " right"
+            }
+          ],
+          "default": "bottom_center"
+        },
+ {
+          "type": "color",
+          "id": "background_mob",
+          "label": "Background color for mobile view",
+          "default": "#000000"
+        },
+       
+{
+      "type": "image_picker",
+      "id": "imagemob",
+      "label": "Image for mobile",
+      "info": "720 x 280px .jpg recommended"
+    }
+  ],
+  "presets": [
+    {
+      "category": "Image",
+      "name": "Banner and Image",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

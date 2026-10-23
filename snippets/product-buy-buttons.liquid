@@ -1,0 +1,158 @@
+{% assign isSetup = false %}
+{% assign isFlat = true %}
+{% assign subTypeIds = shop.metafields.ProductSubType.subTypeIds | split: "," %}
+{% assign excludeProductsSC = shop.metafields.ExcludeProductsSC.ProductIds | split: "," %}
+{% assign prodSubTypeId = product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductSubType | append: "" %}
+
+{% assign promotionCollection = shop.metafields.helpText.PromotionCollectionName.value | parse_json | first | default: "" %}
+{% if promotionCollection != "" and collections[promotionCollection] != nil and collections[promotionCollection].products.size > 0 %}
+{% for promotionProduct in collections[promotionCollection].products %}
+  {%- if promotionProduct.id == product.id -%}
+    {% assign isFlat = false %}
+    {%- break -%}
+  {%- endif -%}
+{% endfor %}
+{% endif %}
+
+{% for sitem in subTypeIds %}
+{%- if sitem == prodSubTypeId -%}
+  {% assign isSetup = true %}
+{%- continue -%}
+{%- endif -%}
+{% endfor %} 
+
+{% for item in excludeProductsSC %}  
+{%- if item == product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductId -%}
+  {% assign isSetup = false %}
+{%- continue -%}
+{%- endif -%}
+{% endfor %} 
+
+{% assign isBO = false %}
+{%- if product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductStatusCode == 'BO' -%}
+  {% assign isBO = true %}
+{%- endif -%}
+{% assign customizer = false %}
+{%- if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true -%}
+  {% assign customizer = product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled %}
+{% endif %}
+{%- assign family = product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.optionFamilyId -%}
+{%- assign SeqChangableOptions =  shop.metafields.optionFamily[family].value.seqChangableOptions -%}
+{%- assign CommonOptions = shop.metafields.optionFamily[family].value.commonOptions -%}
+<script>
+ const prodId = {{product.id}} ;
+ const prodType = "{{product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductType}}";
+ const hopsProdId = "{{product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductId}}" ;
+ const minLimits = {{shop.metafields.MOAType | json}} ;
+ const moaAmnts = {{shop.metafields.helpText.MOAID | json}};
+ const flatCharges = {{shop.metafields.FlatCharges | json}};
+ const setupCharges = {{shop.metafields.setupcharge | json}};
+ {% comment %} const flatChargeVariants = {{shop.metafields.FlatChargeVariants | json}}; {% endcomment %}
+ const SetupChargeVariants = {{shop.metafields.SetupChargeVariants | json}};
+ const productSubType = "{{product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductSubType}}" ;
+ const isSetupCharge = {{isSetup}};
+ const _customerName = "{{customer.first_name}}";
+ const _email = "{{customer.email}}";
+ const _variantLimit = {{ shop.metafields.helpText.VariantLimit.value }};
+ const _previwIcon = {{shop.metafields.PreviewIcon | json}};
+ let _isCanvasEnabled = {{customizer}};
+  // if (window.innerWidth <= 999) {
+  //   _isCanvasEnabled = false
+  // }
+ const printonBackLines = {{ shop.metafields.printOnBackLines.optionIds.value| split: "," | json }};
+ const printonBack = {{ shop.metafields.printOnBack.optionIds.value | split: "," | json }};
+ const seqOptions = {{ SeqChangableOptions |json}};
+ const commonOptions = {{ CommonOptions |json}};
+ {% comment %} const isSetupCharge = {{product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.isProductSubType}} ; {% endcomment %}
+ const removedPC_dropdown = {{ shop.metafields.helpText.RemovedPrintColor.value | json }};
+ const isFlatCharges = {{ isFlat | json }};
+const promotionProductsEdit = {% if promotionCollection != "" and collections[promotionCollection] != nil and collections[promotionCollection].products.size > 0 %}{{ collections[promotionCollection].products | map: "id" | json }}{% else %}[]{% endif %};
+const specialCharValidation=  {{ shop.metafields.helpText.specialCharValidation.value | json }} ;
+</script>
+<style>
+
+
+/* Add a right margin to each icon */
+
+</style>
+{%- assign family = product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.optionFamilyId -%}
+{%- assign VariationOptions =  shop.metafields.optionFamily[family].value.variationOptions -%}
+{%- assign RemoveBuyButton =  shop.metafields.helpText.RemoveAddtoCartButton.value -%}
+{%- assign ProductIDs =  product.metafields.search.productId.value  -%}
+
+{% if RemoveBuyButton contains ProductIDs %}
+    {{ shop.metafields.helpText.ContactForPurchase.value }}
+{% else %}
+{% if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true %}
+  <label class='cartCheck' for="disclaimerCheck" style="width: 100%!important;color: #1e2d7d;cursor:pointer;width: 100%!important;font-size: 12px;font-weight: 700;">
+    <input
+      type="checkbox"
+      id="disclaimerCheck"
+      style="vertical-align: middle;">
+    I HAVE REVIEWED AND APPROVED MY ARTWORK.
+    <i
+      style="font-size: 15px;"
+      class="fa fa-question-circle"
+      aria-hidden="true"
+      data-toggle="tooltip"
+      data-placement="top"
+      title="{{ shop.metafields.helpText.disclaimer.value }}"></i>
+  </label>
+{% endif %}
+<div class="product-form__payment-container" {{ block.shopify_attributes }}>
+  {%- if product.template_suffix != 'contact' -%}
+    {%- if product.selected_or_first_available_variant.available -%}
+      {%- if product.template_suffix == 'pre-order' -%}
+        <button type="submit" class="product-form__add-button button button--primary" data-action="add-to-cart">{{ 'product.form.pre_order' | t }}</button>
+      {%- else -%}
+        {%- if isBO == true -%}
+  			<button  onclick="CartAction(event,prodId,prodType,minLimits,moaAmnts,flatCharges,setupCharges,SetupChargeVariants,hopsProdId);" id="cart-actions" class="product-form__add-button button button--disabled" disabled >
+            <i style="display:none;" class="fa fa-refresh fa-spin" ></i>   {{ 'product.form.add_to_cart' | t }}
+           </button>
+        {%- else -%}
+          <button  onclick="CartAction(event,prodId,prodType,minLimits,moaAmnts,flatCharges,setupCharges,SetupChargeVariants,hopsProdId);" id="cart-actions" class="product-form__add-button button button--primary buttonload" >
+            <i style="display:none;" class="fa fa-refresh fa-spin" ></i>   {{ 'product.form.add_to_cart' | t }}
+           </button>
+        {%- endif -%}
+        
+      {%- endif -%}
+    {%- else -%} 
+   
+      <button type="submit" class="product-form__add-button button button--disabled" disabled>{{ 'product.form.sold_out' | t }}</button>
+    {%- endif -%}
+
+    {%- if VariationOptions.size > 0 -%}
+  		{%- if isBO == true -%}
+  			<input  id="varAddBtn" type="button" class="button button--disabled" disabled value="TO ORDER MORE LIKE THIS" data-vCount="0" onclick="addVariation(this)" data-toggle="tooltip" data-placement="top" title="{{ shop.metafields.helpText.AddVariation }}" data-html="true" style="border:none;" >
+        {%- else -%}
+          <input  id="varAddBtn" type="button" class="button button--primary button_variant" value="To order more like this" data-vCount="0" onclick="addVariation(this)" data-toggle="tooltip" data-placement="top" title="{{ shop.metafields.helpText.AddVariation }}" data-html="true" style="border:none;" >
+        {%- endif -%}
+      
+    {%- endif -%}
+    {% comment %}  
+    {%- if block.settings.show_payment_button and product.template_suffix != 'pre-order' -%}
+      {{ form | payment_button }}
+    {%- endif -%}
+    {% endcomment %}
+  {%- else -%}
+    <a href="mailto:{{ shop.email }}" class="button button--primary">{{ 'product.form.contact_us' | t }}</a>
+  {%- endif -%}
+
+  {%- if block.settings.show_payment_button and product.selected_or_first_available_variant.available == false -%}
+    <style>
+      #shopify-section-{{ section.id }} .shopify-payment-button {
+        display: none;
+      }
+    </style>
+  {%- endif -%}
+</div>
+{% endif %}
+<!-- <script>
+  $(document).ready(function() {
+    $('.product-form__add-button ').click(function() {
+        if ($('.SET_NUM').val().length === 0) {            
+           $(".SET_NUM").css("display", "block");
+        }
+    })
+});
+</script> -->

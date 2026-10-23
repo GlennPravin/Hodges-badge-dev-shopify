@@ -1,0 +1,347 @@
+{%- comment -%}
+This snippet structures the micro-data using JSON-LD specification. Please note that for Product especially,
+the schema often changes. We try to output as much info as possible, but Google may add new requirements over time,
+or change the format of some info
+{%- endcomment -%}
+
+{%- if request.page_type == 'product' -%}
+  {%- assign days_product_price_valid_until = 10 | times: 86400 -%}
+
+  {%- assign gtin_option = 'gtin' -%}
+  {%- if product.selected_or_first_available_variant.barcode != blank -%}
+    {%- assign is_barcode_available = true -%}
+    {%- assign gtin_string_length = product.selected_or_first_available_variant.barcode | size -%}
+
+    {%- if gtin_string_length == 8 or gtin_string_length == 12 or gtin_string_length == 13 or gtin_string_length == 14 -%}
+      {%- assign is_valid_gtin_length = true -%}
+      {%- assign gtin_option = gtin_option | append: gtin_string_length -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%} Check for custom schema in metafield namespace: global, key: product_schema {%- endcomment -%}
+  {%- comment -%} Check for custom schema in metafield namespace: global, key: faq_schema {%- endcomment -%}
+  {%- if product.metafields.global.product_schema.value != blank or product.metafields.global.faq_schema.value != blank -%}
+    {%- assign use_product_metafield_schema = true -%}
+  {%- else -%}
+  {%- comment -%} No metafield found — fall back to default generated schema {%- endcomment -%}
+    {%- capture main_entity_microdata -%}
+      "@type": "Product",
+      "offers": [
+        {%- for variant in product.variants -%}
+          {
+            "@type": "Offer",
+            "name": {{ variant.title | json }},
+            "availability": {%- if variant.available -%}"https://schema.org/InStock"{%- else -%}"https://schema.org/OutOfStock"{%- endif -%},
+            "price": {{ variant.price | divided_by: 100.0 | json }},
+            "priceCurrency": {{ cart.currency.iso_code | json }},
+            "priceValidUntil": "{{ 'now' | date: '%s' | plus: days_product_price_valid_until | date: '%Y-%m-%d'}}",
+            {%- if variant.sku != blank -%}
+              "sku": {{ variant.sku | json }},
+            {%- endif -%}
+            "url": "{{ product.url }}?variant={{ variant.id }}"
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ],
+      {%- if product.metafields.reviews.rating.value != blank -%}
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "{{ product.metafields.reviews.rating.value }}",
+          "reviewCount": "{{ product.metafields.reviews.rating_count.value }}",
+          "worstRating": "{{ product.metafields.reviews.rating.value.scale_min }}",
+          "bestRating": "{{ product.metafields.reviews.rating.value.scale_max }}"
+        },
+      {%- endif -%}
+      {%- if is_barcode_available and is_valid_gtin_length %}
+        "{{gtin_option}}": {{ product.selected_or_first_available_variant.barcode | json }},
+        "productId": {{ product.selected_or_first_available_variant.barcode | json }},
+      {%- elsif is_barcode_available %}
+        "mpn": {{ product.selected_or_first_available_variant.barcode | json }},
+        "productId": {{ product.selected_or_first_available_variant.barcode | json }},
+      {%- endif %}
+      "brand": {
+        "name": {{ product.vendor | json }}
+      },
+      "name": {{ product.title | json }},
+      "description": {{ product.description | strip_html | json }},
+      "category": {{ product.type | json }},
+      "url": "{{ product.url }}",
+      "sku": {{ product.selected_or_first_available_variant.sku | json }},
+      "image": {
+        "@type": "ImageObject",
+        "url": "https:{{ product.featured_media | img_url: '1024x' }}",
+        "image": "https:{{ product.featured_media | img_url: '1024x' }}",
+        "name": {{ product.featured_media.alt | json }},
+        "width": "1024",
+        "height": "1024"
+      }
+    {%- endcapture -%}
+  {%- endif -%}
+
+{%- elsif request.page_type == 'article' -%}
+  {%- capture main_entity_microdata -%}
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "{{ article.url }}",
+    "articleSection": {{ blog.title | json }},
+    "keywords": "{{ article.tags | join: ', ' }}",
+    "headline": {{ article.title | json }},
+    "description": {{ article.excerpt_or_content | strip_html | truncatewords: 25 | json }},
+    "dateCreated": "{{ article.created_at | date: '%Y-%m-%dT%T' }}",
+    "datePublished": "{{ article.published_at | date: '%Y-%m-%dT%T' }}",
+    "dateModified": "{{ article.published_at | date: '%Y-%m-%dT%T' }}",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https:{{ article.image | img_url: '1024x' }}",
+      "image": "https:{{ article.image | img_url: '1024x' }}",
+      "name": {{ article.image.alt | json }},
+      "width": "1024",
+      "height": "1024"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "{{ article.user.first_name | escape }} {{ article.user.last_name | escape }}",
+      "givenName": {{ article.user.first_name | json }},
+      "familyName": {{ article.user.last_name | json }}
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": {{ shop.name | json }}
+    },
+    "commentCount": {{ article.comments_count }},
+    "comment": [
+      {%- for comment in article.comments limit: 5 -%}
+        {
+          "@type": "Comment",
+          "author": {{ comment.author | json }},
+          "datePublished": "{{ comment.created_at | date: '%Y-%m-%dT%T' }}",
+          "text": {{ comment.content | json }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  {%- endcapture -%}
+{%- endif -%}
+
+{%- capture breadcrumb_entity_microdata -%}
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": {{ 'general.breadcrumb.home' | t | json }},
+      "item": "{{ shop.url }}"
+    }
+
+    {%- if request.page_type == 'product' -%}
+      {%- if collection -%}
+        ,{
+          "@type": "ListItem",
+          "position": 2,
+          "name": {{ collection.title | json }},
+          "item": "{{ shop.url }}{{ collection.url }}"
+        }, {
+          "@type": "ListItem",
+          "position": 3,
+          "name": {{ product.title | json }},
+          "item": "{{ shop.url }}{{ product.url }}"
+        }
+      {%- else -%}
+        ,{
+          "@type": "ListItem",
+          "position": 2,
+          "name": {{ product.title | json }},
+          "item": "{{ shop.url }}{{ product.url }}"
+        }
+      {%- endif -%}
+    {%- elsif request.page_type == 'collection' -%}
+        ,{
+          "@type": "ListItem",
+          "position": 2,
+          "name": {{ collection.title | json }},
+          "item": "{{ shop.url }}{{ collection.url }}"
+        }
+    {%- elsif request.page_type == 'blog' -%}
+        ,{
+          "@type": "ListItem",
+          "position": 2,
+          "name": {{ blog.title | json }},
+          "item": "{{ shop.url }}{{ blog.url }}"
+        }
+    {%- elsif request.page_type == 'article' -%}
+        ,{
+          "@type": "ListItem",
+          "position": 2,
+          "name": {{ blog.title | json }},
+          "item": "{{ shop.url }}{{ blog.url }}"
+        }, {
+          "@type": "ListItem",
+          "position": 3,
+          "name": {{ article.title | json }},
+          "item": "{{ shop.url }}{{ article.url }}"
+        }
+    {%- elsif request.page_type == 'page' -%}
+       ,{
+          "@type": "ListItem",
+          "position": 2,
+          "name": {{ page.title | json }},
+          "item": "{{ shop.url }}{{ page.url }}"
+        }
+    {%- endif -%}
+  ]
+{%- endcapture -%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+
+    {
+      "@type": "Organization",
+      "@id": "{{ shop.url }}/#organization",
+      "name": "Hodges Badge Company, Inc.",
+      "alternateName": "Hodges Badge",
+      "slogan": "Your FIRST PLACE for AWARDS®.",
+      "url": "{{ shop.url }}/",
+      "telephone": "+18005562440",
+      "foundingDate": "1920",
+      "email": "info@hodgesbadge.com",
+      "description": "America's premier supplier of custom award ribbons, rosettes, medals, trophies, silver, crystal and recognition awards. Handcrafted in the USA since 1920.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://hodgesbadge.com/cdn/shop/files/100yr_hbc_logo_1000x214_b4a03a9d-eb60-4448-bc93-8e8f0018ca3e_360x@2x.png?v=1761578886",
+        "width": 1000,
+        "height": 214
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://hodgesbadge.com/cdn/shop/files/100yr_hbc_logo_800x409_875b1212-d4a3-488a-917c-6fac6d6ab3c2.png?v=1782114027",
+        "width": 800,
+        "height": 419
+      },
+      "sameAs": [
+        "https://www.facebook.com/hodgesbadge",
+        "https://www.instagram.com/hodgesbadge"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+18005562440",
+        "contactType": "customer service",
+        "availableLanguage": "English"
+      },
+      "address": [
+        {
+          "@type": "PostalAddress",
+          "streetAddress": "205 Clock Tower Square",
+          "addressLocality": "Portsmouth",
+          "addressRegion": "RI",
+          "postalCode": "02871",
+          "addressCountry": "US"
+        },
+        {
+          "@type": "PostalAddress",
+          "streetAddress": "6440 Enduro Dr",
+          "addressLocality": "Washington",
+          "addressRegion": "MO",
+          "postalCode": "63090",
+          "addressCountry": "US"
+        }
+      ],
+      "knowsAbout": [
+        "Custom Award Ribbons",
+        "Rosette Awards",
+        "Medal Awards",
+        "Trophy Awards",
+        "Silver Awards",
+        "Crystal Awards",
+        "Dog Show Awards",
+        "Equestrian Awards",
+        "Fair, 4-H and Festival Awards",
+        "Swim Awards",
+        "Dance, Gymnastics, and Cheerleading Awards",
+        "Track & Field Awards",
+        "Recognition Awards",
+        "Sports Awards"
+      ]
+    }
+
+    {%- if request.page_type == 'index' -%}
+
+    ,{
+      "@type": "WebSite",
+      "@id": "{{ shop.url }}/#website",
+      "url": "{{ shop.url }}/",
+      "name": "Hodges Badge Company, Inc.",
+      "description": "Custom rosettes, ribbons, medals, trophies, plaques and recognition awards handcrafted in the USA since 1920.",
+      "inLanguage": "en-US",
+      "publisher": {
+        "@id": "{{ shop.url }}/#organization"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "{{ shop.url }}/pages/search-results-page?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+
+    ,{
+      "@type": "WebPage",
+      "@id": "{{ shop.url }}/#webpage",
+      "url": "{{ shop.url }}/",
+      "name": "Custom Rosettes & Award Ribbons | Hodges Badge Co. Since 1920",
+      "description": "Custom rosettes, ribbons, medals & trophies for horse shows, dog shows, fairs, schools & more. Handcrafted in the USA since 1920.",
+      "isPartOf": {
+        "@id": "{{ shop.url }}/#website"
+      },
+      "about": {
+        "@id": "{{ shop.url }}/#organization"
+      },
+      "inLanguage": "en-US"
+    }
+
+    {%- endif -%}
+
+    {%- if main_entity_microdata != blank -%}
+    ,{
+      {{ main_entity_microdata }}
+    }
+    {%- endif -%}
+
+    {%- if use_product_metafield_schema -%}
+      {%- if product.metafields.global.product_schema.value != blank -%}
+    ,{{ product.metafields.global.product_schema.value | json }}
+      {%- endif -%}
+
+      {%- if product.metafields.global.faq_schema.value != blank -%}
+    ,{{ product.metafields.global.faq_schema.value | json }}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if request.page_type == 'collection' -%}
+      {%- if collection.metafields.global.collection_schema.value != blank
+         or collection.metafields.global.item_list_schema.value != blank
+         or collection.metafields.global.faq_schema.value != blank -%}
+
+        {%- if collection.metafields.global.collection_schema != blank -%}
+    ,{{ collection.metafields.global.collection_schema.value | json }}
+        {%- endif -%}
+
+        {%- if collection.metafields.global.item_list_schema != blank -%}
+    ,{{ collection.metafields.global.item_list_schema.value | json }}
+        {%- endif -%}
+
+        {%- if collection.metafields.global.faq_schema != blank -%}
+    ,{{ collection.metafields.global.faq_schema.value | json }}
+        {%- endif -%}
+
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if breadcrumb_entity_microdata != blank -%}
+    ,{
+      {{ breadcrumb_entity_microdata }}
+    }
+    {%- endif -%}
+
+  ]
+}
+</script>

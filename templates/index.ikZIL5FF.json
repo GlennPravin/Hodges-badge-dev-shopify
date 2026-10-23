@@ -1,0 +1,534 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "collection-list": {
+      "type": "collection-list",
+      "blocks": {
+        "collection-1": {
+          "type": "collection",
+          "settings": {
+            "collection": "custom-rosettes",
+            "link": ""
+          }
+        },
+        "collection-2": {
+          "type": "collection",
+          "settings": {
+            "collection": "custom-award-ribbons-1",
+            "link": ""
+          }
+        },
+        "collection-3": {
+          "type": "collection",
+          "settings": {
+            "collection": "custom-silver-awards",
+            "link": ""
+          }
+        },
+        "collection-5": {
+          "type": "collection",
+          "settings": {
+            "collection": "custom-column-trophies",
+            "link": ""
+          }
+        },
+        "collection-4": {
+          "type": "collection",
+          "settings": {
+            "collection": "custom-medal-awards",
+            "link": ""
+          }
+        },
+        "collection-6": {
+          "type": "collection",
+          "settings": {
+            "collection": "custom-ribbon-rolls",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection-1",
+        "collection-2",
+        "collection-3",
+        "collection-5",
+        "collection-4",
+        "collection-6"
+      ],
+      "settings": {
+        "title": "",
+        "link_title": "View all",
+        "link": "shopify://collections",
+        "round_images": false,
+        "show_collection_title": true
+      }
+    },
+    "1632322954d523e328": {
+      "type": "collection-list",
+      "blocks": {
+        "1632322954d523e328-0": {
+          "type": "collection",
+          "settings": {
+            "collection": "custom-plaques",
+            "link": ""
+          }
+        },
+        "1632322954d523e328-1": {
+          "type": "collection",
+          "settings": {
+            "collection": "custom-acrylic-awards",
+            "link": ""
+          }
+        },
+        "1632322954d523e328-2": {
+          "type": "collection",
+          "settings": {
+            "collection": "stock-quick-ship-buttons-lapel-pins",
+            "link": ""
+          }
+        },
+        "1632322954d523e328-3": {
+          "type": "collection",
+          "settings": {
+            "collection": "custom-sash-awards",
+            "link": ""
+          }
+        },
+        "1632322954d523e328-4": {
+          "type": "collection",
+          "settings": {
+            "collection": "custom-crystal-awards",
+            "link": ""
+          }
+        },
+        "1632322954d523e328-5": {
+          "type": "collection",
+          "settings": {
+            "collection": "sale",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "1632322954d523e328-0",
+        "1632322954d523e328-1",
+        "1632322954d523e328-2",
+        "1632322954d523e328-3",
+        "1632322954d523e328-4",
+        "1632322954d523e328-5"
+      ],
+      "settings": {
+        "title": "",
+        "link_title": "View all",
+        "link": "shopify://collections",
+        "round_images": false,
+        "show_collection_title": true
+      }
+    },
+    "1636461043975174d8": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "custom-award-ribbons",
+        "title": "Top Products",
+        "products_count": 12,
+        "layout": "vertical",
+        "stack_products": false,
+        "show_quick_buy": false,
+        "link_title": "View all",
+        "link_url": ""
+      }
+    },
+    "16837980487c83e823": {
+      "type": "apps",
+      "disabled": true,
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "16357419886b64441b": {
+      "type": "slideshow_Trust_pilot",
+      "blocks": {
+        "16357419886b64441b-0": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/millenium-nr-sale-slider-0821_720x_a53d93d8-1471-45a0-af8c-e428fae0fcfc.webp",
+            "mobile_image": "shopify://shop_images/millenium-nr-sale-slider-0821_720x_a53d93d8-1471-45a0-af8c-e428fae0fcfc.webp",
+            "show_overlay": false,
+            "overlay_opacity": 30,
+            "text_color": "#ffffff",
+            "title": "",
+            "content": "",
+            "content_position": "middle_center",
+            "button_background": "#ffffff",
+            "button_text_color": "#000000",
+            "button_text": "Button",
+            "link": ""
+          }
+        },
+        "16357419886b64441b-1": {
+          "type": "image",
+          "settings": {
+            "show_overlay": false,
+            "overlay_opacity": 30,
+            "text_color": "#ffffff",
+            "title": "",
+            "content": "",
+            "content_position": "middle_center",
+            "button_background": "#ffffff",
+            "button_text_color": "#000000",
+            "button_text": "Button",
+            "link": ""
+          }
+        },
+        "image_nXLJMV": {
+          "type": "image",
+          "settings": {
+            "show_overlay": false,
+            "overlay_opacity": 30,
+            "text_color": "#ffffff",
+            "title": "Slide title",
+            "content": "Tell your story",
+            "content_position": "middle_center",
+            "button_background": "#ffffff",
+            "button_text_color": "#000000",
+            "button_text": "Button",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "16357419886b64441b-0",
+        "16357419886b64441b-1",
+        "image_nXLJMV"
+      ],
+      "settings": {
+        "edge_to_edge": false,
+        "section_size": "preserve_ratio",
+        "carousel_effect": "slide",
+        "autoplay": true,
+        "cycle_speed": 5
+      }
+    },
+    "collection_list_KqiMRC": {
+      "type": "collection-list",
+      "blocks": {
+        "collection_eD4f6N": {
+          "type": "collection",
+          "settings": {
+            "collection": "dog-show-glass-trophies",
+            "image": "shopify://shop_images/Dog_Show_Glass_Trophies.png",
+            "link": ""
+          }
+        },
+        "collection_cAUWpU": {
+          "type": "collection",
+          "settings": {
+            "collection": "stock-quick-ship-awards",
+            "link": ""
+          }
+        },
+        "collection_nW7BRj": {
+          "type": "collection",
+          "settings": {
+            "collection": "exclude-moa",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_eD4f6N",
+        "collection_cAUWpU",
+        "collection_nW7BRj"
+      ],
+      "settings": {
+        "title": "Our collections",
+        "link_title": "View all",
+        "link": "shopify://collections",
+        "round_images": false,
+        "show_collection_title": false
+      }
+    },
+    "16323248663f1cbb61": {
+      "type": "recently-viewed-products",
+      "settings": {
+        "title": "Recently viewed",
+        "show_quick_buy": false
+      }
+    },
+    "22eb7f54-72fb-480d-93bb-6f47b5edd25a": {
+      "type": "custom-html",
+      "custom_css": [],
+      "settings": {
+        "title": "WISER APP TESTING IN DEV",
+        "html": "Testing wiser app"
+      }
+    },
+    "28a0cb71-6a20-45b4-945d-882a3e768744": {
+      "type": "mosaic",
+      "blocks": {
+        "template--17190955745573__28a0cb71-6a20-45b4-945d-882a3e768744-1683291475db3a90f1-0": {
+          "type": "item",
+          "settings": {
+            "show_overlay": false,
+            "overlay_opacity": 50,
+            "background": "#f3f4f4",
+            "text_color": "#4f5558",
+            "title": "Your heading",
+            "content": "Tell more about your product, collection...",
+            "content_position": "top_left",
+            "button_background": "#4f5558",
+            "button_text_color": "#f3f4f4",
+            "button_text": "Learn more",
+            "link": ""
+          }
+        },
+        "template--17190955745573__28a0cb71-6a20-45b4-945d-882a3e768744-1683291475db3a90f1-1": {
+          "type": "item",
+          "settings": {
+            "show_overlay": false,
+            "overlay_opacity": 50,
+            "background": "#f3f4f4",
+            "text_color": "#4f5558",
+            "title": "Your heading",
+            "content": "Tell more about your product, collection...",
+            "content_position": "top_left",
+            "button_background": "#4f5558",
+            "button_text_color": "#f3f4f4",
+            "button_text": "Learn more",
+            "link": ""
+          }
+        },
+        "template--17190955745573__28a0cb71-6a20-45b4-945d-882a3e768744-1683291475db3a90f1-2": {
+          "type": "item",
+          "settings": {
+            "show_overlay": false,
+            "overlay_opacity": 50,
+            "background": "#f3f4f4",
+            "text_color": "#4f5558",
+            "title": "Your heading",
+            "content": "Tell more about your product, collection...",
+            "content_position": "top_left",
+            "button_background": "#4f5558",
+            "button_text_color": "#f3f4f4",
+            "button_text": "Learn more",
+            "link": ""
+          }
+        },
+        "template--17190955745573__28a0cb71-6a20-45b4-945d-882a3e768744-1683291475db3a90f1-3": {
+          "type": "item",
+          "settings": {
+            "show_overlay": false,
+            "overlay_opacity": 50,
+            "background": "#f3f4f4",
+            "text_color": "#4f5558",
+            "title": "Your heading",
+            "content": "Tell more about your product, collection...",
+            "content_position": "top_left",
+            "button_background": "#4f5558",
+            "button_text_color": "#f3f4f4",
+            "button_text": "Learn more",
+            "link": ""
+          }
+        },
+        "template--17190955745573__28a0cb71-6a20-45b4-945d-882a3e768744-1683291475db3a90f1-4": {
+          "type": "item",
+          "settings": {
+            "show_overlay": false,
+            "overlay_opacity": 50,
+            "background": "#f3f4f4",
+            "text_color": "#4f5558",
+            "title": "Your heading",
+            "content": "Tell more about your product, collection...",
+            "content_position": "top_left",
+            "button_background": "#4f5558",
+            "button_text_color": "#f3f4f4",
+            "button_text": "Learn more",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--17190955745573__28a0cb71-6a20-45b4-945d-882a3e768744-1683291475db3a90f1-0",
+        "template--17190955745573__28a0cb71-6a20-45b4-945d-882a3e768744-1683291475db3a90f1-1",
+        "template--17190955745573__28a0cb71-6a20-45b4-945d-882a3e768744-1683291475db3a90f1-2",
+        "template--17190955745573__28a0cb71-6a20-45b4-945d-882a3e768744-1683291475db3a90f1-3",
+        "template--17190955745573__28a0cb71-6a20-45b4-945d-882a3e768744-1683291475db3a90f1-4"
+      ],
+      "disabled": true,
+      "settings": {
+        "section_size": "medium"
+      }
+    },
+    "c4a4d337-e8b6-4e36-9727-5edff39f2a35": {
+      "type": "offers",
+      "blocks": {
+        "template--17190955745573__c4a4d337-e8b6-4e36-9727-5edff39f2a35-16832914896f3eac47-0": {
+          "type": "offer",
+          "settings": {
+            "title": "Your text",
+            "content": "<p>Write a few words about your offers or your shop.</p>"
+          }
+        },
+        "template--17190955745573__c4a4d337-e8b6-4e36-9727-5edff39f2a35-16832914896f3eac47-1": {
+          "type": "offer",
+          "settings": {
+            "title": "Your text",
+            "content": "<p>Write a few words about your offers or your shop.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "template--17190955745573__c4a4d337-e8b6-4e36-9727-5edff39f2a35-16832914896f3eac47-0",
+        "template--17190955745573__c4a4d337-e8b6-4e36-9727-5edff39f2a35-16832914896f3eac47-1"
+      ],
+      "disabled": true,
+      "settings": {
+        "items_per_row": 2,
+        "stack_mobile": false
+      }
+    },
+    "a76a1950-96aa-4a8c-9d07-74011ce23b44": {
+      "type": "blog-posts",
+      "settings": {
+        "blog": "news",
+        "blog_posts_count": 3,
+        "title": "Blog posts",
+        "link_title": "View all",
+        "show_category": true,
+        "show_author": true,
+        "show_date": true,
+        "show_excerpt": false,
+        "show_button_readmore": true,
+        "stack_mobile": true
+      }
+    },
+    "8a842f4d-a5de-45a2-95e4-793b3287f52b": {
+      "type": "blog-posts",
+      "settings": {
+        "blog": "hodges-blog",
+        "blog_posts_count": 9,
+        "title": "Mahi Blog DEV-TEST",
+        "link_title": "Hodeges-DEV",
+        "show_category": true,
+        "show_author": true,
+        "show_date": true,
+        "show_excerpt": true,
+        "show_button_readmore": true,
+        "stack_mobile": true
+      }
+    },
+    "558f4f00-089d-4c32-848e-9f10e6952f59": {
+      "type": "blog-posts",
+      "settings": {
+        "blog": "blog1",
+        "blog_posts_count": 9,
+        "title": "Mahi Blog DEV-TEST",
+        "link_title": "Hodeges-DEV",
+        "show_category": false,
+        "show_author": true,
+        "show_date": true,
+        "show_excerpt": true,
+        "show_button_readmore": true,
+        "stack_mobile": true
+      }
+    },
+    "b3b469e7-be46-4b33-a322-b84e51939f1c": {
+      "type": "blog-posts",
+      "disabled": true,
+      "settings": {
+        "blog": "blog1",
+        "blog_posts_count": 3,
+        "title": "Blog posts",
+        "link_title": "View all",
+        "show_category": true,
+        "show_author": true,
+        "show_date": true,
+        "show_excerpt": false,
+        "show_button_readmore": true,
+        "stack_mobile": false
+      }
+    },
+    "f0d55797-d325-4c7a-9dde-a0033ee24272": {
+      "type": "blog-posts",
+      "disabled": true,
+      "settings": {
+        "blog": "news",
+        "blog_posts_count": 3,
+        "title": "Blog posts",
+        "link_title": "View all",
+        "show_category": true,
+        "show_author": true,
+        "show_date": true,
+        "show_excerpt": false,
+        "show_button_readmore": false,
+        "stack_mobile": false
+      }
+    },
+    "3cab7162-f75c-4667-9a64-480e7edc6c3f": {
+      "type": "blog-posts",
+      "disabled": true,
+      "settings": {
+        "blog": "news",
+        "blog_posts_count": 3,
+        "title": "Blog posts",
+        "link_title": "View all",
+        "show_category": true,
+        "show_author": true,
+        "show_date": true,
+        "show_excerpt": false,
+        "show_button_readmore": false,
+        "stack_mobile": false
+      }
+    },
+    "dde6f358-6947-4ef4-983b-48c20e48fdd6": {
+      "type": "blog-posts",
+      "disabled": true,
+      "settings": {
+        "blog": "custom-awards-for-corporate-culture-brand-recognition1",
+        "blog_posts_count": 3,
+        "title": "Blog posts",
+        "link_title": "View all",
+        "show_category": true,
+        "show_author": true,
+        "show_date": true,
+        "show_excerpt": false,
+        "show_button_readmore": false,
+        "stack_mobile": false
+      }
+    },
+    "16837980162cc55bb7": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    }
+  },
+  "order": [
+    "collection-list",
+    "1632322954d523e328",
+    "1636461043975174d8",
+    "16837980487c83e823",
+    "16357419886b64441b",
+    "collection_list_KqiMRC",
+    "16323248663f1cbb61",
+    "22eb7f54-72fb-480d-93bb-6f47b5edd25a",
+    "28a0cb71-6a20-45b4-945d-882a3e768744",
+    "c4a4d337-e8b6-4e36-9727-5edff39f2a35",
+    "a76a1950-96aa-4a8c-9d07-74011ce23b44",
+    "8a842f4d-a5de-45a2-95e4-793b3287f52b",
+    "558f4f00-089d-4c32-848e-9f10e6952f59",
+    "b3b469e7-be46-4b33-a322-b84e51939f1c",
+    "f0d55797-d325-4c7a-9dde-a0033ee24272",
+    "3cab7162-f75c-4667-9a64-480e7edc6c3f",
+    "dde6f358-6947-4ef4-983b-48c20e48fdd6",
+    "16837980162cc55bb7"
+  ]
+}

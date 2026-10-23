@@ -1,0 +1,635 @@
+
+{%- if section.settings.show_announcement -%}
+{%- capture section_settings -%}
+{
+  "showNewsletter": {{ section.settings.show_newsletter | json }}
+}
+{%- endcapture -%}
+
+<section data-section-id="{{ section.id }}" data-section-type="announcement-bar" data-section-settings='{{ section_settings }}'>
+  {%- if section.settings.show_newsletter -%}
+ 
+   <!-- <div id="announcement-bar-newsletter" class="announcement-bar__newsletter   mob_newsletter" aria-hidden="true"> -->
+    <div id="announcement-bar-newsletter" class="announce_section   mob_newsletter" aria-hidden="true">
+
+<!--<div id="announcement-bar-newsletter" class=" newLetter-mob announcement-bar__newsletter hidden-phone" aria-hidden="true"> -->
+      <div class="container">
+        <div  class="announcement-bar__close-container">
+<!--           <button  class="announcement-bar__close close_pop" data-action="toggle-newsletter">{% render 'icon', icon: 'close' %}</button> -->
+        </div>
+      </div>
+
+      <div class="container con_aligli_pop modal_align">
+        <div class="announcement-bar__newsletter-inner subscribe_popup">
+           <button  class="announcement-bar__close close_pop" data-action="toggle-newsletter">{% render 'icon', icon: 'close' %}</button>
+    <p class="alert alert--success alert--center success_reg" style="display:none;">We have received your Interest</p>
+          {%- if section.settings.newsletter_title != blank -%}
+            <h2 class="heading h1 header_title">{{ section.settings.newsletter_title | escape }}</h2>
+          {%- endif -%}
+
+          
+          {%- assign newsletter_id = 'newsletter-' | append: section.id -%}
+
+          <div class="newsletter">
+            {%- form 'customer', id: newsletter_id, class: 'form newsletter__form' -%}
+              {%- if form.posted_successfully? -%}
+                <p class="alert alert--success alert--center emailalert"> {{ 'home_page.newsletter.success' | t }}</p>
+             <p class="alert alert--success alert--center emailunsub" style="display:none;position: absolute;top: 60px;"> You have been unregistered to our newsletter!</p>
+                {%- if form.context == 'announcement-bar' -%}
+                  {%- assign open_announcement = true -%}
+                {%- endif -%}
+              {%- else -%}
+                {%- if form.errors -%}
+<!--                   <p class="alert alert--error ">{{ form.errors.messages['email'] }}</p> -->
+                {%- endif -%}
+
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <input type="hidden" name="contact[context]" value="announcement-bar">
+
+                <div class="form__input-row">
+                  <div class="form__input-wrapper form__input-wrapper--labelled">
+                    <input type="email" id="announcement[contact][email]" name="contact[email]" class="cfoucs form__field form__field--text" autofocus >
+                    <label for="announcement[contact][email]" class="form__floating-label">{{ 'home_page.newsletter.input' | t }}</label>
+                  <p class=" alertemail alert--error" style="display:none;color:red;background-color:transparent;">Please provide a valid email address</p>
+
+                  </div>
+
+                 
+                </div>
+             {%- if section.settings.newsletter_content != blank -%}
+            <div class="rte text-left ">
+              {{ section.settings.newsletter_content }}
+            </div>
+          {%- endif -%}
+            {%- if section.settings.show_award_checkbox_List -%}
+<div class="text-left">
+  <div class="lds-dual-ring" style="display: none;"></div>
+                  <span  class="form__input-wrapper form__input-wrapper--labelled design_text">What are you interested in?</span>
+               
+                <div class="row mr_up" >
+                   <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                 <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="Athletic" id="flexCheckDefaultAthletic" >
+                   <label class="form-check-label" for="flexCheckDefaultAthletic"> Athletic Awards </label></div>
+                </div>
+                    <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                  <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="Fair" id="flexCheckDefaultFair" >
+                   <label class="form-check-label" for="flexCheckDefaultFair"> Fair Awards </label></div>
+                </div>
+                </div>
+                <div class="row" >
+<!--                    <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                 <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="Cat" id="flexCheckDefaultCat" >
+                   <label class="form-check-label" for="flexCheckDefaultCat"> Cat Show Awards </label></div>
+                </div> -->
+<!--                      <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                 <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="Cat" id="" >
+                   <label class="form-check-label" for="flexCheckDefaultCat"> Cat Show Awards </label></div>
+                </div> -->
+                  <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                 <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="Equestrian" id="flexCheckDefaultEquestrian" >
+                   <label class="form-check-label" for="flexCheckDefaultEquestrian">Equestrian Awards </label></div>
+                </div>
+                
+                    <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                  <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="Gym/Cheer/Dance" id="flexCheckDefaultGym" >
+                   <label class="form-check-label" for="flexCheckDefaultGym"> Gym/Cheer/Dance Awards </label></div>
+                </div>
+                </div><div class="row" >
+                   <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                 <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="College" id="flexCheckDefaultCollege" >
+                   <label class="form-check-label" for="flexCheckDefaultCollege"> College IDs/Awards </label></div>
+                </div>
+                    <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                  <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="Religious/Inspirational" id="flexCheckDefaultReligious" >
+                   <label class="form-check-label" for="flexCheckDefaultReligious"> Religious/Inspirational Awards </label></div>
+                </div>
+                </div>
+                <div class="row" >
+                   <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                 <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="Dog" id="flexCheckDefaultDog" >
+                   <label class="form-check-label" for="flexCheckDefaultDog"> Dog Show Awards </label></div>
+                </div>
+                    <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                  <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="School" id="flexCheckDefaultSchool" >
+                   <label class="form-check-label" for="flexCheckDefaultSchool"> School Awards </label></div>
+                </div>
+                </div><div class="row" >
+    
+         
+<!--                    <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                 <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="Drug" id="flexCheckDefaultDrug" >
+                   <label class="form-check-label" for="flexCheckDefaultDrug"> Drug Free Incentives </label></div>
+                </div> -->
+                    <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                  <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="Recognition" id="flexCheckDefaultRecognition" >
+                   <label class="form-check-label" for="flexCheckDefaultRecognition"> Recognition Awards </label></div>
+                </div>
+    <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                  <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="Swim" id="flexCheckDefaultSwim" >
+                   <label class="form-check-label" for="flexCheckDefaultSwim"> Swim Awards </label></div>
+                </div>
+                </div>
+<!--                 <div class="row" >
+                   <div class="col-lg-6 form__input-wrapper form__input-wrapper--labelled">
+                 <div class="form-check mb-2">
+                   <input class="form-check-input" name="type" type="checkbox" value="Equestrian" id="flexCheckDefaultEquestrian" >
+                   <label class="form-check-label" for="flexCheckDefaultEquestrian">Equestrian Awards </label></div>
+                </div>
+             
+                </div> -->
+               </div>
+            {%- endif -%}
+            <div class="text-center"> <button type="submit" class=" button button--primary subscribe_button_n" onclick="event.preventDefault();getlocaldata();get_checked_list();">{{ 'home_page.newsletter.submit' | t }}</button></div>
+              {%- endif -%}
+             
+            {%- endform -%}
+          <p class="disclaimer__subtext text-left emailalert">
+            Don't want to receive cart reminders from us?  <button onclick="usub()">Unsubscribe</button>
+                </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {%- endif -%}
+     
+<div class="announcement-bar">
+    <div class="container">
+      <div class="announcement-bar__inner">
+        {%- if section.settings.link != blank -%}
+          <a href="{{ section.settings.link }}" class="announcement-bar__content announcement-bar__content--{{ section.settings.text_position }}">{{ section.settings.text | escape }}</a>
+        {%- else -%}
+          <p class="announcement-bar__content announcement-bar__content--{{ section.settings.text_position }}">{{ section.settings.text | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.show_newsletter -%}
+          
+        <button type="button" class="announcement-bar__button annoncement_bar_mob acconuSub buttonAnnSub sub_sec sub_but_position"    data-action="toggle-newsletter" aria-expanded="false" aria-controls="announcement-bar-newsletter">
+          <span class="newsLetterIcon_design"> {%- render 'icon', icon: 'newsletter'   -%} </span>
+            {{- section.settings.newsletter_button | escape -}}
+          </button>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+  
+  <div id="login_for_review" class="modal hide"  role="dialog">
+
+  </div>
+</section>
+
+<style>
+  .announcement-bar {
+    background: {{ section.settings.background }};
+    color: {{ section.settings.text_color }};
+  }
+  body {
+  background: #fff;
+}
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 5% auto;
+  border-radius: 50%;
+  border: 6px solid #000;
+  border-color: #000 transparent #000 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0,0,0,.8);
+    z-index: 999;
+    opacity: 1;
+    transition: all 0.5s;
+}
+</style>
+
+<script>
+  {%- if section.settings.show_newsletter -%}
+    document.documentElement.style.setProperty('--announcement-bar-button-width', document.querySelector('.announcement-bar__button').clientWidth + 'px');
+  {%- else -%}
+    document.documentElement.style.removeProperty('--announcement-bar-button-width');
+  {%- endif -%}
+
+  document.documentElement.style.setProperty('--announcement-bar-height', document.getElementById('shopify-section-{{ section.id }}').clientHeight + 'px');
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+"name": "Announcement bar",
+"settings": [
+  {
+    "type": "checkbox",
+    "id": "show_announcement",
+    "label": "Show announcement",
+    "default": true
+  },
+  {
+    "type": "color",
+    "id": "background",
+    "label": "Background",
+    "default": "#1e2d7d"
+  },
+  {
+    "type": "checkbox",
+    "id": "show_award_checkbox_List",
+    "label": "show award checkbox List",
+    "default": true
+  },
+  {
+    "type": "color",
+    "id": "text_color",
+    "label": "Text",
+    "default": "#ffffff"
+  },
+  {
+    "type": "text",
+    "id": "text",
+    "label": "Text",
+    "default": "Keep up to date on Sales and Promotions: Join our Email List!"
+  },
+  {
+    "type": "select",
+    "id": "text_position",
+    "label": "Text position",
+    "options": [
+      {
+        "value": "left",
+        "label": "Left"
+      },      
+      {
+        "value": "center",
+        "label": "Right"
+      }
+    ],
+    "default": "center",
+    "info": "Text is always centered on mobile."
+  },
+  {
+    "type": "url",
+    "id": "link",
+    "label": "Link"
+  },
+  {
+    "type": "header",
+    "content": "Newsletter"
+  },
+  {
+    "type": "paragraph",
+    "content": "Customers who subscribe will have their email address added to the \"accepts marketing\" [customer list](/admin/customers?query=&accepts_marketing=1)."
+  },
+  {
+    "type": "paragraph",
+    "content": "Only visible on desktop."
+  },
+  {
+    "type": "checkbox",
+    "id": "show_newsletter",
+    "label": "Show sign up form",
+    "default": true
+  },
+  {
+    "type": "text",
+    "id": "newsletter_button",
+    "label": "Open button",
+    "default": "Subscribe & Save"
+  },
+  {
+    "type": "text",
+    "id": "newsletter_title",
+    "label": "Heading",
+    "default": "Newsletter"
+  },
+  {
+    "type": "richtext",
+    "id": "newsletter_content",
+    "label": "Text",
+    "default": "<p>A short sentence describing what someone will receive by subscribing</p>"
+  }
+]
+}
+{% endschema %}
+
+
+
+
+<script>
+  $(document).ready(function () {
+
+    $(".cfoucs").blur(function () {
+	  var isValidEmail = checkEmail($(".cfoucs").val());	
+	  if(isValidEmail == true){
+         var alertemail = document.querySelector(".alertemail");
+         alertemail.style.display = "none";
+		  $(".lds-dual-ring").show();
+      $.ajax({
+        url: 'https://hops-connect.dev.hodgesbadge.com/api/Barilliance/GetSubscriberInterests?email=' + $(".cfoucs").val() + '&requestMode=Subscription&isHodges=true',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data, textStatus, xhr) {
+          $(".lds-dual-ring").hide();
+          $("input:checkbox[name=type]:checked").each(function () {
+            $(this).prop('checked', false);
+          });
+          $.each(data.interestedCatalogs, function (i, val) {
+            // alert(val.catalogName);
+            $("input[value='" + val.catalogName + "']").prop('checked', true);
+          });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          console.log('Error in Operation');
+        }
+      });
+	  }
+else{
+  var alertemail = document.querySelector(".alertemail");
+      alertemail.style.display = "block";
+}
+        
+      
+    });
+  });
+
+  var currenturl = window.location.href;
+  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+  var res = currenturl.replace(hashes);
+  console.log(currenturl);
+  console.log(hashes);
+  console.log(res, 'res');
+  var uri = window.location.toString();
+  console.log(uri, 'uri');
+  var clean_url = uri.substring(0, uri.indexOf("?"));
+  console.log(clean_url, 'clean');
+  var inputvalnew = document.getElementById("announcement[contact][email]").value;
+  function get_checked_list() {
+    // emailvalidate();
+    var array = [];
+    var person = {}
+    var ins = []
+    var objects = {};
+    var result = $('#result');
+
+    var firstname = '';
+    var lastname = '';
+    var address = '';
+    var city = '';
+    var state = '';
+    var otherstate = '';
+    var zipcode = '';
+    var country = '';
+    var mobilenumber = '';
+    var email = document.getElementById("announcement[contact][email]").value;
+    var organization = '';
+
+    var isValidEmail = checkEmail(email);
+    if(isValidEmail == true){
+       $("input:checkbox[name=type]:checked").each(function () {
+      array.push($(this).val());
+    });
+    for (let i = 0; i < array.length; i++) {
+      objects[i] = { catalogName: array[i] };
+      ins.push(objects[i]);
+    }
+
+    var add_to_email_list = 0
+    var catalogType = '';
+    person = {
+      firstName: firstname,
+      lastName: lastname,
+      address: address,
+      city: city,
+      state: state,
+      postalCode: zipcode,
+      country: country,
+      organization: organization,
+      phone: mobilenumber,
+      email: email,
+      catalogType: catalogType,
+      isfreeUpdate: Boolean(add_to_email_list),
+      interestedCatalogs: ins
+    };
+    console.log(person);
+
+    $.ajax({
+      type: 'POST',
+      url: `https://hops-connect.dev.hodgesbadge.com/api/Barilliance/CatalogRequest?requestMode=Subscription&isHodges=true`,
+      data: JSON.stringify(person),
+      dataType: 'text',
+      contentType: "application/json; charset=utf-8",
+      encode: true,
+      success: function (response, status, xhr) {
+        console.log('test response', response);
+        if (response.includes('Sucessfully')) {
+         // alert('You have been registered to our newsletter!')
+           var alertemail_reg = document.querySelector(".success_reg");
+         alertemail_reg.style.display = "block";
+          setTimeout(function(){ document.getElementById("newsletter-announcement-bar").submit(); }, 3000);
+          
+          
+         // return true;
+        }
+        else {
+          $("#myForm").hide();
+          result.html("Oops! something went wrong. Pelase try again later");
+        }
+      }
+    });
+    }
+    else{
+      var alertemail = document.querySelector(".alertemail");
+      alertemail.style.display = "block"
+      // document.getElementById("announcement[contact][email]").focus();
+      return false;
+       /* var alertemail = document.querySelector(".alertemail");
+        if (email == null || email == "") {
+        alertemail.style.display = "block"
+        document.getElementById("announcement[contact][email]").focus();
+        return false;
+        } */
+    }
+    
+    
+
+
+
+
+   
+
+   // return false;
+
+  }
+
+
+  function getlocaldata() {
+
+    var selecttext = document.getElementById("announcement[contact][email]").value;
+    localStorage.setItem('server', selecttext);
+    var strserver = localStorage.getItem('server');
+    console.log(strserver);
+  }
+
+  function inputvalempty() {
+    var getlocaldata = localStorage.getItem('server');
+
+
+    $.ajax({
+      type: 'POST',
+      url: `https://hops-connect.dev.hodgesbadge.com/ShopifyCustomer/UpdateAcceptsMarketStatus?email=${getlocaldata}&isHodges=true`,
+      //url: "https://hops-connect.dev.hodgesbadge.com/ShopifyCustomer/UpdateAcceptsMarketStatus?email="+emailval, 
+      dataType: 'text',
+      contentType: "application/json; charset=utf-8",
+      // encode: true,
+      // console.log('testfirst');
+      success: function (response, status, xhr) {
+        //alert(response);
+        console.log(response, 'testres');
+        //  $(".emailalert").hide();
+        //  $(".emailunsub").show();
+        //   $(".header_title").hide();
+        $("#myFormunsubscibe").show();
+        //  $(".announce_section").show();
+        // location.replace("https://hodges-badge.myshopify.com/");
+        location.replace(clean_url);
+
+
+        //  location.reload();
+
+      },
+
+
+
+    });
+
+  }
+  function inputvalget() {
+    var inputval = document.getElementById("announcement[contact][email]").value;
+    console.log(inputval);
+
+    $.ajax({
+      type: 'POST',
+      url: `https://hops-connect.dev.hodgesbadge.com/ShopifyCustomer/UpdateAcceptsMarketStatus?email=${inputval}&isHodges=true`,
+      //url: "https://hopsconnectapi.azurewebsites.net/ShopifyCustomer/UpdateAcceptsMarketStatus?email="+emailval, 
+      dataType: 'text',
+      contentType: "application/json; charset=utf-8",
+      // encode: true,
+      // console.log('testfirst');
+      success: function (response, status, xhr) {
+        //alert(response);
+        console.log(response, 'testres');
+        // $(".emailalert").hide();
+        // $(".emailunsub").show();
+        // $(".header_title").hide();
+        $("#myFormunsubscibe").show();
+        //  $(".announce_section").show();
+        location.replace(currenturl);
+        //  location.reload();
+
+      },
+
+
+
+    });
+
+  }
+  function usub() {
+
+    var getlocaldataa = localStorage.getItem('server');
+    console.log(getlocaldataa);
+    if (inputvalnew != '') {
+      // console.log('test');
+      inputvalempty();
+    }
+    else if (inputvalnew == '') {
+      //console.log('test');
+      inputvalget();
+    }
+
+
+  }
+
+  function emailvalidate() {
+    if (inputvalnew == null || inputvalnew == "") {
+      alert("Name can't be blank");
+
+    }
+
+  }
+
+
+function checkEmail(emailVal) {
+        var email = emailVal;//document.getElementById('txtEmail');
+        var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (!filter.test(email)) {
+           // alert('Please provide a valid email address');
+           // email.focus;
+            return false;
+        }
+		return true;
+    }
+
+  function ValidateEmail(input) {
+      alert(input);
+  alert(input.value);
+  var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+  if (input.value.match(validRegex)) {
+
+    alert("Valid email address!");
+
+    document.form1.text1.focus();
+
+    return true;
+
+  } else {
+
+    alert("Invalid email address!");
+
+    document.form1.text1.focus();
+
+    return false;
+
+  }
+
+}
+	
+</script>
+<!-- {% if customer %} -->
+  <!-- <script>var customer_email = '{{ customer.email }}'; alert(customer_email)
+  </script> -->
+  <!-- {% endif %} -->

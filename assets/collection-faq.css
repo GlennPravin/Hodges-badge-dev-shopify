@@ -1,0 +1,271 @@
+/* Collection FAQ — visual styles (scoped) */
+.collection-faq.section,
+.collection-faq {
+  margin-top: 24px !important;
+  margin-bottom: 24px;
+  padding-top: 0;
+}
+
+.collection-faq .section__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 22px;
+  padding: 0;
+}
+
+.collection-faq .faq__title,
+.collection-faq h2.faq__title,
+.collection-faq .section__title.faq__title {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 0 7px;
+  text-align: center !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: 30px !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+  line-height: 1.2 !important;
+  color: #1a1a1a !important;
+}
+
+/* .collection-faq .faq__title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 180px;
+  max-width: 30%;
+  height: 3px;
+  background: #00badb;
+  transform: translateX(-50%);
+} */
+
+.collection-faq .faq {
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto 24px;
+  border: none;
+  background: transparent;
+}
+
+.collection-faq .faq__group,
+.collection-faq .faq__group-list {
+  margin: 0;
+}
+
+.collection-faq .faq__item,
+.collection-faq .faq__item + .faq__item {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.collection-faq .faq__item-wrapper {
+  border-top: none;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.collection-faq .faq__item:first-child .faq__item-wrapper {
+  border-top: none;
+}
+
+.collection-faq .faq__question,
+.collection-faq button.faq__question,
+.collection-faq .faq__question.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 10px 0 2px;
+  margin: 0;
+  min-height: 0;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+  line-height: 24px !important;
+  color: #1a1a1a !important;
+  box-shadow: none;
+}
+
+.collection-faq .faq__question:hover,
+.collection-faq .faq__question:focus,
+.collection-faq button.faq__question:hover,
+.collection-faq button.faq__question:focus {
+  color: #1a1a1a !important;
+  outline: none;
+}
+
+.collection-faq .faq__question-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+  line-height: inherit !important;
+  color: #1a1a1a !important;
+}
+
+.collection-faq .faq__question .plus-button {
+  position: relative;
+  top: 0;
+  right: 0;
+  flex-shrink: 0;
+  margin-left: 16px;
+  width: 10px;
+  height: 10px;
+  color: #1a1a1a !important;
+}
+
+.collection-faq .faq__question .plus-button::before,
+.collection-faq .faq__question .plus-button::after {
+  background-color: #1a1a1a !important;
+}
+
+.collection-faq .faq__question .plus-button::before {
+  width: 10px;
+  height: 1px;
+  opacity: 1;
+}
+
+.collection-faq .faq__question .plus-button::after {
+  width: 1px;
+  height: 10px;
+}
+
+/* Expanded state — show minus */
+.collection-faq .faq__question[aria-expanded="true"] .plus-button::before {
+  opacity: 0;
+}
+
+.collection-faq .faq__question[aria-expanded="true"] .plus-button::after {
+  width: 10px;
+  height: 1px;
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.collection-faq .faq__answer-wrapper {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.2s ease-in-out;
+}
+
+.collection-faq .faq__answer-wrapper.is-open {
+  height: auto;
+  overflow: visible;
+  padding: 2px 0 10px;
+}
+
+.collection-faq .faq__answer {
+  margin: 0;
+  padding: 10px 12px;
+  background: #eeeeee;
+  border: none;
+  border-radius: 8px;
+  box-shadow: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 300 !important;
+  font-style: normal !important;
+  line-height: 24px !important;
+  color: #1a1a1a !important;
+  text-align: left;
+}
+
+.collection-faq .faq__answer p {
+  margin: 0 0 0.75em;
+  font-family: inherit !important;
+  font-size: 16px !important;
+  font-weight: 300 !important;
+  line-height: 24px !important;
+  color: #1a1a1a !important;
+  text-align: left;
+}
+
+.collection-faq .faq__answer p:first-child {
+  margin-top: 0;
+}
+
+.collection-faq .faq__answer p:last-child {
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 641px) {
+  .collection-faq.section,
+  .collection-faq {
+    margin-top: 24px !important;
+  }
+}
+
+@media screen and (max-width: 999px) {
+  .collection-faq .faq__title,
+  .collection-faq h2.faq__title,
+  .collection-faq .section__title.faq__title {
+    font-size: 26px !important;
+  }
+
+  .collection-faq .faq {
+    max-width: 92%;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .collection-faq.section,
+  .collection-faq {
+    margin-top: 20px !important;
+  }
+
+  .collection-faq .section__header {
+    margin-bottom: 20px;
+  }
+
+  .collection-faq .faq__title,
+  .collection-faq h2.faq__title,
+  .collection-faq .section__title.faq__title {
+    font-size: 24px !important;
+    padding-bottom: 6px;
+  }
+
+  .collection-faq .faq__title::after {
+    width: 28%;
+  }
+
+  .collection-faq .faq {
+    max-width: 100%;
+    padding: 0 4px;
+  }
+
+  .collection-faq .faq__question,
+  .collection-faq button.faq__question {
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0 2px;
+    font-size: 16px !important;
+    line-height: 24px !important;
+  }
+
+  .collection-faq .faq__question .plus-button {
+    margin-top: 0;
+    width: 10px;
+    height: 10px;
+  }
+
+  .collection-faq .faq__answer-wrapper.is-open {
+    padding: 2px 0 8px;
+  }
+}
