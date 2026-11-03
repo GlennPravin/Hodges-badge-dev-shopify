@@ -36,6 +36,13 @@ always visible.
     {%- endif -%}
 
     {%- for link in menu.links -%}
+      {%- assign goldswim_title = link.title | downcase | strip -%}
+      {%- assign goldswim_url = link.url | downcase -%}
+      {%- if goldswim_title contains 'goldswim' or goldswim_url contains 'goldswim' -%}
+        {%- unless customer.b2b? -%}
+          {%- continue -%}
+        {%- endunless -%}
+      {%- endif -%}
       {%- assign is_mega_menu = false -%}
       {%- assign downcase_title = link.title | downcase | strip -%}
 
