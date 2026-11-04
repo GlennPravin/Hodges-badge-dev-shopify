@@ -168,6 +168,11 @@
     border-radius: 8px;
   }
 
+  .account-page-2-profile-actions .button[disabled] {
+    cursor: wait;
+    opacity: 0.7;
+  }
+
   @media screen and (max-width: 640px) {
     .account-profile {
       padding: 20px 16px 16px;
@@ -862,6 +867,31 @@
       }
     }
 
+    function applySavedProfile(saved) {
+      var panel = document.querySelector(".account-page-2-panel--profile");
+      var form = document.getElementById("account-page-2-profile-form");
+      if (!panel || !form || !saved) return;
+      [
+        ["first_name", saved.first],
+        ["last_name", saved.last],
+        ["email", saved.email]
+      ].forEach(function (pair) {
+        var value = String(pair[1] || "").trim();
+        var valueEl = form.querySelector('[data-profile-value="' + pair[0] + '"]');
+        var field = form.querySelector('[name="' + pair[0] + '"]');
+        if (valueEl) valueEl.textContent = value || "—";
+        if (field) field.value = value;
+      });
+      panel.setAttribute("data-profile-first", saved.first || "");
+      panel.setAttribute("data-profile-last", saved.last || "");
+      panel.setAttribute("data-profile-email", saved.email || "");
+      var emailField = form.querySelector("[data-profile-email]");
+      if (emailField) emailField.setAttribute("data-account-email", saved.email || "");
+      var avatar = form.querySelector(".account-profile__avatar");
+      var initialSource = String(saved.first || saved.email || "").trim();
+      if (avatar && initialSource) avatar.textContent = initialSource.charAt(0).toUpperCase();
+    }
+
     function setupProfileForm() {
       var form = document.getElementById("account-page-2-profile-form");
       if (!form || form.getAttribute("data-account-page-2-bound")) return;
@@ -883,6 +913,13 @@
         });
         if (editButton) editButton.hidden = on;
         if (saveButton) saveButton.hidden = !on;
+      }
+
+      function setSaving(on) {
+        form.classList.toggle("is-saving", on);
+        if (!saveButton) return;
+        saveButton.disabled = on;
+        saveButton.textContent = on ? "Saving..." : "Save";
       }
 
       nameFields.forEach(function (field) {
@@ -942,22 +979,31 @@
           saveUrl += "&email=" + encodeURIComponent(email);
         }
 
+        setSaving(true);
         fetch(saveUrl, { method: "POST" })
           .then(function (response) {
             if (!response.ok) {
               return response.json().then(function (body) {
+                setSaving(false);
                 showProfileMessage(profileSaveError(body && body.message), false);
               }).catch(function () {
+                setSaving(false);
                 showProfileMessage("Profile could not be saved.", false);
               });
             }
+            var savedProfile = { ok: true, first: first, last: last, email: email };
             try {
               sessionStorage.setItem("accountPage2Tab", "profile");
-              sessionStorage.setItem("accountPage2ProfileExpected", JSON.stringify({ first: first, last: last, email: email }));
+              sessionStorage.setItem("accountPage2ProfileExpected", JSON.stringify(savedProfile));
             } catch (e) {}
-            window.location.href = profilePageUrl();
+            applySavedProfile(savedProfile);
+            setEditing(false);
+            setSaving(false);
+            showProfileMessage("Profile saved.", true);
+            window.location.reload();
           })
           .catch(function () {
+            setSaving(false);
             showProfileMessage("Profile could not be saved.", false);
           });
       });
@@ -980,12 +1026,8 @@
         setAccountTab("profile");
         history.replaceState(null, "", profilePageUrl());
         if (expected) {
-          var panel = document.querySelector(".account-page-2-panel--profile");
-          var saved = panel
-            && namesMatch(panel.getAttribute("data-profile-first"), expected.first)
-            && namesMatch(panel.getAttribute("data-profile-last"), expected.last)
-            && (!expected.email || namesMatch(panel.getAttribute("data-profile-email"), expected.email));
-          showProfileMessage(saved ? "Profile saved." : "Profile could not be saved.", saved);
+          if (expected.ok) applySavedProfile(expected);
+          showProfileMessage(expected.ok ? "Profile saved." : profileSaveError(expected.message), !!expected.ok);
         }
         return;
       }
