@@ -1,8 +1,5 @@
 {%- if customer == blank -%}
   <script>
-    try {
-      sessionStorage.setItem('hodges_b2b_login_pending', String(Date.now()));
-    } catch (e) {}
     window.location.href = "/customer_authentication/login?return_to=" + encodeURIComponent("/pages/account-page" + window.location.search);
   </script>
 {%- endif -%}
@@ -133,7 +130,8 @@
     line-height: 1.4;
   }
 
-  input.account-profile__input[type="text"] {
+  input.account-profile__input[type="text"],
+  input.account-profile__input[type="email"] {
     display: none;
     width: 100%;
     height: 44px;
@@ -218,7 +216,7 @@
   {%- assign profile_initial = customer.email | slice: 0 | upcase -%}
 {%- endif -%}
 
-<div class="account-page-2-panel--profile" data-profile-first="{{ profile_first_name | escape }}" data-profile-last="{{ profile_last_name | escape }}">
+<div class="account-page-2-panel--profile" data-profile-first="{{ profile_first_name | escape }}" data-profile-last="{{ profile_last_name | escape }}" data-profile-email="{{ customer.email | escape }}">
   <header class="account-profile__intro">
     <h1 class="account-profile__title">Profile</h1>
     <p class="account-profile__subtitle">Manage your account details and preferences.</p>
@@ -251,8 +249,8 @@
 
     <div class="account-profile__email">
       <span class="account-profile__label">Email address</span>
-      <span class="account-profile__value">{{ customer.email | escape }}</span>
-      <input type="hidden" name="email" value="{{ customer.email | escape }}" data-profile-email data-account-email="{{ customer.email | escape }}">
+      <span class="account-profile__value" data-profile-value="email">{{ customer.email | escape }}</span>
+      <input id="profile-email" class="account-profile__input" type="email" name="email" value="{{ customer.email | escape }}" autocomplete="email" data-profile-name data-profile-email data-account-email="{{ customer.email | escape }}">
     </div>
 
     <div class="account-page-2-profile-actions">
@@ -835,6 +833,16 @@
       return String(left || "").trim().toLowerCase() === String(right || "").trim().toLowerCase();
     }
 
+    function profileSaveError(message) {
+      if (/already been taken|already exist/i.test(message || "")) {
+        return "Email Already exist with another account";
+      }
+      if (/valid email/i.test(message || "")) {
+        return "Enter a valid email address.";
+      }
+      return "Profile could not be saved.";
+    }
+
     function showProfileMessage(text, ok) {
       var message = document.querySelector("[data-profile-message]");
       if (!message) return;
@@ -905,7 +913,7 @@
         var accountEmail = emailField ? (emailField.getAttribute("data-account-email") || "") : "";
         var panel = document.querySelector(".account-page-2-panel--profile");
 
-        if (!first || !last || email.toLowerCase() !== accountEmail.toLowerCase()) {
+        if (!first || !last || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           showProfileMessage("Profile could not be saved.", false);
           return;
         }
@@ -918,7 +926,9 @@
 
         var currentFirst = panel ? panel.getAttribute("data-profile-first") : "";
         var currentLast = panel ? panel.getAttribute("data-profile-last") : "";
-        if (namesMatch(first, currentFirst) && namesMatch(last, currentLast)) {
+        var emailChanged = !namesMatch(email, accountEmail);
+        var nameChanged = !namesMatch(first, currentFirst) || !namesMatch(last, currentLast);
+        if (!emailChanged && !nameChanged) {
           setEditing(false);
           showProfileMessage("Profile saved.", true);
           return;
@@ -926,18 +936,24 @@
 
         var saveUrl = "https://hops-connect.dev.hodgesbadge.com/ShopifyCustomer/UpdateCustomerName"
           + "?customer_id=" + encodeURIComponent(customerId)
-          + "&first_name=" + encodeURIComponent(first)
+          + "&first_name=" + encodeURIComponent(first)        
           + "&last_name=" + encodeURIComponent(last);
+        if (emailChanged) {
+          saveUrl += "&email=" + encodeURIComponent(email);
+        }
 
         fetch(saveUrl, { method: "POST" })
           .then(function (response) {
             if (!response.ok) {
-              showProfileMessage("Profile could not be saved.", false);
-              return;
+              return response.json().then(function (body) {
+                showProfileMessage(profileSaveError(body && body.message), false);
+              }).catch(function () {
+                showProfileMessage("Profile could not be saved.", false);
+              });
             }
             try {
               sessionStorage.setItem("accountPage2Tab", "profile");
-              sessionStorage.setItem("accountPage2ProfileExpected", JSON.stringify({ first: first, last: last }));
+              sessionStorage.setItem("accountPage2ProfileExpected", JSON.stringify({ first: first, last: last, email: email }));
             } catch (e) {}
             window.location.href = profilePageUrl();
           })
@@ -967,7 +983,8 @@
           var panel = document.querySelector(".account-page-2-panel--profile");
           var saved = panel
             && namesMatch(panel.getAttribute("data-profile-first"), expected.first)
-            && namesMatch(panel.getAttribute("data-profile-last"), expected.last);
+            && namesMatch(panel.getAttribute("data-profile-last"), expected.last)
+            && (!expected.email || namesMatch(panel.getAttribute("data-profile-email"), expected.email));
           showProfileMessage(saved ? "Profile saved." : "Profile could not be saved.", saved);
         }
         return;
