@@ -8,6 +8,13 @@
       <div class="mobile-menu__section">
         <ul class="mobile-menu__nav" data-type="menu" role="list">
           {%- for link in menu.links -%}
+            {%- assign goldswim_title = link.title | downcase | strip -%}
+            {%- assign goldswim_url = link.url | downcase -%}
+            {%- if goldswim_title contains 'goldswim' or goldswim_url contains 'goldswim' -%}
+              {%- unless customer.b2b? -%}
+                {%- continue -%}
+              {%- endunless -%}
+            {%- endif -%}
             <li class="mobile-menu__nav-item">
               {%- if link.links != blank -%}
                 {%- capture panel_id -%}mobile-panel-{{ forloop.index0 }}{%- endcapture -%}

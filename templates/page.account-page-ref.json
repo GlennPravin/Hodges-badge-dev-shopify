@@ -26,20 +26,7 @@
     "main_customers_account_Ma8C6b": {
       "type": "main-customers-account",
       "name": "Customer Account",
-      "settings": {
-        "default_tab": "orders",
-        "hero_eyebrow": "Good to see you again,",
-        "hero_subtitle": "Manage your orders, addresses and account details easily from one place.",
-        "hero_tagline_line1": "Quality parts",
-        "hero_tagline_line2": "A stronger tomorrow",
-        "show_support_banner": true,
-        "support_title": "Need help with your order or have a question?",
-        "support_text": "Our support team is ready to assist you.",
-        "support_button_label": "Contact Support",
-        "support_url": "",
-        "padding_top": 32,
-        "padding_bottom": 32
-      }
+      "settings": {}
     },
     "collection_with_image_i8ycy7": {
       "type": "collection-with-image",

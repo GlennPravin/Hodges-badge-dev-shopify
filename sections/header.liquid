@@ -419,6 +419,13 @@
         <div class="container">
           <ul class="nav-bar__linklist list--unstyled" data-type="menu" role="list">
             {%- for link in navigation_menu.links -%}
+              {%- assign goldswim_title = link.title | downcase | strip -%}
+              {%- assign goldswim_url = link.url | downcase -%}
+              {%- if goldswim_title contains 'goldswim' or goldswim_url contains 'goldswim' -%}
+                {%- unless customer.b2b? -%}
+                  {%- continue -%}
+                {%- endunless -%}
+              {%- endif -%}
               <li class="nav-bar__item">
                 {%- if link.links.size == 0 -%}
                   <a href="{{ link.url }}" class="nav-bar__link link" data-type="menuitem">{{ link.title }}</a>
