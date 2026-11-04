@@ -833,6 +833,16 @@
       return String(left || "").trim().toLowerCase() === String(right || "").trim().toLowerCase();
     }
 
+    function profileSaveError(message) {
+      if (/already been taken|already exist/i.test(message || "")) {
+        return "Email Already exist with another account";
+      }
+      if (/valid email/i.test(message || "")) {
+        return "Enter a valid email address.";
+      }
+      return "Profile could not be saved.";
+    }
+
     function showProfileMessage(text, ok) {
       var message = document.querySelector("[data-profile-message]");
       if (!message) return;
@@ -927,14 +937,19 @@
         var saveUrl = "https://hops-connect.dev.hodgesbadge.com/ShopifyCustomer/UpdateCustomerName"
           + "?customer_id=" + encodeURIComponent(customerId)
           + "&first_name=" + encodeURIComponent(first)
-          + "&last_name=" + encodeURIComponent(last)
-          + "&email=" + encodeURIComponent(email);
+          + "&last_name=" + encodeURIComponent(last);
+        if (emailChanged) {
+          saveUrl += "&email=" + encodeURIComponent(email);
+        }
 
         fetch(saveUrl, { method: "POST" })
           .then(function (response) {
             if (!response.ok) {
-              showProfileMessage("Profile could not be saved.", false);
-              return;
+              return response.json().then(function (body) {
+                showProfileMessage(profileSaveError(body && body.message), false);
+              }).catch(function () {
+                showProfileMessage("Profile could not be saved.", false);
+              });
             }
             try {
               sessionStorage.setItem("accountPage2Tab", "profile");
