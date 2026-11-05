@@ -10,7 +10,7 @@
           <a href="{{ item.url }}" class="search-bar__result-item">
             <div class="search-bar__image-container">
               <div class="aspect-ratio aspect-ratio--square">
-                <img src="{{ item.featured_image | img_url: '120x120' }}" alt="{{ item.featured_image.alt | escape }}">
+                <img loading='lazy'  src="{{ item.featured_image | img_url: '120x120' }}" alt="{{ item.featured_image.alt | escape }}">
               </div>
             </div>
 

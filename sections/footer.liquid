@@ -74,36 +74,80 @@
                         </div> -->
 
                         <!-- <button type="submit" class="form__submit form__submit--tight button button--primary">{{ 'footer.newsletter.submit' | t }}</button> -->
-                        <!-- <a href="#top"> -->
-                          <button type="button" class="announcement-bar__button annoncement_bar_mob acconuSub buttonAnnSub sub_sec"    data-action="toggle-newsletter" aria-expanded="false" aria-controls="announcement-bar-newsletter">
+                        <a href="#top"><button type="button" class="announcement-bar__button annoncement_bar_mob acconuSub buttonAnnSub sub_sec"    data-action="toggle-newsletter" aria-expanded="false" aria-controls="announcement-bar-newsletter">
                                                      Subscribe
-                          </button>
-                        <!-- </a> -->
+                          </button></a>
        
                       {%- endif -%}
                     {%- endform -%}
               
-                <a class="footer__link-item link desktpsize" style="display:none !important;" onclick="resizeWin()">Click to Desktop View</a>
-                                            <!--footerSocialMedia-->
-                    <div class="footerSocial footer_view_catalog" >
-                      <div class="text-center">
-                              <ul>
-                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="//www.facebook.com/pages/Portsmouth-RI/Hodges-Badge-Company/135209996731" target="_blank"><img src="//cdn.shopify.com/s/files/1/0574/5901/5852/t/4/assets/FB-Logo__32.gif?v=15765800314746081793"></a>&nbsp;&nbsp;
-                               <!--  <a href="http://blog.hodgesbadge.com/" target="_blank"><img src="/images/art/ic_blog_32w.jpg" border="0"></a>&nbsp;&nbsp;-->
-                                 <a href="//www.twitter.com/hodgesbadge" target="_blank"><img src="//cdn.shopify.com/s/files/1/0574/5901/5852/t/4/assets/twitter-bird-big-32w.png?v=4130767318676523134"></a>  &nbsp; 
-                                  <a href="//www.pinterest.com/hodgesbadge/" target="_blank"><img src="//cdn.shopify.com/s/files/1/0574/5901/5852/t/4/assets/pinterest_badge_32w.png?v=13681683555543725769"></a>&nbsp;
-                                 <a href="//www.linkedin.com/company/hodges-badge-company" target="_blank"><img src="//cdn.shopify.com/s/files/1/0574/5901/5852/t/4/assets/LinkedIn-TMWhite.png?v=10169738057483297653"></a>&nbsp; 
-      <a href="https://www.instagram.com/hodgesbadge/" target="_blank"><img src="//cdn.shopify.com/s/files/1/0574/5901/5852/t/4/assets/Instagram-Icon-32w.jpg?v=14346752534744503623"></a>
-               </ul>
-                       </div>
-                      <div>
-                        
-                        <a href=""> <div class="catalog-image_footer"> <a href="https://hodges-badge-sandbox-dev.myshopify.com/pages/catalog-request">
-                         <img src="//cdn.shopify.com/s/files/1/0574/5901/5852/t/4/assets/flipbook_catalogs_150x140.jpg?v=612724523098398625"> </div></a> <!--catalog-image--></a>
-                       </div>
-                     </div>
-                  </div>
-                </div>
+<a class="footer__link-item link desktpsize" style="display:none !important;" onclick="resizeWin()">Click to Desktop View</a>
+<!--footerSocialMedia-->
+<style>
+  .footer_social_catalog_wrap {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+    gap: 12px;
+  }
+  .footer_social_heading {
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 0px 10px 0px 10px;
+  }
+  .footer_social_catalog_wrap .footer_icons_block {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+    padding: 0px 10px 0px 10px;
+  }
+  .footer_social_catalog_wrap .footer_catalog_block {
+    width: 100%;
+    max-width: 150px;
+    margin: 0 auto;
+  }
+  .footer_social_catalog_wrap .footer_catalog_block a {
+    display: block;
+    width: 100%;
+    padding-bottom: 8px;
+  }
+  .footer_social_catalog_wrap .footer_catalog_block img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>
+
+<div class="footerSocial footer_view_catalog footer_social_catalog_wrap">
+
+  <p class="footer_social_heading">Follow and tag @hodgesbadge</p>
+
+  <div class="footer_icons_block">
+    <a href="https://www.facebook.com/hodgesbadge/" target="_blank"><img alt="Hodges Badge Company on Facebook" loading="lazy" height="32" width="32" src="https://hodgesbadge.azureedge.net/test-aydev/social-media-facebook-Icon.png"></a>
+    <a href="https://www.instagram.com/hodgesbadge/" target="_blank"><img alt="Hodges Badge Company on Instagram" loading="lazy" height="32" width="32" src="https://hodgesbadge.azureedge.net/test-aydev/social-media-instagram-Icon.png"></a>
+    <a href="https://x.com/hodgesbadge" target="_blank"><img alt="Hodges Badge Company on X" loading="lazy" height="32" width="32" src="https://hodgesbadge.azureedge.net/test-aydev/social-media-x-Icon.png"></a>
+    <a href="https://www.pinterest.com/hodgesbadge/" target="_blank"><img alt="Hodges Badge Company on Pinterest" loading="lazy" height="32" width="32" src="https://hodgesbadge.azureedge.net/test-aydev/social-media-pinterest-Icon.png"></a>
+    <a href="https://www.linkedin.com/company/hodges-badge-company" target="_blank"><img alt="Hodges Badge Company on LinkedIn" loading="lazy" height="32" width="32" src="https://hodgesbadge.azureedge.net/test-aydev/social-media-linkedin-Icon.png"></a>
+    <a href="https://www.youtube.com/@HodgesBadge1920" target="_blank"><img alt="Hodges Badge Company on YouTube" loading="lazy" height="32" width="32" src="https://hodgesbadge.azureedge.net/test-aydev/social-media-youtube-Icon.png"></a>
+    <a href="https://www.tiktok.com/@hodgesbadge" target="_blank"><img alt="Hodges Badge Company on TikTok" loading="lazy" height="32" width="32" src="https://hodgesbadge.azureedge.net/test-aydev/social-media-tiktok-Icon.png"></a>
+  </div>
+
+  <div class="footer_catalog_block">
+    <a href="https://hodges-badge-sandbox-dev.myshopify.com/pages/catalog-request">
+      <div class="catalog-image_footer">
+        <img alt="View our latest digital catalogs" loading="lazy" src="//cdn.shopify.com/s/files/1/0574/5901/5852/t/4/assets/flipbook_catalogs_150x140.jpg?v=612724523098398625">
+      </div>
+      <!--catalog-image-->
+    </a>
+  </div>
+
+</div>
             {%- endcase -%}
           {%- endfor -%}
         </div>

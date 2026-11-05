@@ -9,7 +9,6 @@ const dpi = 72;
 function addImageToCanvas(imageUrl, id) {
   return new Promise((resolve, reject) => {
     fabric.Image.fromURL(imageUrl, (img) => {
-      // console.log(imageUrl,'imageurl');
       img.set({ selectable: false, id: id, isBaseimg: true });
       img.objectCaching = false;
       if (id == 'ruler') {

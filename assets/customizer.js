@@ -40,7 +40,7 @@ async function loadCanvasImages() {
     promises.push(promise);
 
   }
-
+ 
  if(window.innerWidth>=999){
   let rectanglecount = false;
   let previewImage = document.getElementById("magnifier1")
@@ -56,8 +56,6 @@ async function loadCanvasImages() {
     selectable: false,
     evented: false
   });
-
-
   // Function to capture the mouse movement
   canvas.on('mouse:move', function (options) {
     if (!rectanglecount) {
@@ -129,10 +127,10 @@ async function loadCanvasImages() {
     canvas2.remove(mouseRectangle)
   });
  }
-   Promise.all(promises)
+  Promise.all(promises)
     .then(() => {
       updateImageSrc(canvas);
-      updateSrc(canvas,hopsProdId);
+    updateSrc(canvas,hopsProdId);
       $(".customizer_btn.product-gallery__thumbnail").click();
       canvas.renderAll();
       fontload();
@@ -145,9 +143,7 @@ async function loadCanvasImages() {
     .catch(error => {
       console.error("Error loading images:", error);
     });
-
-  }
-
+}
 
 
 
@@ -355,8 +351,7 @@ function renderCanvas() {
     borderObjects = canvas.getObjects().filter(obj => obj.border == true)
   }
   canvas.renderAll();
-  // var dataURL = canvas.toDataURL();
-  // console.log(dataURL);  
+ 
 }
 
 function createGroup(object, key) {
@@ -654,6 +649,7 @@ function processPngImage(value) {
     var img = new Image();
     img.src = value;
     img.crossOrigin = 'Anonymous';
+   // console.log('imgextension',imgextension)
     img.onload = function () {
       canvas.width = img.width;
       canvas.height = img.height;
@@ -673,15 +669,15 @@ function processPngImage(value) {
       // Loop through the pixels and make white pixels transparent
       if(!isFullyWhite){
         for (var i = 0; i < pixels.length; i += 4) {
-        var red = pixels[i];
-        var green = pixels[i + 1];
-        var blue = pixels[i + 2];
+              var red = pixels[i];
+              var green = pixels[i + 1];
+              var blue = pixels[i + 2];
         // Check if the pixel is white (you can adjust the tolerance)
-        if (isTransparent(red, green, blue)) {
-          pixels[i + 3] = 0; // Set alpha (transparency) to 0
+          if (isTransparent(red, green, blue)) {
+            pixels[i + 3] = 0; // Set alpha (transparency) to 0
+          }
+         }
         }
-      }
-      }
      ctx.putImageData(imageData, 0, 0);
       ctx.globalCompositeOperation = "source-atop";
      // ctx.fillStyle = 'rgb(255, 0, 0)'; // red
@@ -728,19 +724,6 @@ function isTransparent(r, g, b) {
   var tolerance = 40;// Adjust this value as needed
   return r > 255 - tolerance && g > 255 - tolerance && b > 255 - tolerance;
 }
-function checkIfImageIsFullyWhite(ctx, width, height) {
-  const imageData = ctx.getImageData(0, 0, width, height);
-  const data = imageData.data;
-  //const tolerance = 40;
-
-  for (let i = 0; i < data.length; i += 4) {
-    const alpha = data[i + 3];
-  if (alpha === 0) {
-      return true; // Found a pixel fully transparent
-  }
-}
-  return false; 
-}
 
 function processImagePromise(value) {
   return new Promise(function (resolve, reject) {
@@ -765,7 +748,7 @@ function processImagePromise(value) {
         if (isWhite(red, green, blue)) {
           pixels[i + 3] = 0; // Set alpha (transparency) to 0
         }
-      }
+        }
       // Put the modified pixel data back on the canvas
       ctx.putImageData(imageData, 0, 0);
       // Convert the canvas to a PNG data URL
@@ -852,7 +835,7 @@ async function download() {
       }
       await Promise.all(promises);
    var settings = {
-        "url": "https://hops-connect.dev.hodgesbadge.com/api/Customizer/UploadCustomizerImages",
+        "url": "https://hops-connect.staging.hodgesbadge.com/api/Customizer/UploadCustomizerImages",
         "method": "POST",
         "timeout": 0,  
         "processData": true,
@@ -871,7 +854,7 @@ async function download() {
           reject(errorThrown);
           document.getElementById("loaderbg").style.display = "none";
           $(".fa-spin").hide();
-           alert('Something went wrong! Please try again!')
+          // alert('Something went wrong! Please try again!')
           //$(".reject_error").show();
           return false;
         });
@@ -893,8 +876,8 @@ async function changeFontFamily(_this, id) {
  });
   await renderTextOnCanvas();
   renderCanvas()
-  $('#canvasName').text('');
   // await applyToVariations();
+  $('#canvasName').text('');
   $("#container2").hide();
   $("#container1").show();
   selectedSlider($(`#${hopsProdId}`));
@@ -904,8 +887,7 @@ async function changeFontFamily(_this, id) {
 
   }
   else{
-    console.log($(_this).val())
-    var input = $(`#${id}:input`);
+  var input = $(`#${id}:input`);
     var inputs = $(`[name="${id}"]`);
 
     inputs.attr('data-font-family', $(_this).val())
@@ -919,7 +901,7 @@ async function changeFontFamily(_this, id) {
 async function changeFontSize(_this, id) {
     if(id==="02All"){
     var value=document.querySelectorAll('.fontapply')
-    // console.log(value,'value')
+    console.log(value,'value')
    value.forEach(function(element) {
   element.setAttribute('data-font-size', $(_this).val());
 
@@ -927,16 +909,16 @@ async function changeFontSize(_this, id) {
    await renderTextOnCanvas();
    renderCanvas();
  // await applyToVariations();
-   $('#canvasName').text('');
-   $("#container2").hide();
-   $("#container1").show();
-   selectedSlider($(`#${hopsProdId}`));
+  $('#canvasName').text('');
+  $("#container2").hide();
+  $("#container1").show();
+  selectedSlider($(`#${hopsProdId}`));
    await applyToVariations();
    var input = $(`#${id}:input`);
    input.attr('data-font-size', $(_this).val())
   }
   else{
-    var input = $(`#${id}:input`);
+  var input = $(`#${id}:input`);
     var inputs = $(`[name="${id}"]`);
     inputs.attr('data-font-size', $(_this).val())
   }
@@ -947,7 +929,6 @@ async function changeFontSize(_this, id) {
 
 //Function to get the fontSize & fontfamily
 function getFontdetails(input) {
-  console.log(input,'inputtt');
   var family = input.attr('data-font-family')
   var size = input.attr('data-font-size')
   if (family == undefined || family == "") {
@@ -1174,7 +1155,6 @@ async function canvasVariation(_this, VarID) {
   selectedSlider($(`#${id}`));
   $('#canvasName').text('Variation ' + id.split('V')[1]);
   $('#canvasName').attr('Variation', id.split('V')[1]);
-  console.log(window.innerWidth,'innerwidr');
   if(window.innerWidth>=999){
      $(".customizer_btn.product-gallery__thumbnail").click();
   }
@@ -1313,8 +1293,6 @@ async function renderTextOnCanvasVariation(variationObject, isbase) {
 
         if (OptionsType[optionId] === 'Text') {
           if ((value != '' && value != 'Select a Stock Design') || (variationObject[optionId] !== undefined && variationObject[optionId].val() != '')) {
-            // var [fontFamily, fontSize] = getFontdetails(_input);
-            
             if (variationObject[optionId] !== undefined) {
               _input = variationObject[optionId];
               value = _input.val();
@@ -1449,70 +1427,7 @@ function removecanvasObject(element) {
 }
 
 
-// TO update the all the variation object properties like base product
-// async function applyToVariations() {
-//   // var urlParams = new URLSearchParams(window.location.search);
-//   // if (urlParams.has("cart_id")) {
-//   //   return false
-//   // } 
-//   // if(!Editcustom) return false;
-//   if ($(".variationsAddToCart")[0]) {
-//     printLineVariationObjects = [];
-//     for (var elementI of $(".variationsAddToCart")) {
-//       var _varId = $(elementI).attr("id");
-//       // console.log($(elementI).childrenAll('label').eq(0));
-//       let ele = $(elementI).find('label').eq(0)
-//       var variationObject = {};
-//       var Variation_id = 'V'+$(ele).attr('data-variation');
-//       if (baseObjects) {
 
-//         canvasObjects[Variation_id] = cloneObjectsOnCanvas(canvas.getObjects())
-
-//       }
-//       for (var element of $("#" + _varId + " li")) {
-//         var input = $(element).find('input');
-//         if ($(input).attr('id') == undefined) continue
-//         var varId = $(input).attr('id').includes("_") ? $(input).attr('id').split('_').slice(0, -1).join('_').split('_v')[0] : $(input).attr('id');
-
-//         for (var option of CanvasOptions) {
-//           var obj = canvasObjects[Variation_id].find(obj => obj.id === option.layer);
-//           if (varId == option.optionId) {
-//             if (OptionsType[varId] === "Color") {
-//               // await findColorOrPattern(obj, input, option);
-//               obj.filters = [new fabric.Image.filters.BlendColor({ color: '#000000' })];
-//               obj.applyFilters();
-//             } else if (OptionsType[varId] === "PrintColor") {
-//               findPrintColor(input);
-//             } else if (OptionsType[varId] == "Border") {
-//               await findBorder(_this, option)
-//             } else if (OptionsType[varId] === "Text" || OptionsType[varId] == "Image") {
-//               variationObject[varId] = input;
-//             }
-//           }
-//         }
-//       }
-
-//       if (Object.keys(variationObject).length > 0) {
-//         await renderTextOnCanvasVariation(variationObject, false);
-//       }
-//       if (printLineVariationObjects.length > 0) {
-
-//         canvasObjects[Variation_id] = canvasObjects[Variation_id].filter(obj => obj.id == 'ruler' || obj.isBaseimg == true);
-//         canvasObjects[Variation_id].push(...printLineVariationObjects);
-//         printLineVariationObjects = [];
-//         if (isborder) {
-//           if (borderObjects.length > 0) {
-//             canvasObjects[Variation_id].push(...borderObjects);
-//           }
-//         }
-//         if (canvasObjects[Variation_id].length > 0) {
-//           // canvasObjects[Variation_id] = cloneObjectsOnCanvas(canvasObjects[Variation_id])
-//         }
-//       }
-//       updateSrc( canvasObjects[Variation_id],Variation_id,true);
-//     }
-//   }
-// }
 async function applyToVariations(edit = false){
   await updateSrc(canvas,hopsProdId); 
   if ($(".variationsAddToCart")[0]) {
@@ -1586,7 +1501,7 @@ async function applyToVariations(edit = false){
           var objectsOnCanvas = canvas2.getObjects();
           if (objectsOnCanvas.length > 0) {
             canvasObjects[Variation_id] = canvasObjects[Variation_id];
-            if(edit){
+			if(edit){
               await updateSrc(canvas2,Variation_id,false,true); 
             }
           }
@@ -1598,6 +1513,10 @@ function prefillfontDetails(_this, Family, size) {
   if ($(_this).attr('type') == 'text'|| _this.is('select') ) {
     var value = $(_this).val();
     if (value.trim() != '' && value != null) {
+      // var fontFamily = $(_this).nextAll('div.select-container').children()[0]; 
+      // var fontSize = $(_this).nextAll('div.select-container').children()[1]; 
+      // $(fontSize).val(size); 
+      // $(fontFamily).val(Family); 
       _this.attr('data-font-family', Family)
       _this.attr('data-font-size', size)
     }
@@ -1653,10 +1572,7 @@ function prefillSpacer(_this, count) {
     $(`#${id}`).attr('data-id', Id)
     $(`#${id}`).attr('data-spacer', count)
   }
-   else if($(_this).hasClass("design_option")){
-    input.attr('data-spacer', count);
-    $('#uploadclick_seq').attr("data-spacer",count);
-  }
+
   else if($(_this).hasClass("print_input_place")){
     input.attr('data-spacer', count);
     $('.extraFieldValue').attr("data-spacer",count);
@@ -1685,19 +1601,17 @@ function prefillrange(_this, value) {
 
 // TO create the properties for each product
 function createProperties(_this) {
-  console.log(_this,'thisssssss');
   var sorting_order = _this.attr('data-sortingorder');
   console.log(sorting_order, "sorting_order");
   var slider = _this.attr('data-slider');
   var spacer = _this.attr('data-spacer');
   var family = _this.attr('data-font-family')
   var size = _this.attr('data-font-size')
-  var dataLabel=_this.attr("data-label");
   family = (typeof family === 'undefined') ? 0 : family;
   size = (typeof size === 'undefined') ? 0 : size;
   spacer = (typeof spacer === 'undefined') ? 0 : spacer;
   slider = (typeof slider === 'undefined') ? 0 : slider;
-  var object = family + '~' + size + '~' + spacer + '~' + slider + '~' + sorting_order + '~' + dataLabel;
+  var object = family + '~' + size + '~' + spacer + '~' + slider + '~' + sorting_order;
   return object;
 }
 
@@ -1705,7 +1619,7 @@ function createProperties(_this) {
 function prefillcanvasProperties(_this, props) {
   var id;
   if ($(_this).attr('id') == undefined) return false
-   if(!$(_this).attr('id').includes('_v')){
+  if(!$(_this).attr('id').includes('_v')){
    id = $(_this).attr('id').split('_')[0];
   }else{
     id = $(_this).attr('id')
@@ -1806,8 +1720,8 @@ function prefillaplyall(canvasprop, props){
 // }
 
 
-function displaySliderCanvas(_this) {
-   event.stopPropagation(); // Prevent event propagation
+function displaySliderCanvas(event,_this) {
+  event.stopPropagation(); 
   let varId =  $(_this).attr('id')
   let ID = $(_this).attr('id').split('V')[1];
   selectedSlider(_this)
@@ -1842,7 +1756,7 @@ function displaySliderCanvas(_this) {
     // $(`label[data-variation=${ID}]`).focus();
     if(window.innerWidth<=767){
       const element = document.querySelector(`label[data-variation='${ID}']`);
-      if (element) {
+        if (element) {
         const elementRect = element.getBoundingClientRect();
         // const elementWidth = elementRect.width;
         const elementHeight = elementRect.height;       
@@ -1856,10 +1770,10 @@ function displaySliderCanvas(_this) {
           behavior: 'smooth'
         });
       }
-}
-else{
-  $(`label[data-variation=${ID}]`).focus();
-}
+  }
+  else{
+    $(`label[data-variation=${ID}]`).focus();
+  }
     canvasVariation($(`label[data-variation=${ID}]`).nextAll('div').children('ul'), varId)
   }
 } 
@@ -1929,7 +1843,7 @@ function geteitherOrSeqvalues(_this) {
   return object
 }
 
-function processEitherorElement(_input,optionId = '',edit = false) {
+function processEitherorElement(_input, optionId = '',edit = false) {
   let url;
   let urlLable;
   let eitherOrspacer = $('.spacer.eitherorSeq_option').children().length;
@@ -1966,7 +1880,7 @@ function processEitherorElement(_input,optionId = '',edit = false) {
                 if(edit || !$("#enterUploadfile").is(":focus")){
               $('.custom_ui').css('display', 'none');
               $('.new_custom').css('display', 'block');
-            }
+              }
               url = CanvasImages['customDesign'];
               urlLable = _input.val();
               optionId = optionid;
@@ -2021,18 +1935,15 @@ function processEitherorElement(_input,optionId = '',edit = false) {
   let val = _input.val();
   console.log('val', val);
 
-  if (val == '' || val == 'Select a Stock Design') {
+ if (val == '' || val == 'Select a Stock Design') {
     if(!manualtrigger){
         $('.slider-container.eitherorSeq_option').css('display', 'none');
       }
         $("#newcustomImg").attr("src", "");
         $(".filename_newcustom").text("");
   } else {
-    // $('.custom_ui').css('display', 'none');
-    // // $('.pop-chosen-value.show').removeClass('show');
-    // $('.new_custom').css('display', 'block');
-     console.log(manualtrigger,'manuAL');
-     if (!manualtrigger || $('.new_custom').css('display') === 'block') {
+
+    if(!manualtrigger|| $('.new_custom').css('display') === 'block'){
     $('.slider-container.eitherorSeq_option').css('display', 'none');
     $('.showtoggle').css('display','none');
     }
@@ -2050,299 +1961,7 @@ if(!edit){
   return [_input, optionId];
 }
 
-// async function displayImageInNewTab(_this) {
-//   let tableRows = '';
 
-//   const canvasJson = $(_this).data('title');
-//   const productid = $(_this).data('id');
-//   const variation = $(_this).data('variation');
-//   const metafields=$(_this).data('metafields');
-// // Retrieve the properties JSON string from the data attribute
-// //  const properties = $(_this).data('properties');
-// // const canvas = $(_this).data('canvas');
-// // const spacer=$(_this).data('spacer')
-// // Parse the JSON string into a JavaScript obje
-// // properties.forEach((pair, index) => {
-// //   const [key, value] = pair; // Destructure the sub-array into key and value
-// //   console.log(`Pair ${index}: Key = ${key}, Value = ${value}`);
-// // });
-// // const dataObject = properties.reduce((acc, [key, value]) => {
-// //   acc[key] = value;
-// //   return acc;
-// // }, {});
-
-
-// // for (const key in canvas) {
-// //   if (canvas.hasOwnProperty(key)) {
-// //     const value = canvas[key];
-
-// //     // Split the value by '~'
-// //     const parts = value.split('~');
-
-// //     // Extract the necessary parts
-// //     const fontName = parts[0];
-// //     const fontSize = parts[1];
-// //     let placeText = parts[5];
-// //     console.log(placeText);
-// //     if(fontName!=0){
-// //       if(placeText===undefined){
-// //            placeText=key;
-// //       }
-     
-// //       const formattedResult = `${fontName} & ${fontSize}`;
-// //       tableRows += `<tr>
-// //               <td style="text-align: center;">${placeText}</td>
-// //               <td style="text-align: center;">${formattedResult}</td>
-// //           </tr>`;
-// //     }
-// //     else{
-
-// //     }
-
-// //   }
-// //   }
-
-
-//   // const variationValue = variation ? variation : 'base'; 
-//   const variationValue = variation || 'Base';
-//   const dateAndTime = new Date().toLocaleString(); // e.g., "MM/DD/YYYY, HH:MM:SS AM/PM"
-// const Name= $(_this).data('customer-name');
-// const Email= $(_this).data('customer-email');
-// const date=Date.now();
-// if(Email!=''){
-//   tableRows += `<tr>
-//   <td>Name</td>
-//   <td>${Name}</td>
-// </tr>
-// <tr>
-//   <td>Email</td>
-//   <td>${Email}</td>
-// </tr>`
-
-// }
-
-//   // const disclamier= shop.metafields.helpText.disclaimer.value
-//   // const currentDate = new Date();
-//   // const date = currentDate.toLocaleDateString(); // e.g., "MM/DD/YYYY"
-//   // const time = currentDate.toLocaleTimeString(); // e.g., "HH:MM:SS AM/PM"
-//   // console.log(productid);
-//   // const canvas = new fabric.Canvas('cartcanvas');
-//   // canvas.setWidth(500);
-//   // canvas.setHeight(500);
-//   // const canvasSpec = typeof canvasJson == 'string' ? JSON.parse(canvasJson.replace(/&quot;/g, '"')): canvasJson;
-//   //     for (const element of canvasSpec) {
-//   //       if (element.type == 'image') {
-//   //         await fabricImage(element,canvas);
-//   //       }
-//   //       else if (element.type == 'text') {
-//   //         const textObject = fabricText(element);
-//   //         canvas.add(textObject);
-//   //       }
-//   //       else if (element.type == 'group') {
-//   //         const group = await fabricGroup(element,canvas);
-//   //        canvas.add(group);
-//   //       }
-//   //     }
-//   //     canvas.renderAll();
-//   //     canvas.renderAll();
-//   //     const resizedBase64String = canvas.toDataURL({
-//   //             format: 'png',
-//   //             quality: 1,
-//   //             multiplier:4
-//   //           });
-//   let DownloadImage = $(_this).find('img').attr('src');
-//   const newTab = window.open();
-//   newTab.document.write(`
-//   <html>
-//   <head>
-//     <style>
-//       body {
-//         display: flex;
-//         justify-content: center;
-//         align-items: center;
-//         height: 100vh;
-//         margin: 0;
-//       }
-//       .container {
-//         display: flex;
-//         width: 195vh;
-//         height: 100%;
-//       }
-//       .left-side, .right-side {
-//         flex: 1;
-//       }
-//       .left-side {
-//         display: flex;
-//         justify-content: center;
-//         align-items: center;
-//         padding: 20px;
-//       }
-//       .right-side {
-//         display: flex;
-//         flex-direction: column;
-//         justify-content: center;
-//         padding: 20px;
-//         box-sizing: border-box;
-//       }
-//       img {
-//         max-width: 100%;
-//         max-height: 100%;
-//       }
-//       #logo-overlay {
-//         position: absolute;
-//         width: 12%;
-//         top: 20px;
-//         left: 20px;
-//       }
-//       #downloadButton {
-//         position: absolute;
-//         height: 4%;
-//         color: white;
-//         cursor: pointer;
-//         width: 8%;
-//         border-radius: 0%;
-//         border: none;
-//         bottom: 8%;
-//         background-color: green;
-//         right: 18%;
-//       }
-//       table {
-//         border-collapse: collapse;
-//         width: 100%;
-//       }
-//       table, th, td {
-//         border: 1px solid black;
-//       }
-//       th, td {
-//         padding: 8px;
-//         text-align: center;
-//       }
-//       th {
-//         background-color: #f2f2f2;
-//       }
-//     </style>
-//     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-//   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-// </head>
-// <body>
-//   <div class="container">
-//     <div class="left-side">
-//       <img src="${DownloadImage}" alt="Base64 Image">
-//     </div>
-//     <div class="right-side">
-//       <div id="print-info">
-//         <table>
-//           <thead>
-//             <tr>
-//               <th colspan="2">Information</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//           <tr>
-//           <td>Product Name</td>
-//           <td>${canvasJson}</td>
-//         </tr>
-//         <tr>
-//         <td>Product Id</td>
-//         <td>${productid}</td>
-//       </tr>
-//             <tr>
-//               <td>Variation</td>
-//               <td>${variationValue}</td>
-//             </tr>
-//             ${tableRows}
-//             <tr>
-//               <td>Date</td>
-//               <td>${dateAndTime}</td>
-//             </tr>
-//           </tbody>
-//         </table>
-//       </div>
-//       <div class="disclaimer">
-//       <p><strong>Disclaimer:</strong>${metafields}</p>
-//     </div>
-//       <img id="logo-overlay" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/100_year_anniversary_page-0001.jpg?v=1678857921" alt="Logo">
-//       <button id="downloadButton" onclick="downloadPdf()">Download PDF</button>
-//     </div>
-//   </div>
-//   <script>
-//   function downloadPdf() {
-//     const { jsPDF } = window.jspdf;
-//     const doc = new jsPDF('p', 'mm', 'a4'); // Use portrait mode ('p') and A4 size
-
-
-//     // Document margins and dimensions
-//     const margin = 5;
-//     const pageWidth = doc.internal.pageSize.getWidth();
-//     const pageHeight = doc.internal.pageSize.getHeight();
-//     const contentWidth = pageWidth - margin * 2; // Width available for content after margins
-//     const contentHeight = pageHeight - margin * 2; // Height available for content after margins
-  
-//     // Image settings
-//     const imgWidth = 100; // Set image width
-//     const imgHeight = 90; // Adjust height based on aspect ratio
-//     const imgX = -13; // X position for the image
-//     const imgY = 10; // Y position for the image, slightly below the top margin
-//     // Prepare data for the table
-//     const Name = $(_this).data('customer-name') || '';  // Fetch the Name from data attribute or default to an empty string if undefined
-//     const Email = $(_this).data('customer-email') || ''; 
-//      const tableData = [
-//       ["Product", "${canvasJson}"],
-//       ["Product Id", "${productid}"],
-//       ["Variation", "${variationValue}"],
-//       ["Timestamp", "${dateAndTime}"]
-//     ];
-//     if (Name !== '') {
-//       tableData.push(["Name", "${Name}"]);
-//     }
-    
-//     if (Email !== '') {
-//       tableData.push(["Email","${Email}"]);
-//     }
-//     // Adding title to the PDF
-//     doc.setFontSize(14);
-//     // const title = "Customized Document";
-//     // const titleWidth = doc.getStringUnitWidth(title) * doc.internal.getFontSize() / doc.internal.scaleFactor;
-//     // const titleX = (pageWidth - titleWidth) / 2;
-//     // doc.text(title, titleX, margin + 10);
-  
-//     // Add the image on the left side
-//     doc.addImage("${DownloadImage}", 'JPEG', imgX, imgY, imgWidth, imgHeight);
-  
-//     // Calculate table position
-//     const tableStartX = imgX + imgWidth + margin; // Table starts right after the image
-//     const tableStartY = imgY; // Align table to the image's top
-  
-//     // Add the table on the right side
-//     doc.autoTable({
-//       startY: 20, // Align table to image top
-//       margin: { left: tableStartX }, // Set margin to position table on the right of the image
-//       head: [['Information', '']], // Header row with colspan
-//       body: tableData,
-//       theme: 'grid', // Use grid theme for better visual appearance
-//       styles: {
-//         cellPadding: 3,
-//         fontSize: 10,
-//       },
-//       headStyles: { fillColor: [211, 211, 211], halign: 'center' }, // Header styles
-//       columnStyles: {
-//         0: { cellWidth: 'auto', halign: 'left' }, // Field column
-//         1: { cellWidth: 'auto', halign: 'left' }  // Value column
-//       },
-//       // Specify the column widths
-//       columnWidths: [100, 100], // Adjust these widths as needed
-//     });
-//     // Save the PDF
-//     doc.save('${productid}_${variationValue}_${date}.pdf');
-//   }
-  
-//   </script>
-//   </body>
-//   </html>
-//   `);
-  
-
-// }
 async function displayImageInNewTab(_this) {
   let tableRows = '';
 
@@ -2374,6 +1993,7 @@ console.log(Email,'Emilll');
   newTab.document.write(`
   <html>
   <head>
+    <title>Image in New Tab</title>
     <style>
       body {
         display: flex;
@@ -2413,7 +2033,7 @@ console.log(Email,'Emilll');
         top: 20px;
         left: 20px;
       }
-      #downloadButton {
+      #downloadButton{
         position: absolute;
         height: 4%;
         color: white;
@@ -2447,7 +2067,7 @@ console.log(Email,'Emilll');
   <body>
     <div class="container">
       <div class="left-side">
-        <img src="${DownloadImage}" alt="Base64 Image">
+    <img src="${DownloadImage}" alt="Base64 Image">
       </div>
       <div class="right-side">
         <div id="print-info">
@@ -2481,11 +2101,11 @@ console.log(Email,'Emilll');
         <div class="disclaimer">
           <p><strong>Disclaimer:</strong>${metafields}</p>
         </div>
-        <img id="logo-overlay" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/100_year_anniversary_page-0001.jpg?v=1678857921" alt="Logo">
+    <img id="logo-overlay" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/100_year_anniversary_page-0001.jpg?v=1678857921" alt="Logo">
         <button id="downloadButton" onclick="downloadPdf()">Download PDF</button>
       </div>
     </div>
-    <script>
+        <script>
       function downloadPdf() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF('p', 'mm', 'a4');
@@ -2523,13 +2143,12 @@ console.log(Email,'Emilll');
         });
 
         doc.save('${productid}_${variationValue}_${date}.pdf');
-      }
-    </script>
-  </body>
+          }
+        </script>
+    </body>
   </html>
-  `);
+`);
 }
-
 
 async function fabricImage(element,canvas) {
   return new Promise((resolve, reject) => {
@@ -2722,7 +2341,7 @@ function getfirstoption(option) {
 
 function fontedit(_this, id, label, size, isVariation) {
 
-if ($(_this).hasClass('fontEdit') && window.innerWidth>=999) {
+  if ($(_this).hasClass('fontEdit') && window.innerWidth>=999) {
   $(_this).addClass('showborder');
 }
   event.preventDefault();
@@ -2768,12 +2387,10 @@ if ($(_this).hasClass('fontEdit') && window.innerWidth>=999) {
   });
   const modal = document.getElementById('fontFamilyPopup');
   window.addEventListener('click', function (event) {
-
     if (event.target == modal) {
     $('.showborder').removeClass('showborder');
 
       modal.style.display = 'none';
-
     }
   });
 
@@ -2802,6 +2419,7 @@ function populateSelectOptions(selectElement, optionsArray, defaultFonts, defaul
 
 function VideoPopup() {
   $('#Modal_video').css('display', 'block');
+  
 }
 function closepopup() {
   $('#Modal_video').css('display', 'none');
@@ -2821,9 +2439,11 @@ function viewCanvasImage(){
   $('#View_image').css('display', 'block');
 }
 function viewfaqImage(_this){
+  if(window.innerWidth<=767){
   $('#Modal_question').css('display', 'none');
   $('#View_FAQimage img').attr("src", _this.src);
   $('#View_FAQimage').css('display', 'block');
+  }
 }
 function closeCustomDesign(){
   $('.new_custom').css('display','block');
@@ -2846,7 +2466,7 @@ function closeCustomizerFAQ() {
 }
 function toggleAnswer(answerId,_this) {
   let previous=$(_this).children().eq(0).attr('class');
-$('.faq-answer1').css('display','none')
+ $('.faq-answer1').css('display','none')
 $('.faq-answer').css('display','none')
 $('.fa-caret-down').removeClass('fa-caret-down').addClass('fa-caret-right')
 $(_this).children().eq(0).attr('class',previous)
@@ -2860,12 +2480,11 @@ $(_this).children().eq(0).attr('class',previous)
 }
 function expandProperties(){
   let imgElement = document.getElementById('expand-details');
-  console.log(imgElement,'imggggg');
   let stickyCard = document.querySelector('.card--sticky');
   // let currentSrc = imgElement.getAttribute('src');
   if (stickyCard.style.display === 'none') {
     $('.close-span').remove();
- $(".product-meta").removeClass('addCssforexpand')
+    $(".product-meta").removeClass('addCssforexpand')
     // $(".product-block-list__item--description").css("display","block")
     $("#shopify-section-footer").css("display","block")
     $(".product-recommendations").css("display","block")
@@ -3087,7 +2706,6 @@ async function updateSrc(Canvas, Id, edit = false,editcustom) {
     });
       newCanvas.add(...Canvas);
       canvasUrl = await renderCanvasToImage(newCanvas);
-      //console.log(canvasUrl,'cnvas');
     } else {
       excludeObjectsFromExport(Canvas);
       canvasUrl = await renderCanvasToImage(Canvas);
@@ -3102,7 +2720,7 @@ function CreateSliderElement(Id,canvasUrl,isselected = true){
   if ($(`#${Id}`).length > 0) {
     $(`#${Id}`).attr('src', canvasUrl);
   } else {
-    $('.image-container').append(`<img id='${Id}' class='view_slider' src='${canvasUrl}' onclick='displaySliderCanvas(this)'>`);
+    $('.image-container').append(`<img id='${Id}' class='view_slider' src='${canvasUrl}' onclick='displaySliderCanvas(event,this)'>`);
     if(Id !== hopsProdId){
       $(`#${Id}`).before(`<span class='sliderId' > ${Id}</span>`);
     }
@@ -3120,25 +2738,7 @@ function selectedSlider(_this){
   });
   $(_this).addClass("isSelect");
 }
-// async function prefillcanvas(prop,id){
-//   canvas.clear()
-//   for (const element of prop) {
-//     if (element.type == 'image') {
-//       await fabricImage(element,canvas);
-//     }
-//     else if (element.type == 'text') {
-//       const textObject = fabricText(element);
-//       canvas.add(textObject);
-//     }
-//     else if (element.type == 'group') {
-//       const group = await fabricGroup(element,canvas);
-//      canvas.add(group);
-//     }
-//   }
-//   canvas.renderAll();
-//   canvasObjects[id.split('_')[0]] = canvas.getObjects();
-//   updateSrc(canvas,id.split('_')[0]);
-// }
+
 async function prefillcanvas(){
   for (element of $("#CommonOptions li")) {
     let _input = $(element);
@@ -3162,7 +2762,7 @@ async function prefillcanvas(){
   await renderTextOnCanvas();
   renderCanvas()
   }
-
+  
 
 function loadSpecsInCanvas(id){
   canvas.clear();
@@ -3173,7 +2773,6 @@ function loadSpecsInCanvas(id){
   const data = canvas.toDatalessJSON(['id','isBaseimg','border'])
  return  JSON.stringify(data.objects)
 }
-
 
 function onSliderChange_new(_this,id){
   var value = $(_this).val();
@@ -3395,9 +2994,9 @@ function tabkeyBehavior(){
       }
       inputsAndSelects.eq(nextIndex).focus();
     }
-  });
+      });
 }
-
+ if (window.innerWidth <= 767 && _isCanvasEnabled) {
 document.addEventListener('DOMContentLoaded', function () {
   const dropdownToggle = document.getElementById('dropdownToggle');
   const dropdownMenu = document.querySelector('.dropdown-menu');
@@ -3422,189 +3021,8 @@ document.addEventListener('DOMContentLoaded', function () {
     dropdownToggle.classList.remove('active');
   });
 });
+}
 
-// if (window.location.pathname.includes('/products/')) {
-//   // Define the beforeunload handler
-//   const beforeUnloadHandler = function (event) {
-//     // Prevent the default action of leaving the page
-//     event.preventDefault();
-//     event.returnValue = ''; // Triggers the generic warning message
-//     return '';
-//   };
-
-//   // Add the beforeunload event listener on the products page
-//   window.addEventListener('beforeunload', beforeUnloadHandler);
-
-//   // Function to remove the beforeunload event listener
-//   function removeBeforeUnloadListener() {
-//     window.removeEventListener('beforeunload', beforeUnloadHandler);
-//   }
-//   // Get the cart button by its ID
-//   const cartButton = document.getElementById('cart-actions');
-
-//   if (cartButton) {
-//     // Add event listener to the cart button
-//     cartButton.addEventListener('click', function (event) {
-//       // Remove the beforeunload event listener when navigating to the cart
-//       removeBeforeUnloadListener();
-
-//     });
-//   }
-// }
-// if(window.innerWidth<=767 && _isCanvasEnabled){
-// // Function to show the custom modal
-// function showUnsavedChangesModal() {
-//   document.getElementById("unsavedChangesModal").style.display = "block";
-// }
-
-// // Function to hide the modal
-// function hideUnsavedChangesModal() {
-//   document.getElementById("unsavedChangesModal").style.display = "none";
-// }
-
-// // Handle "Stay" button click
-// document.getElementById("stayBtn").addEventListener("click", function() {
-//   hideUnsavedChangesModal();
-//   history.pushState({}, ''); // Push the state back after staying on the page
-// });
-
-// // Handle "Leave page" button click
-// document.getElementById("leaveBtn").addEventListener("click", function() {
-//   window.onpopstate = null; // Allow leaving without the modal
-//   window.history.back(); // Go back to the previous page
-// });
-
-// // Detect browser back/forward navigation
-// window.addEventListener('popstate', function(event) {
-//   showUnsavedChangesModal();
-// });
-
-// // Push a dummy state into the history so that the popstate event is triggered on back/forward navigation
-// window.history.pushState({}, '');
-
-// document.querySelectorAll('a').forEach(link => {
-//   // Check if the link is inside an excluded <li> or has an excluded class
-//   const isExcluded = link.classList.contains('header__action-item-link') || link.classList.contains('close');
-//   if (!isExcluded) {
-//     link.addEventListener('click', function(event) {
-//       event.preventDefault(); // Prevent navigation
-//       console.log(link.getAttribute('href'),'link.getAttribute');
-//       if (link.getAttribute('href') !== "#") {
-//         showUnsavedChangesModal(); // Show the custom modal
-//     }
-//       // Handle "Leave page" button click in modal
-//       document.getElementById("leaveBtn").addEventListener("click", function() {
-//         window.location.href = link.href; // Navigate to the clicked link after confirmation
-//       }, { once: true }); // Use { once: true } to ensure the event listener is removed after being triggered once
-//     });
-//   }
-// });
-
-// // Intercept form submissions
-// document.querySelectorAll('form').forEach(form => {
-//   form.addEventListener('submit', function(event) {
-//     event.preventDefault(); // Prevent form submission
-//     showUnsavedChangesModal(); // Show custom modal
-
-//     // Handle "Leave page" button click
-//     document.getElementById("leaveBtn").addEventListener("click", function() {
-//       form.submit(); // Submit the form after confirmation
-//     });
-//   });
-// });
-
-// }
-
-// let initialFormState = {};  // Object to store initial values
-// let isPageModified = false;  // To track if any changes were made
-// let pendingNavigationUrl = "";  // To store the pending URL if the user wants to leave
-
-// // Save initial form state
-// function saveInitialState() {
-//     document.querySelectorAll('input[type="text"]').forEach(element => {
-//         initialFormState[element.id] = element.value;
-//     });
-// }
-
-// // Compare current state with initial state to detect changes
-// function checkIfFormModified() {
-//     let modified = false;
-// // console.log(document.querySelectorAll('input[type="text"]'),'modified');
-//     document.querySelectorAll('input[type="text"]').forEach(element => {
-//         let currentValue = element.value;
-//         let initialValue = initialFormState[element.id];
-//         console.log(initialFormState,'initialFormState');
-//         // If the value is different from the initial value, mark as modified
-//         if ((currentValue !== initialValue) && initialValue!=undefined) {
-//           console.log(currentValue,'currentValue');
-//           console.log(initialValue,'initialValue');
-
-//             modified = true;
-//         }
-//     });
-
-//     return modified;
-// }
-
-// // Track form changes (text inputs, textareas, select elements)
-// document.querySelectorAll('input[type="text"]').forEach(element => {
-//     element.addEventListener('input[type="text"]', () => {
-//         isPageModified = checkIfFormModified();
-//     });
-
-//     element.addEventListener('change', () => {
-//         isPageModified = checkIfFormModified();
-//     });
-
-//     // For undo scenario, on every keyup event, re-check form state
-//     element.addEventListener('keyup', () => {
-//         isPageModified = checkIfFormModified();
-//     });
-// });
-
-// // Handle form reset, reset the modified flag and save new initial state
-// document.querySelectorAll('form').forEach(form => {
-//     form.addEventListener('reset', () => {
-//         saveInitialState();  // Re-save the initial state after reset
-//         isPageModified = false;  // Reset modified flag
-//     });
-// });
-
-// // Show the custom modal when unsaved changes exist
-// function showUnsavedChangesModal() {
-//     const modal = document.getElementById('unsavedChangesModal');
-//     modal.style.display = 'block';  // Show modal
-
-//     // Stay on the current page
-//     document.getElementById('stayBtn').addEventListener('click', () => {
-//         modal.style.display = 'none';  // Hide modal
-//     });
-
-//     // Leave the page
-//     document.getElementById('leaveBtn').addEventListener('click', () => {
-//         isPageModified = false;  // Reset modified flag
-//         modal.style.display = 'none';  // Hide modal
-//         window.location.href = pendingNavigationUrl;  // Redirect to the stored URL
-//     });
-// }
-
-// // Intercept all link clicks to check if form is modified
-// document.querySelectorAll('a').forEach(link => {
-//     link.addEventListener('click', function(event) {
-//         if (isPageModified) {
-//             event.preventDefault();  // Prevent default navigation
-//             pendingNavigationUrl = event.target.href;  // Store the URL for later
-//             showUnsavedChangesModal();  // Show the modal
-//         } 
-//         // else {
-//         //     // Allow normal navigation if no changes were made
-//         //     window.location.href = event.target.href;
-//         // }
-//     });
-// });
-
-// // Save the initial form state when the page loads
-// window.onload = saveInitialState;
 if (window.innerWidth <= 767 && _isCanvasEnabled) {
 if (window.location.pathname.includes('/products/')) {
 
@@ -3702,6 +3120,7 @@ if (window.location.pathname.includes('/products/')) {
   // window.addEventListener('beforeunload', handleBeforeUnload);
 }
 }
+
 
 function removeFocus() {
   document.activeElement.blur();

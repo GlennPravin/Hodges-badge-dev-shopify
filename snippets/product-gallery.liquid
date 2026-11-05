@@ -1,4 +1,5 @@
 
+
 {%- capture contentForQuerystring -%}{{ content_for_header }}{%- endcapture -%}
     {%- assign pageUrl = contentForQuerystring | split:'"pageurl":"' | last | split:'"' | first | split:'.myshopify.com' | last |
        replace:'\/','/' | 
@@ -31,7 +32,7 @@
         <div class="card__section card__section--tight">
         {% if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true %}
             <span id="canvasName" style="visiblity:hidden;"></span>
-            <!-- <span
+            {% comment %} <span
               id='info-btn'
               class="fa fa-play"
               onclick="VideoPopup()"
@@ -40,26 +41,14 @@
               data-toggle="tooltip"
               data-placement="top"
               title="Click to View Customizer FAQ"
-              style="cursor:pointer;"></span> -->
-            <!-- <span
-              id='info-btn'
-              onclick="redirectToNewLink()"
-              class="fa fa-question-circle"
-              aria-hidden="true"
-              data-toggle="tooltip"
-              data-placement="top"
-              title="Click to View Customizer FAQ"
-              style="cursor:pointer;"></span> -->
-              <button 
-
-              onclick="redirectToNewLink()"
-             {% comment %} class="fa fa-question-circle"  {% endcomment %}
-               class="custom-button"
-              aria-hidden="true"
-              data-toggle="tooltip"
-              data-placement="top"
-              {% comment %} title="Click to View Customizer FAQ" {% endcomment %}
-              style="cursor:pointer;"><span class="help-text" >Help Me</span></button >
+              style="cursor:pointer;"></span> {% endcomment %}
+            <button 
+            onclick="redirectToNewLink()"
+             class="custom-button"
+            aria-hidden="true"
+            data-toggle="tooltip"
+            data-placement="top"
+            style="cursor:pointer;"><span class="help-text" >Help Me</span></button>
             <img
               id='info-btn'
               onclick="applyRuler(true)"
@@ -74,7 +63,7 @@
           {% endif %}
            {% if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true %}
           <div class="customization">
-            {{ shop.metafields.helpText.customizationNotes.value }}
+              {{ shop.metafields.helpText.customizationNotes.value }}
           </div>
           {% endif %}
           <div class="product-gallery {% if show_thumbnails_if_one_media %}product-gallery--with-thumbnails{% endif %}">
@@ -85,6 +74,7 @@
        
                   {%- if shopifyAlternateImages.size > 0 -%}
                       {%- assign counter = 0 -%}
+                      {%- assign rendered_media_ids = "," -%}
                       {%- for media in product.media -%}
                           {%- for image in product.images -%}
                          
@@ -93,14 +83,24 @@
     
                                       {% assign imageId = image.id | append: "" %}
                                       
-                                      {%- if imageId == Hops_media.imageSrc -%}
-                                       
+                                      {% assign mediaImageId = media.id | append: "" %}
+                                      {% assign hopsImageSrc = Hops_media.imageSrc | append: "" %}
+                                      {%- assign hops_id_match = false -%}
+                                      {%- if imageId == hopsImageSrc or mediaImageId == hopsImageSrc -%}
+                                          {%- assign hops_id_match = true -%}
+                                      {%- endif -%}
+                                      {%- assign media_id_token = "," | append: media.id | append: "," -%}
+                                      {%- if hops_id_match or forloop.last -%}
+                                          {%- if hops_id_match -%} 
                                           {%- if counter == 0 -%}
                                               {%- if Hops_media.marketId == itemShow -%}
                                                   {%- assign selected_media = media -%}
                                                   {%- assign counter = 1 -%}
                                               {%- endif -%}
                                           {%- endif -%}
+                                          {%- endif -%}
+                                          {%- unless rendered_media_ids contains media_id_token -%}
+                                          {%- assign rendered_media_ids = rendered_media_ids | append: media.id | append: "," -%}
                                           {%- assign is_media_group = false -%}
                                           {%- assign is_media_filtered = false -%}
                                           {%- assign media_alt = media.alt -%}
@@ -153,7 +153,7 @@
                                                           {%- assign image_url = media | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
     
                                                           <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: media.aspect_ratio }}%">
-                                                              <img loading='lazy'  class="product-gallery__image lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" data-zoom="{{ media | img_url: '1600x' }}" data-zoom-width="{{ media.width | at_most: 1600 }}" alt="{{ media_alt | escape }}">
+                                                              <img loading='lazy'  class="product-gallery__image lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" data-zoom="{{ media | img_url: '1600x' }}" data-zoom-width="{{ media.width | at_most: 1600 }}" alt="{{ media_alt | escape }}" data-image-branch="alternate">
     
                                                               <noscript>
                                                                   <img loading='lazy'  src="{{ media | img_url: '800x' }}" alt="{{ media_alt | escape }}">
@@ -183,6 +183,7 @@
                                                       </div>
                                               {%- endcase -%}
                                           </div>
+                                          {%- endunless -%}
                                       {%- endif -%}
                                   {%- endfor -%}
                               {%- endif -%}
@@ -215,7 +216,7 @@
                                                           {%- assign image_url = media | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
     
                                                           <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: media.aspect_ratio }}%">
-                                                              <img loading='lazy'  class="product-gallery__image lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" data-zoom="{{ media | img_url: '1600x' }}" data-zoom-width="{{ media.width | at_most: 1600 }}" alt="{{ media_alt | escape }}">
+                                                              <img loading='lazy'  class="product-gallery__image lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" data-zoom="{{ media | img_url: '1600x' }}" data-zoom-width="{{ media.width | at_most: 1600 }}" alt="{{ media_alt | escape }}" data-image-branch="special">
     
                                                               <noscript>
                                                                   <img loading='lazy'  src="{{ media | img_url: '800x' }}" alt="{{ media_alt | escape }}">
@@ -307,7 +308,7 @@
                                           {%- assign image_url = media | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
     
                                           <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: media.aspect_ratio }}%">
-                                              <img loading='lazy'  class="product-gallery__image lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" data-zoom="{{ media | img_url: '1600x' }}" data-zoom-width="{{ media.width | at_most: 1600 }}" alt="{{ media_alt | escape }}">
+                                              <img loading='lazy'  class="product-gallery__image lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" data-zoom="{{ media | img_url: '1600x' }}" data-zoom-width="{{ media.width | at_most: 1600 }}" alt="{{ media_alt | escape }}" data-image-branch="default">
     
                                               <noscript>
                                                   <img loading='lazy'  src="{{ media | img_url: '800x' }}" alt="{{ media_alt | escape }}">
@@ -359,7 +360,7 @@
               {%- endif -%}
             </div>
     
-            <div class="big_image"   data-media-type="image"  style="position: absolute; opacity: 1;width: 100%;display:none;">
+            <div class="big_image "   data-media-type="image"  style="position: absolute; opacity: 1;width: 100%;display:none;">
               <div class="product-gallery__size-limiter" style="max-width: 380px">
                <div
                   class="aspect-ratio"
@@ -393,15 +394,27 @@
                     </div>
                     </a>
                      {%- endif -%}
+    
+                    
+                    
                      {%- if shopifyAlternateImages.size > 0  -%}
                           {%- assign counter = 0 -%}
+                          {%- assign rendered_media_ids = "," -%}
                           {%- for media in product.media -%}
     
                               {%- for image in product.images -%}
                                   {%- if image.src == media -%}
                                       {%- for Hops_media in shopifyAlternateImages -%}
                                           {% assign imageId = image.id | append: "" %}
-                                          {%- if imageId == Hops_media.imageSrc -%}
+                                          {% assign mediaImageId = media.id | append: "" %}
+                                          {% assign hopsImageSrc = Hops_media.imageSrc | append: "" %}
+                                          {%- assign hops_id_match = false -%}
+                                          {%- if imageId == hopsImageSrc or mediaImageId == hopsImageSrc -%}
+                                              {%- assign hops_id_match = true -%}
+                                          {%- endif -%}
+                                          {%- assign media_id_token = "," | append: media.id | append: "," -%}
+                                          {%- if hops_id_match or forloop.last -%}
+                                              {%- if hops_id_match -%}
                                               {%- if counter == 0 -%}
                                                   {%- if  itemShow == '' -%}
                                                       {%- assign selected_media = media -%}
@@ -413,6 +426,9 @@
                                                       {%- assign counter = 1 -%}
                                                   {%- endif -%}
                                               {%- endif -%}
+                                              {%- endif -%}
+                                              {%- unless rendered_media_ids contains media_id_token -%}
+                                              {%- assign rendered_media_ids = rendered_media_ids | append: media.id | append: "," -%}
                                               {%- assign is_media_group = false -%}
                                               {%- assign is_media_filtered = false -%}
                                               {%- assign media_alt = media.alt -%}
@@ -471,6 +487,7 @@
                                                      <img loading='lazy'  class="image--fade-in lazyload imageborder" data-src="{{ media | img_url: '130x' }}" alt="{{ media_alt | escape }}">
                                                   </div>
                                               </a>
+                                              {%- endunless -%}
                                           {%- endif -%}
                                       {%- endfor -%}
                                   {%- endif -%}
@@ -631,32 +648,10 @@
               <button class="dropdown-item" onclick="expandProperties()">Options</button>
             </div> 
 
-          
-          
-{% comment %} <div class="dropdown">
-  <input type="checkbox" id="dropdown__btn">
-  <label class="View-button" for="dropdown__btn" type="button" data-toggle="dropdown" style="--clr:#0d7c66">
-    Dropdown button
-  </label>
-  <div class="dropdown-menu">
-    <a class="dropdown-item" href="#">Action</a>
-    <a class="dropdown-item" href="#">Another action</a>
-    <a class="dropdown-item" href="#">Something else here</a>
-  </div>
-</div> {% endcomment %}
 
  </div>
-{% comment %}     
-    <img
-    id="expand-details"
-    onclick="expandProperties()"
-    src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/maximize.png?v=1721291087"
-    class="expand-view">
-  </img>  {% endcomment %}
-   {% endif %}
-    
-        </div>
-
+    {% endif %}
+      </div>
       <div class="image-container" style="display:none;"></div> 
       <canvas id="stockCanvas" style="display: none;"></canvas>
     {%- endif -%}

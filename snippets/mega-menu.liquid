@@ -77,7 +77,7 @@
         <a href="{{ mega_menu_block.settings.image_1_link | default: '#' }}" class="mega-menu__promo">
           <div class="mega-menu__image-wrapper">
             <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: mega_menu_block.settings.image_1.aspect_ratio }}%">
-              <img class="lazyload image--fade-in" data-src="{{ mega_menu_block.settings.image_1 | img_url: '550x' }}" alt="{{ mega_menu_block.settings.image_1.alt | escape }}">
+              <img loading='lazy'  class="lazyload image--fade-in" data-src="{{ mega_menu_block.settings.image_1 | img_url: '550x' }}" alt="{{ mega_menu_block.settings.image_1.alt | escape }}">
             </div>
           </div>
 
@@ -90,7 +90,7 @@
         <a href="{{ mega_menu_block.settings.image_2_link | default: '#' }}" class="mega-menu__promo">
           <div class="mega-menu__image-wrapper">
             <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: mega_menu_block.settings.image_2.aspect_ratio }}%">
-              <img class="lazyload image--fade-in" data-src="{{ mega_menu_block.settings.image_2 | img_url: '550x' }}" alt="{{ mega_menu_block.settings.image_2.alt | escape }}">
+              <img loading='lazy'  class="lazyload image--fade-in" data-src="{{ mega_menu_block.settings.image_2 | img_url: '550x' }}" alt="{{ mega_menu_block.settings.image_2.alt | escape }}">
             </div>
           </div>
 

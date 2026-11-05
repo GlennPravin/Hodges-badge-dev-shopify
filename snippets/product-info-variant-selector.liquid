@@ -70,7 +70,7 @@
 
                       <label class="variant-swatch__item" for="{{ variant_swatch_id }}" title="{{ value | escape }}">
                         <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: variant.image.aspect_ratio }}%">
-                          <img src="{{ variant.image | img_url: '120x' }}" alt="{{ variant.image.alt | escape }}">
+                          <img alt="" loading='lazy' src="{{ variant.image | img_url: '120x' }}" alt="{{ variant.image.alt | escape }}">
                         </div>
 
                         {% render 'icon', icon: 'cross-sold-out' %}

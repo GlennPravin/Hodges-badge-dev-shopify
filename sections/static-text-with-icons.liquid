@@ -6,7 +6,7 @@
           <div class="text-with-icons__item" data-block-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
             <div class="text-with-icons__icon-wrapper">
               {%- if block.settings.custom_icon != blank -%}
-                <img src="{{ block.settings.custom_icon | img_url: '60x' }}" alt="{{ block.settings.custom_icon.alt | escape }}">
+                <img loading="lazy" src="{{ block.settings.custom_icon | img_url: '60x' }}" alt="{{ block.settings.custom_icon.alt | escape }}">
               {%- else -%}
                 {%- render 'icon', icon: block.settings.icon, stroke_width: 1.5 -%}
               {%- endif -%}

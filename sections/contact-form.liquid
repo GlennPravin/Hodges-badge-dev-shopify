@@ -101,7 +101,7 @@
           {%- if section.settings.store_image -%}
             <div class="contact__store-image">
               <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: section.settings.store_image.aspect_ratio }}%">
-                <img width="{{ section.settings.store_image.width }}" height="{{ section.settings.store_image.height }}" src="{{ section.settings.store_image | img_url: '700x' }}" alt="{{ section.settings.store_image.alt | escape }}">
+                <img loading='lazy'  width="{{ section.settings.store_image.width }}" height="{{ section.settings.store_image.height }}" src="{{ section.settings.store_image | img_url: '700x' }}" alt="{{ section.settings.store_image.alt | escape }}">
               </div>
             </div>
           {%- endif -%}

@@ -19,7 +19,6 @@ const subTypeIds = {{ shop.metafields.ProductSubType.subTypeIds | split: "," | j
 const excludeProductsSC = {{ shop.metafields.ExcludeProductsSC.ProductIds | split: "," | json}}
 
 {% assign promotionReorderHandle = shop.metafields.helpText.PromotionCollectionName.value | parse_json | first | default: "" %}
-const PromotionReorder = "{{ promotionReorderHandle }}";
 {% if promotionReorderHandle != "" and collections[promotionReorderHandle] != nil and collections[promotionReorderHandle].products.size > 0 %}
   const PromotionProductsReorder = {{ collections[promotionReorderHandle].products | map: "id" | json }};
 {% else %}
@@ -29,8 +28,11 @@ const PromotionReorder = "{{ promotionReorderHandle }}";
 {%- for line_item in order.line_items -%}
    {%- if line_item.product.type != 'HiddenCharges' and line_item.product != null and all_products[line_item.product.handle] != empty -%}
       chargeCode.push({ {{line_item.product.id}}:{{ all_products[line_item.product.handle].metafields.chargecode|json}} })
-      myAcc_productSubType[{{ line_item.properties["_hopsId"] | json }}] ={{ all_products[line_item.product.handle].metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductSubType | append: '' | json }};
-    {% endif %}
+      myAcc_productSubType[
+  {{ line_item.properties["_hopsId"] | json }}
+] ={{ all_products[line_item.product.handle].metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductSubType | append: '' | json }};
+
+      {% endif %}
 	{%- if line_item.product != null and all_products[line_item.product.handle] != empty -%}
       {%- unless RemoveBuyButton contains line_item.properties["_hopsId"] -%}
       reorder.push({{line_item | json}})
@@ -93,8 +95,9 @@ const PromotionReorder = "{{ promotionReorderHandle }}";
         <div class="card card--sticky hidden-pocket">
           <div class="card__section card__section--tight">
             <div class="card__linklist">
+              <a href="/pages/account-page#profile" class="card__linklist-item link" data-account-profile-link>My profile</a>
               <a href="{{ routes.account_url }}" class="card__linklist-item link text--strong">{{ 'customer.general.orders' | t }}</a>
-              <a href="{{ routes.account_addresses_url }}" class="card__linklist-item link">{{ 'customer.general.addresses' | t }}</a>
+              <a href="/pages/account-page#addresses" class="card__linklist-item link">{{ 'customer.general.addresses' | t }}</a>
               <a href="/pages/tax-details" class="card__linklist-item link">My tax-Exempt</a>
               <a href="{{ routes.account_logout_url }}" class="card__linklist-item link" data-no-instant>{{ 'customer.general.logout' | t }}</a>
             </div>
@@ -114,8 +117,9 @@ const PromotionReorder = "{{ promotionReorderHandle }}";
               </header>
 
               <div class="value-picker__choice-list">
+                <a href="/pages/account-page#profile" class="value-picker__choice-item" data-account-profile-link>My profile {% render 'icon', icon: 'check-2' %}</a>
                 <a href="{{ routes.account_url }}" class="value-picker__choice-item is-selected">{{ 'customer.general.orders' | t }} {% render 'icon', icon: 'check-2' %}</a>
-                <a href="{{ routes.account_addresses_url }}" class="value-picker__choice-item">{{ 'customer.general.addresses' | t }} {% render 'icon', icon: 'check-2' %}</a>
+                <a href="/pages/account-page#addresses" class="value-picker__choice-item">{{ 'customer.general.addresses' | t }} {% render 'icon', icon: 'check-2' %}</a>
                 <a href="/pages/tax-details" class="card__linklist-item link">My tax-Exempt {% render 'icon', icon: 'check-2' %}</a>
                 <a href="{{ routes.account_logout_url }}" class="value-picker__choice-item" data-no-instant>{{ 'customer.general.logout' | t }} {% render 'icon', icon: 'check-2' %}</a>
               </div>
@@ -350,8 +354,8 @@ const PromotionReorder = "{{ promotionReorderHandle }}";
                       {{- 'cart.general.free' | t -}}
                       {%- else -%}
                          {%- if acCharges -%}
-                      {%- assign _baseAc =  line_item.properties['_baseAc'] |  times: 100  -%} 
-                      <td class="line-item__line-price table__cell--right break1">{{_baseAc | plus: line_item.final_price | money }}</td>
+                            {%- assign _baseAc =  line_item.properties['_baseAc'] |  times: 100  -%} 
+                            <td class="line-item__line-price table__cell--right break1">{{_baseAc | plus: line_item.final_price | money }}</td>
                          {%- else -%}
                           <!-- {% comment %} {%- assign _baseAc =  line_item.properties['_baseAc'] |  times: 100  -%}  {% endcomment %} -->
                          <td class="line-item__line-price table__cell--right break1">{{ line_item.final_price | money }}</td>
@@ -361,8 +365,8 @@ const PromotionReorder = "{{ promotionReorderHandle }}";
                       {{- 'cart.general.free' | t -}}
                     {%- else -%}
                         {%- if acCharges -%}
-                      {%- assign _totalAc =  line_item.properties['_totalAc'] |  times: 100  -%} 
-                      <td class="line-item__line-price table__cell--right break2 tab_total_respon"><div id="my_box2">{{ _totalAc | plus: line_item.final_line_price | money }}</div></td>
+                             {%- assign _totalAc =  line_item.properties['_totalAc'] |  times: 100  -%} 
+                              <td class="line-item__line-price table__cell--right break2 tab_total_respon"><div id="my_box2">{{ _totalAc | plus: line_item.final_line_price | money }}</div></td>
                          {%- else -%}
                             {% comment %} {%- assign _totalAc =  line_item.properties['_totalAc'] |  times: 100  -%}  {% endcomment %}
                             <td class="line-item__line-price table__cell--right break2 tab_total_respon"><div id="my_box2">{{ line_item.final_line_price | money }}</div></td>

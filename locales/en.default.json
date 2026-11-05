@@ -306,6 +306,7 @@
       "delete": "Delete",
       "add_address": "Add a new address",
       "edit_address": "Edit address",
+      "save_address": "Save",
       "form_subtitle": "Please fill in the information below:",
       "first_name": "First name",
       "last_name": "Last name",
@@ -545,27 +546,33 @@
   "shopify": {
     "checkout": {
       "shipping": {
-        "free_rate_label": "Call for quote",
-        "estimated_delivery_date_range": "Shipping Method",
         "estimated_delivery_date": {
           "one": "Shipping Method",
           "other": "Shipping Method"
-        }
+        },
+        "estimated_delivery_date_range": "Shipping Method",
+        "free_rate_label": "Call for quote"
       },
       "order_summary": {
-        "free_shipping_discount_label": "test",
-        "free_total_label": "Call for quote",
-        "discount_label": "Key code",
-        "discount_placeholder": "Key code",
+        "free_shipping_discount_label": "test2",
+        "subtotal_label": "Merchandise Total",
         "subtotal_label_with_quantity": {
-          "one": "Merchandise Total",
-          "other": "Merchandise Total"
+          "other": "Merchandise Total",
+          "one": "Merchandise Total"
         },
         "discount_order_stacking": {
           "one": "Discount",
           "other": "Discount"
         },
-        "confirmation_number_label": "Confirmation #{{ confirmation_number }} — NOTE : This is your Shopify transaction number. Your Hodges Badge Company Web order number will be emailed to you shortly."
+        "free_total_label": "Call for quote",
+        "free_shipping_total_label": "Call for quote",
+        "confirmation_number_label": "Confirmation #{{ confirmation_number }} — NOTE : This is your Shopify transaction number. Your Hodges Badge Company Web order number will be emailed to you shortly.",
+        "discount_label": "Discount Code",
+        "discount_placeholder": "Discount Code"
+      },
+      "delivery_options": {
+        "free_total_label": "test1",
+        "pick_up_in_five_or_more_days": " "
       },
       "shipping_errors": {
         "shipping_method_not_available_generic": {
@@ -580,6 +587,11 @@
   "customer_accounts": {
     "order_details": {
       "subtotal": "Merchandise Total"
+    },
+    "orders": {
+      "order_status": {
+        "confirmed_description_pickup": "we will email you to pick up your order"
+      }
     }
   }
 }

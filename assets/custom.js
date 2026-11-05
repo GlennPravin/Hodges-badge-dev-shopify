@@ -1,3 +1,16 @@
+(function () {
+  try {
+    var path = (window.location.pathname || "").replace(/\/+$/, "") || "/";
+    var savedTab = sessionStorage.getItem("accountPage2Tab");
+    if (path === "/account/addresses" || (savedTab === "addresses" && path === "/account")) {
+      window.location.replace("/pages/account-page#addresses");
+      return;
+    }
+    if (path === "/account") {
+      window.location.replace("/pages/account-page");
+    }
+  } catch (e) {}
+})();
 /**
  * Include your custom JavaScript here.
  *
@@ -49,21 +62,21 @@ $(document).ready(() => {
     ReBindingAutoComplete();
  
   });
-  $('[data-toggle="tooltip"]').tooltip();
+$('[data-toggle="tooltip"]').tooltip();
 // Store the original title
 let originalTitle = $('.my-handle').attr('data-original-title');
 
   const sortableoptions = document.getElementById("sortableoptions");
   Sortable.create(sortableoptions, {
-    handle: ".my-handle,.sort_index",
+  handle: ".my-handle,.sort_index",
     animation: 150,
      ghostClass: 'ghost',
     dragClass: "drag",
     forceFallback: true,
     draggable:".list-group-item",
     scroll: sortableoptions,
-   scrollSensitivity: 250, // px, how near the mouse must be to an edge to start scrolling.
-    scrollSpeed: 5, // px, speed of the scrolling
+ scrollSensitivity: 260, // px, how near the mouse must be to an edge to start scrolling.
+scrollSpeed: 5, // px, speed of the scrolling
 
     onEnd: (event) => {
 $('.my-handle').attr('data-original-title', originalTitle);
@@ -72,24 +85,24 @@ $('.my-handle').attr('data-original-title', originalTitle);
       let value = $(draggableElement).find('input')
       canvasColorization(value);
       reorder_sort_indexes();
-      tabkeyBehavior();
-      if(window.innerWidth<=767){
-      const stickyCanvas = document.getElementById('customized-image');
-      if (stickyCanvas) {
-        stickyCanvas.classList.add('sticky-canvas');
-      }
+    tabkeyBehavior();
+    if(window.innerWidth<=767){
+    const stickyCanvas = document.getElementById('customized-image');
+    if (stickyCanvas) {
+      stickyCanvas.classList.add('sticky-canvas');
     }
-  },
-        onMove: function (/**Event*/evt, /**Event*/originalEvent) {
-          $('.my-handle').removeAttr('data-original-title');
-
-      if(window.innerWidth<=767){
-      const stickyCanvas = document.getElementById('customized-image');
-      if (stickyCanvas) {
-        stickyCanvas.classList.remove('sticky-canvas');
-      }
-    }
+  }
     },
+    onMove: function (/**Event*/evt, /**Event*/originalEvent) {
+        $('.my-handle').removeAttr('data-original-title');
+
+    if(window.innerWidth<=767){
+    const stickyCanvas = document.getElementById('customized-image');
+    if (stickyCanvas) {
+      stickyCanvas.classList.remove('sticky-canvas');
+    }
+  }
+  },
   });
   $(".meta-reference-master").change((event) => {
     let target_id = $(event.target).val();
@@ -117,36 +130,9 @@ $('.my-handle').attr('data-original-title', originalTitle);
   });
   reorder_sort_indexes();
 });
-
-
-document.addEventListener('DOMContentLoaded', function() {
-  var menu=document.getElementById('menuSection');
-  //const body = document.body;
-  const html = document.documentElement;
-    console.log(menu);
-
-   // Function to toggle menu visibility and scrollbar
-  function toggleMenu() {
-     const isOpen = menu.getAttribute('aria-expanded') === 'false';
-    if(isOpen){
-      console.log('enter into isopen')
-      //body.classList.toggle('menu-openss');
-      html.classList.toggle('menu-opens');
-    }
-    else{
-      html.classList.remove('menu-opens');
-    }
-  }
-
-  // Event listener for menu toggle
-  menu.addEventListener('click', toggleMenu);
-});
-
-
-
 function reorder_sort_indexes() {
   $(".sort_index").each((index, obj) => {
-    // $(obj).text(index + 1);
+  // $(obj).text(index + 1);
     var inputElement = $(obj).siblings("input,select").first();
     if (!inputElement.length) {
       console.log($(obj).siblings("div").find('input,select').first())
@@ -259,8 +245,8 @@ function selectedImage(src, id, txt, _this, container_code, charges, valAdd) {
 
   $(".pop-chosen-value[data-option-id=" + id + "]").addClass("show");
 
-
-  //     if ($($("#" + id + "_btn").closest("ul")).attr("id") == "CommonOptions") {
+  // if ($($("#" + id + "_btn").closest("ul")).attr("id") == "CommonOptions") {
+    
   //   if($(".dependent-values.show #enterCenterUploadfile").val()!=""){
   //     $(".dependent-values.show #enterCenterUploadfile").val("");
   //     $(".dependent-values.show #yourZoom_centerUploader input").val("");
@@ -323,59 +309,58 @@ function selectedImage(src, id, txt, _this, container_code, charges, valAdd) {
   }
 }
 async function selectedImage_Cart(src, id, txt, _this, container_code, charges, valAdd, product_hopsUId, color_label) {
-$("#popup1").css("display", "none");
-document.getElementById("loaderbg").style.display = "block";
+  $("#popup1").css("display", "none");
+  document.getElementById("loaderbg").style.display = "block";
 
-try {
-    let cart = await fetch('/cart.js').then(response => response.json());
+  try {
+      let cart = await fetch('/cart.js').then(response => response.json());
 
-    let matchingItems = cart.items.filter(item => 
-        item.properties && 
-        item.properties["_hopsUId"] === product_hopsUId &&
-        item.product_type &&
-        item.product_type !== "HiddenCharges"
-    );
+      let matchingItems = cart.items.filter(item => 
+          item.properties && 
+          item.properties["_hopsUId"] === product_hopsUId &&
+          item.product_type &&
+          item.product_type !== "HiddenCharges"
+      );
 
-    let updates = matchingItems.map(item => {
-        let printColorValue = item.properties["_" + id];
-        let LookUpValue = _this.dataset.id ? _this.dataset.id.trim() : "";
+      let updates = matchingItems.map(item => {
+          let printColorValue = item.properties["_" + id];
+          let LookUpValue = _this.dataset.id ? _this.dataset.id.trim() : "";
 
-        if (printColorValue) {
-            let remainingValue = printColorValue.split("~~");
-            let updatedValue = `${LookUpValue}~~${remainingValue.slice(1).join("~~")}`;
+          if (printColorValue) {
+              let remainingValue = printColorValue.split("~~");
+              let updatedValue = `${LookUpValue}~~${remainingValue.slice(1).join("~~")}`;
 
-            return {
-                id: item.key,
-                quantity: item.quantity,
-                properties: {
-                    ...item.properties,
-                    [color_label]: txt,
-                    ["_" + id]: updatedValue,
-                }
-            };
-        }
-        return null;
-    }).filter(update => update !== null);
-    for (let update of updates) {
+              return {
+                  id: item.key,
+                  quantity: item.quantity,
+                  properties: {
+                      ...item.properties,
+                      [color_label]: txt,
+                      ["_" + id]: updatedValue,
+                  }
+              };
+          }
+          return null;
+      }).filter(update => update !== null);
+      for (let update of updates) {
 
-        await fetch('/cart/change.js', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(update)
-        }).then(res => res.json());
+          await fetch('/cart/change.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(update)
+          }).then(res => res.json());
 
-        await new Promise(resolve => setTimeout(resolve, 300)); 
-    }
+          await new Promise(resolve => setTimeout(resolve, 300)); 
+      }
 
-    $(".table-wrapper").load(location.href + " .table-wrapper > *", function() {
-        document.getElementById("loaderbg").style.display = "none";
-    });
+      $(".table-wrapper").load(location.href + " .table-wrapper > *", function() {
+          document.getElementById("loaderbg").style.display = "none";
+      });
 
-} catch (error) {
-    document.getElementById("loaderbg").style.display = "none";
+  } catch (error) {
+      document.getElementById("loaderbg").style.display = "none";
+  }
 }
-}
-
 
 /**
  * @author: Jino R Krishnan<jino@bezohminds.com>
@@ -393,6 +378,8 @@ var canvasProperties = {};
 var canvasVariationProperties = {};
 let editcanvasprops ={};
 let fileNamesArr={};
+let checkoutTriggered;
+
 function glideThoughFormElements(flatCharges) {
   getStreamerSizeFromForm();
   getCommonOptionValues(flatCharges);
@@ -454,12 +441,12 @@ function getCommonOptionValues(flatCharges) {
     } else if (data_type == "input-text") {
       _input = _input.find("input");
     } else if (data_type == "popup") {
-        if(_input.find('.choose-value-container .WithoutAutoComplete').length > 0){
-          _input = _input.find(".choose-value-container .WithoutAutoComplete");
-        }
-         else{
-          _input = _input.find(".choose-value-container .autocomplete");
-        }
+      if(_input.find('.choose-value-container .WithoutAutoComplete').length > 0){
+        _input = _input.find(".choose-value-container .WithoutAutoComplete");
+      }
+       else{
+      _input = _input.find(".choose-value-container .autocomplete");
+      }
     } else if (data_type == "select") {
       _input = _input.find("select");
       isSelect = true;
@@ -565,8 +552,7 @@ function getCommonOptionValues(flatCharges) {
       let _lbl = _input.attr("data-label");
       const _dn = _input.attr("data-dn");
       let _name = _input.attr("name");
-      // const _value = _input.val();
-       let _value = _input.val() != undefined ?  _input.val().trim(): _input.val();
+      let _value = _input.val() != undefined ?  _input.val().trim(): _input.val();
       const _key = _input.attr("data-key");
       const _dsgnId = _input.attr("data-designId");
       const _stockDesign = _input.attr("data-design");
@@ -807,11 +793,8 @@ function getSequenceableOptionValues(flatCharges) {
       }
       if ($(_input).attr("id") && _isCanvasEnabled == true) {
         if (_input.val() == '' && isSelect) {
-
-
           canvasProperties[$(_input2).attr("id").split('_')[0]] = createProperties(_input2);
         } else {
-
           canvasProperties[$(_input).attr("id").split('_')[0]] = createProperties(_input);
         }
       }
@@ -901,7 +884,7 @@ function getSequenceableOptionValues(flatCharges) {
           }
           if (_lbl !== undefined) {
             if(_isCanvasEnabled && (_lbl.includes("Print")|| _lbl.includes("Text"))){
-            seqlbl = seqlbl + 1;
+              seqlbl = seqlbl + 1;
               _lbl =  _lbl + " " +seqlbl.toString() 
             }else{
               _lbl = _lbl
@@ -976,10 +959,10 @@ function getSequenceableOptionValues(flatCharges) {
           let _name = _input.attr("name");
           let _lbl = _input.attr("data-label");
           if (_isCanvasEnabled) {
-          if (/\d+/.test(_lbl)) {
+            if (/\d+/.test(_lbl)) {
              _lbl = _lbl.replace(/\d+/g, '');
+                }
             }
-          }
           let _value = _input.val() != undefined ?  _input.val().trim(): _input.val();
           const _key = _input.attr("data-key");
           const _stockDesign = _input.attr("data-design");
@@ -1010,14 +993,14 @@ function getSequenceableOptionValues(flatCharges) {
                 !(_name.includes("_uploadImage")) && 
                 _value.toUpperCase() === "" && 
                 (Spacer != 0 || datasortingorder!=0)
-            )
+            ) 
          {
             canvasProperties['eitherorSeq'] = geteitherOrSeqvalues(_input);
         }
           let hopspName = "StockDesign";
           let nxtlvlValue = "";
           let refCode = "";
-          if ((_name.includes("_uploadImage") && _value.toUpperCase() != "")) {
+          if (_name.includes("_uploadImage") && _value.toUpperCase() != "") {
            
             if ($("#enterUploadfile").val() != "") {
               _name = _name.replace("uploadImage", "enterUploadfile");
@@ -1379,9 +1362,9 @@ let RemoveCartItems = {};
   let baseVarQty = $("#varQty").val();
   if (additionalChargeInAmount > 0) {
     let baseAdditional =parseFloat(additionalChargeInAmount.toFixed(3));
-      let roundedNum = (Math.round((baseAdditional + Number.EPSILON) * 100) / 100).toFixed(2);
-     pushableProperties["_baseAc"] = roundedNum;
-    pushableProperties["_Base Additional Charge"] =
+    let roundedNum = (Math.round((baseAdditional + Number.EPSILON) * 100) / 100).toFixed(2);
+    pushableProperties["_baseAc"] = roundedNum;
+       pushableProperties["_Base Additional Charge"] =
       "$" + roundedNum;
     pushableProperties["Total Additional Charge"] =
     "$" + (pushableProperties["_baseAc"] * baseVarQty).toFixed(2);
@@ -1431,7 +1414,7 @@ if (_isCanvasEnabled) {
  function variationItems(prodId,hopsProdId) {
   if ($(".variationsAddToCart")[0]) {
     $(".variationsAddToCart").each((index, element) => {
-      canvasVariationProperties = {}
+      canvasVariationProperties={}
       const _varId = $(element).attr("id");
       const _qtyEle = $(element).find(".varQtyAddToCart");
 
@@ -1469,7 +1452,7 @@ if (_isCanvasEnabled) {
           if (_input[0].tagName == "SELECT") {
             _dn = $(_input[0]).find("option:selected").text();
             
-            if(_dn == ""|| _dn == " - Select an Option - "){
+            if(_dn == "" || _dn == " - Select an Option - "){
               _input2 =  $(_input[1]);
               _dn = _input2.val();
               _txtinput2 = _input2.val();
@@ -1499,8 +1482,8 @@ if (_isCanvasEnabled) {
           _addChargeCode = "";
         }
 
-        if (_lbl !== undefined && _dn !== undefined ) {
-          
+        if (_lbl !== undefined ) {
+        
             variationProperties[_lbl] = _dn.toUpperCase();
 
             variationProperties["_" + _name] =
@@ -1550,7 +1533,7 @@ if (_isCanvasEnabled) {
         var prop = props;
         if(props.split('~')[1]) prop = props.split('~')[1];
         if(variationProperties[prop] && pushableProperties[props] && typeof variationProperties[prop] == 'string'){
-           if(prop != '_canvasImage' && prop != '_canvasProperties'  ){
+           if(prop != '_canvasImage'  && prop != '_canvasProperties'  ){
           if(variationProperties[prop].toString().includes("~") && pushableProperties[prop].toString().includes("~")){
             let test = variationProperties[prop].split('~');
             test[1] = pushableProperties[prop].split('~')[1];
@@ -1583,15 +1566,17 @@ function removeEmptyProperties(variationProperties) {
     var cleanedData = {};
     let previous;
     const includesPrintOnBack = Object.keys(variationProperties).some(key => {
-        const sanitizedKey = typeof key === 'string' ? key.split("_")[1] : key;
-        const isKeyInPrintOnBack = printonBack.includes(sanitizedKey);
-        if (isKeyInPrintOnBack) {
-            const value = variationProperties[key];
-            const isConditionMet = value && value.split('~')[0] === 'NO' ? true : false;
-            return isConditionMet;
-        }
-        return false;
-    });
+      const sanitizedKey = typeof key === 'string' ? key.split("_")[1] : key;
+      const isKeyInPrintOnBack = printonBack.includes(sanitizedKey);
+  
+      if (isKeyInPrintOnBack) {
+          const value = variationProperties[key];
+          const isConditionMet = value && value.split('~')[0] === 'NO' ? true : false;
+          return isConditionMet;
+      }
+  
+      return false;
+  });
     for (var prop in variationProperties) {
         if (variationProperties.hasOwnProperty(prop)) {
             var value = variationProperties[prop];
@@ -1601,7 +1586,7 @@ function removeEmptyProperties(variationProperties) {
                 typeof value === 'string' &&
                 value.trim() !== "" &&
                 !value.startsWith("~") &&
-                value.indexOf("- SELECT AN OPTION -") === -1 &&
+                value.indexOf("- SELECT AN OPTION -") === -1 && 
                 removePrintonBackLines(cleanedData,prop,previous,includesPrintOnBack)
             ) {
                 cleanedData[prop] = value;
@@ -1615,13 +1600,13 @@ function removeEmptyProperties(variationProperties) {
 var cleanedData = removeEmptyProperties(variationProperties);
 console.log(cleanedData, "cleanedData");
       if (additionalChargeInAmountV > 0) {
-        let variationAdditional =parseFloat(additionalChargeInAmountV.toFixed(3));;
-        let variationrounded = (Math.round((variationAdditional + Number.EPSILON) * 100) / 100).toFixed(2);
-        cleanedData["_Base Additional Charge"] =
-          "$" + variationrounded;
+      let variationAdditional =parseFloat(additionalChargeInAmountV.toFixed(3));;
+      let variationrounded = (Math.round((variationAdditional + Number.EPSILON) * 100) / 100).toFixed(2);
+      cleanedData["_Base Additional Charge"] =
+        "$" + variationrounded;
 
-        cleanedData["_baseAc"] = variationrounded;
-        cleanedData["Total Additional Charge"] =
+         cleanedData["_baseAc"] = variationrounded;
+          cleanedData["Total Additional Charge"] =
           "$" + (cleanedData["_baseAc"] * qty).toFixed(2).toString();
         cleanedData["_totalAc"] = (cleanedData["_baseAc"] * qty).toFixed(2);
       }
@@ -1635,13 +1620,14 @@ console.log(cleanedData, "cleanedData");
         if (cleanedData.hasOwnProperty(prop)) {
           OrderedValues[prop] = cleanedData[prop];
         }
+
       }
-      for (const prop in cleanedData) {
-         if (!OrderedValues.hasOwnProperty(prop)) {
-    // Add property from variationProperties to OrderedValues if not already included
-        OrderedValues[prop] = cleanedData[prop];
-     }
+// Process all properties from variationProperties
+for (const prop in cleanedData) {
+  if (!OrderedValues.hasOwnProperty(prop)) {
+    OrderedValues[prop] = cleanedData[prop];
   }
+}
       var item = {
         quantity: qty,
         id: prodId,
@@ -1649,6 +1635,7 @@ console.log(cleanedData, "cleanedData");
       };
       
       addCartItems.push(item);
+
       additionalChargeInAmountV = 0;
       
     })
@@ -1719,10 +1706,10 @@ function GetFlatCharges(flatCharges) {
             props["designQty"] = dqty.toString();
             if (flatCharges[charge].displayName.toLowerCase().includes("logo")) {
               props["_legacy_product_as_fee_title"] = "Logo Charges";
-              props["_legacy_product_as_fee_description"] = "Logo Charges";
+            props["_legacy_product_as_fee_description"] = "Logo Charges";
               }else{
               props["_legacy_product_as_fee_title"] = "Die Charges";
-              props["_legacy_product_as_fee_description"] = "Die Charges";
+            props["_legacy_product_as_fee_description"] = "Die Charges";
               }
            // props["_prodType"] = prodType;
 
@@ -1767,7 +1754,7 @@ function GetSetupCharges(
     props["_hopsUId"] = hopsProdUId;
     props["_prodType"] = prodType;
     props["_legacy_product_as_fee_title"] = "Setup Charges";
-    props["_legacy_product_as_fee_description"] = "Setup Charges";
+  props["_legacy_product_as_fee_description"] = "Setup Charges";
     // props["hopsId"] = hopsProdId;
 
     var item = {
@@ -2123,14 +2110,13 @@ function CartMOA(minLimits, moaAmnts) {
 
 function getProductId(prodId) {
 var strSize = $("#streamer-size").val();
-var x = document.getElementById("product-select-" + prodId); 
-var productOptions = Array.from(x.options); 
+var x = document.getElementById("product-select-" + prodId);
+var productOptions = Array.from(x.options);
 productOptions.sort(function(a, b) {
     var startA = parseInt(a.innerText.match(/(\d+)-\d+/)[1]); 
     var startB = parseInt(b.innerText.match(/(\d+)-\d+/)[1]); 
     return startA - startB;
 });
- 
   for (i = 0; i < productOptions.length; i++) {
     if (strSize == undefined) {
       var qtyRange = productOptions[i].text.split("-")[1].trim();
@@ -2143,9 +2129,9 @@ productOptions.sort(function(a, b) {
       }
     } else {
       if (strSize ==productOptions[i].text.split("/")[0].trim()) {
-        var qtyRange = productOptions[i].text.split("/")[1].split("-")[1].trim(); 
+        var qtyRange = productOptions[i].text.split("/")[1].split("-")[1].trim();
         outOfRangPrd =productOptions[i].value;
-        outOfRangeQty = outOfRangPrd + "_" + productOptions[i].text.split("/")[1].split(" - ")[0].trim(); 
+        outOfRangeQty = outOfRangPrd + "_" + productOptions[i].text.split("/")[1].split(" - ")[0].trim();
         if (Number(prodQty) <= Number(qtyRange)) {
           prId = productOptions[i].value;
           prodAmnt = Number(productOptions[i].text.split("$")[1].trim()); 
@@ -2260,7 +2246,13 @@ function cartItems_addtocart(
       finalCartItems.push(addCartItems[item]);
     }
 
-    var addCart = { items: finalCartItems.reverse() };
+    finalCartItems.sort(function(a, b) {
+  if (a.properties["_hopsUId"] !== b.properties["_hopsUId"]) return 0;
+  var aVar = a.properties["Variation"] ? parseInt(a.properties["Variation"].replace('V','')) : -1;
+  var bVar = b.properties["Variation"] ? parseInt(b.properties["Variation"].replace('V','')) : -1;
+  return aVar - bVar;
+});
+var addCart = { items: finalCartItems.reverse() };
 
     fetch("/cart/add.js", {
       body: JSON.stringify(addCart),
@@ -2446,9 +2438,9 @@ function validate_commonoptions(productType = "") {
               .html("Please choose the option " + label)
               .show();
             errorAvailable = true;
-            // _return = false;
+            _return = false;
             // return false
-          }
+          } 
           // else {
           //   $(".error." + optionId).hide();
           // }
@@ -2473,8 +2465,6 @@ function validate_commonoptions(productType = "") {
         if (
           $(element).find(".pop-chosen-value input")[0].hasAttribute("required")
         ) {
-          console.log(optionVal,'popupvalue');
-            console.log(label,'label');
           if (!optionVal) {
             $(".error." + optionId)
               .html("Please choose the option " + label)
@@ -2774,7 +2764,7 @@ function validate_variation(productType) {
             errorAvailable = true;
             _return = false;
             // return false
-          }
+          } 
           // else {
           //   $(".error." + optionId).hide();
           // }
@@ -2923,16 +2913,12 @@ async function CartAction(
   event.stopPropagation();
 
   clearLocalStorage();
- let totalQty = 0;
- var minQty;
-  $('.product-form__info-list').next('.err.base').remove();
+  let totalQty = 0;
+  var minQty;
   if(  $("#varQty").val()== 0){
     $("#varQty").focus()
-    $('.product-form__info-list').after(
-        "<div class='err base' style='display:block; color:red; font-size:11px;'>Please Enter the Quantity</div>"
-      );
     $(".error.add-to-cart")
-      .html("Please check the messages in Red.")
+      .html("Please Enter the Quantity")
       .show();
       return false;
   }else{
@@ -2947,21 +2933,18 @@ async function CartAction(
         $('#disclaimer_alert').css('display', 'none');
       }
     }
-  //  if( Number($("#varQty").val()) < Number(minQty)){
+  //  if(  $("#varQty").val() < Number(minQty)){
   //   $("#varQty").focus()
-  //   $('.product-form__info-list').after(
-  //       "<div class='err base' style='display:block; color:red; font-size:11px;'>Please enter the minimum quantity: " + minQty + "</div>"
-  //     );
-  //     $(".error.add-to-cart")
-  //     .html("Please check the messages in Red.")
+  //   $(".error.add-to-cart")
+  //     .html("Please Enter the Minimum Quantity: "+ minQty)
   //     .show();
       
   //     return false;
   //  }else{
-    //  if($("#varQty").attr('data-label')){
-    //   pushableProperties["_stockCustomRider"] = true;
-    // }
-    // pushableProperties["_minQty"] = Number(minQty);
+  //    if($("#varQty").attr('data-label')){
+  //     pushableProperties["_stockCustomRider"] = true;
+  //   }
+  //   pushableProperties["_minQty"] = Number(minQty);
   //  }
   }
 
@@ -2983,36 +2966,20 @@ async function CartAction(
       .show();
     }
     totalQty += inputValue;
-  //     else if( inputValue < pushableProperties["_minQty"]){
-  //      hasZeroQuantity = true;
-  //       labelElement.append(
-  // "<div class='err variation' style='display: block; color: red; font-size: 11px!important;'>Please Enter the "
-  // + pushableProperties["_minQty"] +
-  // " Minimum Quantity for: " + labelText + "</div>"
-  //       );
-  //       $(".error.add-to-cart")
-  //       .html("Please check the messages in Red.")
-  //       .show();
-  //      }
   });
   if(totalQty < Number(minQty)){
-   // $("#varQty").focus()
-    // $('.product-form__info-list').after(
-    //     "<div class='err base' style='display:block; color:red; font-size:11px;'>Please enter the minimum quantity: " + minQty + "</div>"
-    //   );
-      $(".error.add-to-cart")
-      .html("Please enter the minimum quantity: " + minQty + "")
-      .show();
-      
-      return false;
-   }
-   else{
-    if($("#varQty").attr('data-label')){
-      pushableProperties["_stockCustomRider"] = true;
+       $(".error.add-to-cart")
+       .html("Please enter the minimum quantity: " + minQty + "")
+       .show();
+       
+       return false;
     }
-    pushableProperties["_minQty"] = Number(minQty);
-   }
-  
+    else{
+     if($("#varQty").attr('data-label')){
+       pushableProperties["_stockCustomRider"] = true;
+     }
+     pushableProperties["_minQty"] = Number(minQty);
+    }
 
   if (hasZeroQuantity) {
     return false
@@ -3030,7 +2997,6 @@ async function CartAction(
 
 if(_isCanvasEnabled){
   document.getElementById("cart-page").style.display = "block";
-
 }
 else{
   document.getElementById("loaderbg").style.display = "block";
@@ -3407,7 +3373,7 @@ function BindingAutoComplete_Variations(vCount) {
 }
 
 $(document).ready(() => {
-              console.log('clicked')        
+                  
 if(issBo == false){
   BindingAutoComplete();
 }
@@ -3486,7 +3452,7 @@ function getAdditionalPrice(element, data_type, _key) {
 //   let acDec = (Math.round(ac * 100) / 100).toFixed(2);
 //   let acId = acAmnt[acDec];
 
-  // prodQty += Number(baseVarQty);
+//   // prodQty += Number(baseVarQty);
 
 //   var Item = {
 //     quantity: baseVarQty,
@@ -3569,13 +3535,13 @@ function clearuploadedValue() {
   if(preview){
     _designSrc = preview;
   }
-  if (_isCanvasEnabled) {
-  $('.new_custom').css('display','block');
-  $('.custom_ui').css('display', 'none');
-  $('.eitheror-group').find('.pop-chosen-value.show').removeClass('show');
-  $('.slider-container.eitherorSeq_option').css('display', 'none');
-  $('.showtoggle').css('display','none');
-  }
+if (_isCanvasEnabled) {
+$('.new_custom').css('display','block');
+$('.custom_ui').css('display', 'none');
+$('.eitheror-group').find('.pop-chosen-value.show').removeClass('show');
+$('.slider-container.eitherorSeq_option').css('display', 'none');
+$('.showtoggle').css('display','none');
+}
   removeclick()
 }
 
@@ -3595,7 +3561,7 @@ function clearChoosenValue(_this) {
   if (_isCanvasEnabled) {
       var id = $(_this).parent().attr('data-option-id')
       $('input[name=' + id + '][onchange="canvasColorization(this)"]').trigger('change', 'input');
-      $('.showtoggle').css('display','none');
+    $('.showtoggle').css('display','none');
 
     }
 }
@@ -3654,7 +3620,7 @@ item_key = item_key[0];
               let Values = flatValues.split(",")
                 if (!Values.includes(flatValArray[fv])) {
                   flatValues = flatValues + "," + flatValArray[fv];
-                }
+              }
             }
           }
         }
@@ -3936,7 +3902,7 @@ function setupChargeCartUpdate(
     props["_hopsUId"] = hopsProdUId;
     props["_prodType"] = prodType;
     props["_legacy_product_as_fee_title"] = "Setup Charges";
-    props["_legacy_product_as_fee_description"] = "Setup Charges";
+  props["_legacy_product_as_fee_description"] = "Setup Charges";
     // props["hopsId"] = hopsProdId;
 
     var item = {
@@ -4040,8 +4006,8 @@ function updateCartFlatCharges(
           }
           
         }
+      }
     }
-  }
      if(item_key.properties["_chargeType"] == "logo" && flatId == "" && logoQty>0 && !(PromotionProductsCart || []).includes(item_key.product_id)){
       const match = Object.keys(item_key.properties).find((i) => {
         if (!i.includes("_")) return false;
@@ -4050,30 +4016,31 @@ function updateCartFlatCharges(
           flatCharges[code]
         );
       });
-      const charge = match ? match.split("_")[1]: null;
-         const value =
+      const charge = match.split("_")[1];
+
+       const value =
   item_key.properties[`_${charge.toUpperCase()}_enterUploadfile`] ??
   item_key.properties[`_${charge.toUpperCase()}_uploadImage`] ??
   item_key.properties[`_${charge.toUpperCase()}`];
 
       const designCode = value?.split("~")[0];
 
-      let props = {};
-      props["ChargeType"] = flatCharges[charge].displayName;
-      props["_" + flatCharges[charge].optionId] = flatCharges[charge].valueId;
-      props["Design"] = designCode;
-      props["_design"] = designCode;
-      props["option"] = flatCharges[charge].optionId;
-      props["designQty"] = item_key.quantity.toString();
-      props["_legacy_product_as_fee_title"] = "Logo Charges";
-      props["_legacy_product_as_fee_description"] = "Logo Charges";
+      let newProps = {};
+      newProps["ChargeType"] = flatCharges[charge].displayName;
+      newProps["_" + flatCharges[charge].optionId] = flatCharges[charge].valueId;
+      newProps["Design"] = designCode;
+      newProps["_design"] = designCode;
+      newProps["option"] = flatCharges[charge].optionId;
+      newProps["designQty"] = item_key.quantity.toString();
+      newProps["_legacy_product_as_fee_title"] = "Logo Charges";
+      newProps["_legacy_product_as_fee_description"] = "Logo Charges";
       jQuery
       .post("/cart/add.js", {
         items: [
           {
             quantity: logoQty,
             id: flatCharges[charge].variant,
-            properties: props,
+            properties: newProps,
           },
         ],
       })  .done(function () {
@@ -4101,9 +4068,9 @@ function updateCartFlatCharges(
 
 async function IncDecRemove(dataItems, item_key, qty, removeflatValues) {
    if (item_key.properties["_productSubType"]) {
-    let setupLimit = 0;
-    let pSupType = "00" + item_key.properties["_productSubType"];
-    let setupChargeValues = setupCharges[pSupType];
+let setupLimit = 0;
+let pSupType = "00" + item_key.properties["_productSubType"];
+let setupChargeValues = setupCharges[pSupType];
 
     if (setupChargeValues != undefined) {
       setupLimit = Number(setupChargeValues.split(",")[0]);
@@ -4115,52 +4082,52 @@ async function IncDecRemove(dataItems, item_key, qty, removeflatValues) {
           i.key != item_key.key &&
           i.properties["_hopsUId"] == item_key.properties["_hopsUId"]
         ) {
-          quantity += i.quantity;
-        }
+  quantity += i.quantity;
+}
       });
-      quantity += qty;
+quantity += qty;
       for (item in dataItems) {
-        if (
-          dataItems[item].product_type == "HiddenCharges" &&
-          dataItems[item].title.includes("Setup Charges") &&
+    if (
+    dataItems[item].product_type == "HiddenCharges" &&
+    dataItems[item].title.includes("Setup Charges") &&
           dataItems[item].properties["_hopsUId"] ==
             item_key.properties["_hopsUId"]
-        ) {
-          updateSetupcharge[dataItems[item].key] = 0;
-          break;
-        }
-      }
+    ) {
+    updateSetupcharge[dataItems[item].key] = 0;
+    break;
+    
+    }
+  }
       await jQuery.post("/cart/update.js", { updates: updateSetupcharge });
       if (quantity < setupLimit) {
         let setupItem = [];
-        setupChargeCartUpdate(
-          item_key.properties["_hopsId"],
-          item_key.properties["_hopsUId"],
-          quantity,
-          setupItem,
-          item_key.properties["_productSubType"],
-          item_key.properties["_prodType"]
-        );
-        var addCart = { items: setupItem };
+    setupChargeCartUpdate(
+      item_key.properties["_hopsId"],
+      item_key.properties["_hopsUId"],
+      quantity,
+      setupItem,
+      item_key.properties["_productSubType"],
+      item_key.properties["_prodType"]
+    );
+    var addCart = { items: setupItem };
 
-        let response = await fetch("/cart/add.js", {
-          body: JSON.stringify(addCart),
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "xmlhttprequest",
-          },
-          method: "POST",
+    let response = await fetch("/cart/add.js", {
+      body: JSON.stringify(addCart),
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "xmlhttprequest",
+      },
+      method: "POST",
         }).then((response) => {
-          return response.json();
+        return response.json();
         });
       }
     }
-  } 
-  
+    }
+
   if (item_key.properties["_baseAc"]) {
     let lineAdd = item_key.properties["_baseAc"];
-
     item_key.properties["Total Additional Charge"] =
       "$" + (Math.round(lineAdd * qty * 100) / 100).toFixed(2).toString();
       item_key.properties["_totalAc"] = (
@@ -4168,7 +4135,6 @@ async function IncDecRemove(dataItems, item_key, qty, removeflatValues) {
     )
       .toFixed(2)
       .toString();
-
     jQuery
       .post("/cart/change.js", {
         quantity: qty,
@@ -4206,15 +4172,15 @@ async function IncDecRemove(dataItems, item_key, qty, removeflatValues) {
         //       );
         //     });
         // } else {
-              updateCartFlatCharges(
-                dataItems,
-                removeflatValues,
-                qty,
-                item_key.properties["_prodType"],
-                minLimits,
-                moaAmnts,
-                item_key
-              );
+          updateCartFlatCharges(
+            dataItems,
+            removeflatValues,
+            qty,
+            item_key.properties["_prodType"],
+            minLimits,
+            moaAmnts,
+            item_key
+          );
         // }
       });
   } else {
@@ -4285,33 +4251,34 @@ function removeLineItem(linekey,lineNo) {
 
 }
 
-function inputLineItem(linekey,lineNo, _this, event) {
+function inputLineItem(linekey, lineNo, _this, event) {
   event.preventDefault();
   event.stopPropagation();
   let totalQty = 0;
+  const minQty = Number(_this.min);
+  let inputQty = Number(_this.value) || 0;
   fetch("/cart.js")
-  .then((response) => response.json())
-  .then((data) => {
-    data.items.forEach((item) => {
-      if (
-        item.properties &&
-        item.properties["_hopsUId"] === _this.dataset.hopsuid &&
-        item.product_type &&
-        item.product_type !== "HiddenCharges" &&
-        item.key != linekey
-      ) {
-        totalQty += item.quantity;
+    .then((response) => response.json())
+    .then((data) => {
+      data.items.forEach((item) => {
+        if (
+          item.properties &&
+          item.properties["_hopsUId"] === _this.dataset.hopsuid &&
+          item.product_type &&
+          item.product_type !== "HiddenCharges" &&
+          item.key != linekey
+        ) {
+          totalQty += item.quantity;
+        }
+      });
+      totalQty += inputQty;
+      if (inputQty <= 0 || totalQty < minQty) {
+        alert("Minimum Quantity for this product is " + minQty);
+        inputQty = minQty;
+        _this.value = minQty;
       }
+      LineItemIncDec(linekey, lineNo, inputQty);
     });
-  totalQty += Number(_this.value);
-  if(totalQty < Number(_this.min))
-  {
-    alert("Minimum Quantity for this product is " + _this.min)
-    _this.value = _this.min
-   
-  }
-  LineItemIncDec(linekey,lineNo, Number(_this.value));
-});
 }
 
 // keyup validation for text length
@@ -4757,7 +4724,8 @@ function alter_please_select_delivery() {
 
 let holidayInsideNextDay = new Date();
 holidayInsideNextDay = toCSTdate(holidayInsideNextDay);
-  let hasOnlyStock = false;
+ let hasOnlyStock = false;
+
 if (window.location.href.includes("/cart")) {
 fetch('/cart.json')
   .then(res => res.json())
@@ -4784,18 +4752,18 @@ fetch('/cart.json')
     initializeEventDate(hasOnlyStock);
   });
 }
+
 function initializeDeliveryDate(hasOnlyStock) {
   var deliveryDateInput = document.getElementById("deliveryDate");
   if (deliveryDateInput && deliveryDateInput._flatpickr) {
     deliveryDateInput._flatpickr.destroy();
   }
-
-  $("#deliveryDate").flatpickr({
-    enableTime: false,
-    dateFormat: "m/d/Y",
-    disable: [
-      function (date) {
-        return isDeliveryDateDisabled(date, hasOnlyStock);
+$("#deliveryDate").flatpickr({
+  enableTime: false,
+  dateFormat: "m/d/Y",
+  disable: [
+    function (date) {
+          return isDeliveryDateDisabled(date, hasOnlyStock);
       },
     ],
     onChange: function (_selectedDates, dateStr) {
@@ -4806,11 +4774,11 @@ function initializeDeliveryDate(hasOnlyStock) {
       storeDeliveryDateSelectionMeta(hasOnlyStock);
       $("#deliveryDate").removeClass("input-error");
       $("#divmessage").html("").css("display", "none");
-    },
-    locale: {
-      firstDayOfWeek: 1, // set start day of week to Monday
-    },
-  });
+    },    
+  locale: {
+    firstDayOfWeek: 1, // set start day of week to Monday
+  },
+});
 }
 var nr_holidayDays = 4;
 
@@ -4905,8 +4873,7 @@ $("#eventDate").flatpickr({
       }
 
       let nextDay = getStockCutoffNextDay(hasOnlyStock);
-        
-      tomo.setDate(tomo.getDate() + nextDay); 
+      tomo.setDate(tomo.getDate() + nextDay);  
 
       if (tomo.getDay() == 6) {
         tomo.setDate(tomo.getDate() + 2);
@@ -4924,11 +4891,11 @@ $("#eventDate").flatpickr({
 }
 let cartDetailsCopied = false;
 $(document).ready(() => {
-  //document.getElementById("loaderbg").style.display = "none";
+  // document.getElementById("loaderbg").style.display = "none";
   if (window.location.href.includes("/cart")) {
     setLocalStorageCart();
   }
-if(!window.location.href.includes('&cart_id')){
+if(!window.location.href.includes('&cart_id') && !window.location.href.includes("/cart")){
  document.getElementById("loaderbg").style.display = "none";
 
 }
@@ -5074,10 +5041,10 @@ function findRelatedItems(cartData, hopsId) {
 
 function fillAsVariant(lineItem) {
   let _vc = document.getElementById("varAddBtn").getAttribute("data-vCount");
-   if(_isCanvasEnabled) {
+  if(_isCanvasEnabled) {
     $('.image-container').show();
   }
-  if (_vc < _variantLimit) {
+  if (_vc < _variantLimit){
     document
       .getElementById("varAddBtn")
       .setAttribute("data-vCount", Number(_vc) + 1);
@@ -5141,23 +5108,21 @@ function fillAsVariant(lineItem) {
             }else{
             _dom[0].selectize.setValue(propertyValue);
             }
-            
           }
         } else {
-           if((_dom[0].tagName == "SELECT") && ($(_dom.find(`option[value="${propertyValue}"]`)).length == 0)){
-                  _dom.eq(0).val('');
-                }else{
-                 _dom.eq(0).val(propertyValue);
-             
-                }
+          if ((_dom[0].tagName == "SELECT") && ($(_dom.find(`option[value="${propertyValue}"]`)).length == 0)) {
+            _dom.eq(0).val('');
+          } else {
+           _dom.eq(0).val(propertyValue);
+          }
         }
       }
-       if (productProperties["_canvasProperties"]  && _isCanvasEnabled) {
+       if (productProperties["_canvasProperties"]  && _isCanvasEnabled ) {
         prefillcanvasProperties(_dom, _canvasProp)
       }
     }
     if( _isCanvasEnabled){
-     var value=document.querySelectorAll('#variant_list .fontapply');
+      var value=document.querySelectorAll('#variant_list .fontapply');
     // console.log(value,'value')
     value.forEach(function(element, index) {
       if(!(element.hasAttribute('data-font-family')) && !(element.hasAttribute('data-font-size'))){
@@ -5171,14 +5136,26 @@ function fillAsVariant(lineItem) {
   });
 }
 
+
+function SortCartItems(_cartItems,_hopsId){
+ let cartItems = _cartItems
+    .filter(i => i.properties["_hopsUId"] === _hopsId && i.product_type != "HiddenCharges" && i.product_type != "")
+    .sort((a, b) => {
+      const numberA = a.properties["Variation"]?.match(/^V(\d+)/)?.[1] || -1;
+      const numberB = b.properties["Variation"]?.match(/^V(\d+)/)?.[1] || -1;
+      return numberA - numberB;
+    });
+  return cartItems
+}
+
 function prefillLineItems(cartData, cartLineItemAvailable) {
     let sorting = true;
   let _hopsId = getHopsId_ExistingItemOnEdit(cartData, cartLineItemAvailable);
   const relatedItems = findRelatedItems(cartData, _hopsId);
-  const cartItems = cartData["items"] ? cartData["items"] : [];
+  let cartItems = cartData["items"] ? cartData["items"] : [];
   if (cartItems.length > 0) {
+    cartItems = SortCartItems(cartItems,_hopsId)
     $(cartItems).each((index, lineItem) => {
-    
       // if (lineItem["key"] == cartLineItemAvailable) {
       if (
         lineItem.properties["_hopsId"] == lineItem.properties["_hopsVId"] &&
@@ -5207,7 +5184,7 @@ function prefillLineItems(cartData, cartLineItemAvailable) {
           prefilltopbottom(_canvasProp, productProperties)
           prefillaplyall(_canvasProp, productProperties)
         }
-        if (sorting && _isCanvasEnabled && productProperties["_canvasProperties"]) {
+        if (sorting && _isCanvasEnabled && productProperties["_canvasProperties"] ) {
           sortelement(_canvasProp);
         }
         console.log("productProperties", productProperties);
@@ -5255,13 +5232,14 @@ function prefillLineItems(cartData, cartLineItemAvailable) {
 
             if (_dom[0] !== undefined && _dom.attr("type") != "file") {
               if (_dom.hasClass("autocomplete")) {
-                 $(".pop-chosen-value[data-option-id='" + _dom.data("key") + "']").removeClass("show").find("input").val('');
+                $(".pop-chosen-value[data-option-id='" + _dom.data("key") + "']").removeClass("show").find("input").val('');
                 if (
                   _dom[0].selectize != undefined &&
                   propertyValue.indexOf(" ") < 0
                 ) {
                   let choosenItemName = getSelectizeLabel(_dom, propertyValue);
                   const ac_key = _dom.data("key");
+
                   const chosenObject = getChosenValue(
                     ac[ac_key],
                     propertyValue,
@@ -5286,27 +5264,48 @@ function prefillLineItems(cartData, cartLineItemAvailable) {
                 if (productProperties["_canvasProperties"] && _isCanvasEnabled) {
                   prefillcanvasProperties(_dom, _canvasProp)
                 }
-              }
-              else if(_dom.hasClass("WithoutAutoComplete")){
-                      let obj = ac[propertyName].find((i)=> i.id == propertyValue)
-                      console.log(obj);
-                      selectedImage(
-                        obj.image,
-                        propertyName,
-                        obj.label,
-                        undefined,
-                        undefined,
-                        obj.additionalCharge,
-                        obj.additionalCharge
-                      );
-                      $(`#${propertyName}_id`).val(propertyValue);
-                } 
-              else {
+            }
+            else if(_dom.hasClass("WithoutAutoComplete")){
+                    let obj = ac[propertyName].find((i)=> i.id == propertyValue)
+                    if(obj){
+                    selectedImage(
+                      obj.image,
+                      propertyName,
+                      obj.label,
+                      undefined,
+                      undefined,
+                      obj.additionalCharge,
+                      obj.additionalCharge
+                    );
+                  }
+                    $(`#${propertyName}_id`).val(propertyValue);
+              } 
+            else {
                 console.log("propertyName", propertyName);
                 console.log(" propertyValue", propertyValue);
                
 
                 if (propertyName.includes("_uploadImage")) {
+                  // $("script").each(function () {
+                  //   if (
+                  //     this.src ===
+                  //     "https://cdn.yourzoom.com/hb/_uploader/js/uploader.js"
+                  //   ) {
+                  //     this.parentNode.removeChild(this);
+                  //   }
+                  // });
+
+                  // $("#yourZoom_uploader").attr(
+                  //   "data-uploader-ref",
+                  //   propertyValue
+                  // );
+                  
+                  // var script = document.createElement("script");
+                  // script.type = "text/javascript";
+                  // script.src =
+                  //   "https://cdn.yourzoom.com/hb/_uploader/js/uploader.js";
+                  // document.head.appendChild(script);
+                  
                   var imgUrl = productProperties["_CustomDesign"];
           var reffcode = productProperties['_'+propertyName].split('~')[6];
                   var filename = productProperties['_'+propertyName].split('~')[0];
@@ -5331,9 +5330,29 @@ function prefillLineItems(cartData, cartLineItemAvailable) {
                   $("#yourZoom_uploader input").val(filename);
                   $("#yourZoom_uploader").attr("data-uploader-ref", filename);
                   $("#yourZoom_uploader").show();
+                  
                 }
 
                 if (propertyName.includes("_uploadCenter")) {
+                  // $("script").each(function () {
+                  //   if (
+                  //     this.src ===
+                  //     "https://cdn.yourzoom.com/hb/_uploader/js/uploader.js"
+                  //   ) {
+                  //     this.parentNode.removeChild(this);
+                  //   }
+                  // });
+
+                  // $(".dependent-values.show #yourZoom_centerUploader").attr(
+                  //   "data-uploader-ref",
+                  //   propertyValue
+                  // );
+
+                  // var script = document.createElement("script");
+                  // script.type = "text/javascript";
+                  // script.src =
+                  //   "https://cdn.yourzoom.com/hb/_uploader/js/uploader.js";
+                  // document.head.appendChild(script);
                   var imgUrl = productProperties["_CustomDesignCenter"];
           var reffcode2 = productProperties['_'+propertyName].split('~')[6];
                   var filename = productProperties['_'+propertyName].split('~')[0];
@@ -5354,17 +5373,18 @@ function prefillLineItems(cartData, cartLineItemAvailable) {
                   // $(".dependent-values.show #yourZoom_centerUploader .uploader-preview img").attr("src", imgUrl);
                   $(".dependent-values.show #yourZoom_centerUploader .uploader-preview img").attr("alt", filename);
                   $(".dependent-values.show #yourZoom_centerUploader .filename").text(filename);
-                  $(".dependent-values.show #yourZoom_centerUploader .filename").attr("data-refcode",reffcode2);
+          $(".dependent-values.show #yourZoom_centerUploader .filename").attr("data-refcode",reffcode2);
                   $(".dependent-values.show #yourZoom_centerUploader input").val(filename);
                   $(".dependent-values.show #yourZoom_centerUploader").attr("data-uploader-ref", filename);
                   $(".dependent-values.show #yourZoom_centerUploader").show();
+                  
                 }
-                 if((_dom[0].tagName == "SELECT") && ($(_dom.find(`option[value="${propertyValue}"]`)).length == 0)){
+                if((_dom[0].tagName == "SELECT") && ($(_dom.find(`option[value="${propertyValue}"]`)).length == 0)){
                   _dom.eq(0).val('');
                 }else{
                   _dom.eq(0).val(propertyValue);
-                    if(_dom.eq(0).attr("id") ==="streamer-size"){
-                    _dom.eq(0).trigger("change")
+                      if(_dom.eq(0).attr("id") ==="streamer-size"){
+                           _dom.eq(0).trigger("change")
                   }
                 }
                 if (productProperties["_canvasProperties"] && _isCanvasEnabled) {
@@ -5463,13 +5483,12 @@ if(issBo == true){
           $("#container1").show();
           $('#canvasName').text('');
           $('#canvasName').removeAttr('variation');
-           $(".customizer_btn.product-gallery__thumbnail").trigger("click");
+          $(".customizer_btn.product-gallery__thumbnail").trigger("click");
           await prefillcanvas();
-          await applyToVariations(true)  
-
+          await applyToVariations(true)
         }
-        if(window.innerWidth<=767){
-        $(".customizer_btn.product-gallery__thumbnail").trigger("click");}
+      if(window.innerWidth<=767){
+      $(".customizer_btn.product-gallery__thumbnail").trigger("click");}
           document.getElementById("loaderbg").style.display = "none";
 
       }).catch((error) => {
@@ -5622,7 +5641,7 @@ function calculatePremiumProcessing(iscartredirect = true) {
                 qty = 1;
               var settings = {
                 url:
-                  "https://hops-connect.dev.hodgesbadge.com/ShopifyShipping/AddVariantInPPFee?minPF=" +
+                  "https://hops-connect.staging.hodgesbadge.com/ShopifyShipping/AddVariantInPPFee?minPF=" +
                   PPCartItemsAmount.toFixed(2),
                 method: "GET",
                 timeout: 0,
@@ -5662,9 +5681,9 @@ function calculatePremiumProcessing(iscartredirect = true) {
                   }
                   
                   if (ppCartId > 0) {
-                    rem_add_PP(qty, itemId, props, ppCartId);
+                    rem_add_PP(qty, itemId, props, ppCartId,iscartredirect);
                   } else {
-                    adCart_PP(qty, itemId, props);
+                    adCart_PP(qty, itemId, props,iscartredirect);
                   }
                 }, 20000);
               });
@@ -6052,7 +6071,7 @@ function clearCart() {
 function AddPPVariant(amount) {
   var settings = {
     url:
-      "https://hops-connect.dev.hodgesbadge.com/ShopifyShipping/AddVariantInPPFee?minPF=" +
+      "https://hops-connect.staging.hodgesbadge.com/ShopifyShipping/AddVariantInPPFee?minPF=" +
       amount,
     method: "GET",
     timeout: 0,
@@ -6073,49 +6092,56 @@ function toCSTdate(inDate)
 
 function mapStockCutoffTimezoneCode(timezoneCode) {
   var code = String(timezoneCode || "").trim().toUpperCase();
+
   if (code === "IST") return "Asia/Kolkata";
-  if (code === "CST") return "america/chicago";
+  if (code === "CST") return "America/Chicago";
   if (code === "EST") return "America/New_York";
+
   return null;
 }
 
 function getStockCutoffTimezone() {
-  var isSandboxShop =
-    typeof shopPermanentDomain === "string" &&
-    shopPermanentDomain.indexOf("sandbox") !== -1;
-
-  if (isSandboxShop) {
-    var urlTimezone = new URLSearchParams(window.location.search).get("cutoffTz");
-    var mappedUrlTimezone = mapStockCutoffTimezoneCode(urlTimezone);
-    if (mappedUrlTimezone) return mappedUrlTimezone;
-  }
-
   var mappedTimezone = mapStockCutoffTimezoneCode(
     shipCalendar && shipCalendar["StockCutoffTimezone"]
   );
-  if (mappedTimezone) return mappedTimezone;
 
-  return "america/chicago";
+  return mappedTimezone || "America/Chicago";
 }
 
 function parseStockCutoffTime(timeValue) {
   var raw = String(timeValue || "").trim();
-  var match = raw.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+  var match = raw.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?$/i);
 
   if (!match) {
     return { hour: NaN, minute: 0 };
   }
 
+  var hour = parseInt(match[1], 10);
+  var minute = parseInt(match[2], 10);
+  var ampm = match[4];
+
+  if (ampm) {
+    var upper = ampm.toUpperCase();
+
+    if (upper === "PM" && hour !== 12) {
+      hour += 12;
+    }
+
+    if (upper === "AM" && hour === 12) {
+      hour = 0;
+    }
+  }
+
   return {
-    hour: parseInt(match[1], 10),
-    minute: parseInt(match[2], 10)
+    hour: hour,
+    minute: minute
   };
 }
 
 function toStockCutoffDate(inDate) {
   return new Date(
     inDate.toLocaleString("en-US", {
-      timeZone: getStockCutoffTimezone(),
+      timeZone: getStockCutoffTimezone()
     })
   );
 }
@@ -6583,23 +6609,23 @@ function shipAlerts_cart(cartItem,prodTypesSA,iscartredirect) {
 }
 
 $("#enterUploadfile").on("change paste keyup", function() {
-  var element = $(this);
+ var element = $(this);
  let inputElement=$('.either_grp').find('.pop-chosen-value').find('input').val();
  let isVisible = $('#yourZoom_uploader').is(':visible');
 if((inputElement &&  inputElement!='') || (isVisible)){
   popUpdesign('Please remove the Custom Design or Stock Design if you want to add File Name')
    $(this).val(''); 
-   $(this).blur();
+    $(this).blur();
    return;
  }
   console.log("element", element);
   if($(this).val().trim() === ""){
   $(this).val('');
-  $('.showtoggle').css('display','none');
+$('.showtoggle').css('display','none');
 
  }
  if ($(this).val().length == 7) {
-   $(this).val($(this).val().slice(0, 6));
+    $(this).val($(this).val().slice(0, 6));
     $('#error-message').show();
   } else {
     $('#error-message').hide();
@@ -6632,11 +6658,11 @@ $(".dependent-values").on("change paste keyup",'#enterCenterUploadfile', functio
   let isVisible = $('.dependent-values.show').find('#yourZoom_centerUploader').is(':visible');
   if((inputElement &&  inputElement!='') || (isVisible)){
   popUpdesign('Please remove the Custom Design or Stock Design if you want to add File Name')
-   $(this).val('');
-  $(this).blur();
+   $(this).val(''); 
+   $(this).blur();
    return;
  }
-  if($(this).val().trim() === ""){
+ if($(this).val().trim() === ""){
   $(this).val('');
  }
   var element = $(this);
@@ -6644,6 +6670,7 @@ $(".dependent-values").on("change paste keyup",'#enterCenterUploadfile', functio
   if ($(this).val().length == 7) {
      $(this).val($(this).val().slice(0, 6));
      $('.dependent-values.show').find('#error-messageCenter').show();
+
   } else {
      $('.dependent-values.show').find('#error-messageCenter').hide();
   }
@@ -6720,71 +6747,58 @@ $(function() {
     inputQuantity[$thisIndex]=val;
   });      
 });
-function validatedelivery()
-{
-  const deliveryDate = localStorage.getItem("deliveryDate"); // $("#deliveryDate").val().replace(/-/g, "/"); //localStorage.getItem("deliveryDate") ;// $("#deliveryDate").val();
-  let delAddTime = localStorage.getItem("delAddTime");
-  if (
-    deliveryDate == "" ||
-    deliveryDate == undefined ||
-    deliveryDate == "Invalid Date" ||
-    deliveryDate == null
-  ) {
- 
-    // datesAvailable = false;
-    // $("#deliveryDate")
-    //   .removeClass("input-error")
-    //   .addClass("input-error")
-    //   .focus();
-  } else {
-    if (new Date().toLocaleDateString() != delAddTime) {
-      document.getElementById("loaderbg").style.display = "block";     
-      document.getElementById('calendaralerts').style.display = 'none';
-      
+function validatedelivery() {
+const deliveryDate = localStorage.getItem("deliveryDate");
+const storedDate = localStorage.getItem("delAddTime");
 
-fetch("/cart.js")
-.then((response) => response.json())
-.then((data) => {
+const loader = document.getElementById("loaderbg");
+const calendarAlert = document.getElementById("calendaralerts");
 
-  let ppCartId = 0;     
+if (!deliveryDate || deliveryDate === "Invalid Date") {
+  return true;
+}
 
-  let ppCart = data.items.filter(function (item) {
-    return item.title.includes("Premium Processing");
-  }); 
+const today = new Date().toLocaleDateString();
 
-  if (ppCart.length > 0) {
-    ppCartId = ppCart[0].id;
-  }
-  if(ppCartId > 0) {
-   jQuery.post("/cart/change.js", { quantity: 0, id: ppCartId }).done(function () {
-    // window.location.href = "/cart";
-    $(".card__section").load(location.href + " .card__section");
-    
-   });
-  }
-  setTimeout(()=>{
-    document.getElementById("loaderbg").style.display = "none";
-    $("#deliveryDate").val('');
-      datesAvailable = false;
-      $("#deliveryDate")
-      .removeClass("input-error")
-      .addClass("input-error")
-      .focus();
-  },3000)
-  
+if (today !== storedDate) {
+  loader.style.display = "block";
+  if (calendarAlert) calendarAlert.style.display = "none";
 
-});
+  fetch("/cart.js")
+    .then((res) => res.json())
+    .then((cart) => {
+      const ppItem = cart.items.find(item =>
+        item.title.includes("Premium Processing")
+      );
 
-      return false;
-     }
-    
-  }
+      const updateUI = () => {
+        $(".card__section").load(location.href + " .card__section");
+        loader.style.display = "none";
+        $("#deliveryDate").val('');
+        datesAvailable = false;
+        $("#deliveryDate")
+          .removeClass("input-error")
+          .addClass("input-error")
+          .focus();
+      };
 
+      if (ppItem) {
+        jQuery.post("/cart/change.js", {
+          quantity: 0,
+          id: ppItem.id
+        }).done(updateUI);
+      } else {
+        updateUI();
+      }
+    });
+}
+
+return true;
 }
 
 
 function preCheckoutAction(_this){
-  let notifyMessage = '';
+let notifyMessage = '';
   if ($('.btn_cart_PC').length > 0) {
     let rawMessage = $(_this).attr('data-alertmessage');
     if (rawMessage) {
@@ -7044,232 +7058,218 @@ function proceedPreCheckoutAction(_this, deliveryDate) {
             });
             $.post("cart/update.js", { attributes: prop })
             .then(async () => {
-  
+              // Prevent double checkout
+               checkoutTriggered = false;
               try {
-          
-                let setupIds = [];
-                let removeKeys = new Set();
-                let hasChanges = false;
-                let changed = false;
-                let isextraSetup = false;
-          
-                //  collect setupIds
+            
+                let setupIds = new Set();
+                let removes = new Set();
+                let updates = [];
+                let adds = [];
+              //  let changed = false;
+                let updatedKeys = new Set();
+            
+                //  Maps
+                let productMap = new Map(); // hopsUId -> any product
+                let setupMap = new Map();   // hopsUId -> setup item
+                let groupMap = new Map();   // hopsUId -> [items]
+                let data = await fetch("/cart.js").then(r => r.json());
+
+                // Build maps
                 data.items.forEach(item => {
-                  if (item.product_type == "HiddenCharges" && item.properties?.ChargeType == "Setup Charge") {
-                    setupIds.push(item.properties._hopsUId);
+                  let hopsUId = item.properties?._hopsUId;
+                  if (!hopsUId) return;
+            
+                  // group map (exclude HiddenCharges)
+                  if (item.product_type !== "HiddenCharges") {
+                    if (!groupMap.has(hopsUId)) groupMap.set(hopsUId, []);
+                    groupMap.get(hopsUId).push(item);
+                    productMap.set(hopsUId, item);
+                  }
+            
+                  // setup map
+                  if (item.product_type === "HiddenCharges" && item.properties?.ChargeType === "Setup Charge") {
+                    setupIds.add(hopsUId);
+                    setupMap.set(hopsUId, item);
                   }
                 });
-          
-                //  FIRST LOOP
+            
+                //  SINGLE LOOP
                 for (const item of data.items) {
-          
-                  if (item.product_type === "HiddenCharges" && item.properties?.ChargeType === "Setup Charge") {
-                    let hopsUId = item.properties?._hopsUId;
-          
-                    let relatedProduct = data.items.find(i =>
-                      i.product_type !== "HiddenCharges" &&
-                      i.properties?._hopsUId === hopsUId
-                    );
-          
-                    if (!relatedProduct) {
-                      hasChanges = true;
-                      isextraSetup = true;
-                    }
-                  }
-          
-                  if (item.product_type === "HiddenCharges" || item.properties?.Variation) continue;
-          
-                  let proSubType = cart_validateSetupCharge(item);
+            
                   let hopsUId = item.properties?._hopsUId;
-                  if (!hopsUId) continue;
-          
-                  let currentSubtype = item.properties?._productSubType;
-                  let setupExists = setupIds.includes(hopsUId);
-          
-                  if (proSubType && currentSubtype !== proSubType) hasChanges = true;
-                  if (!proSubType && currentSubtype !== undefined) hasChanges = true;
-                  if (proSubType && !setupExists) hasChanges = true;
-                  if (!proSubType && setupExists) hasChanges = true;
-                }
-          
-                if (!hasChanges) {
-                  $(".cart-recap__checkout")[0]?.click();
-                  return;
-                }
-          
-                //  SECOND LOOP
-                for (const item of data.items) {
-          
-                  //  orphan remove
-                  if (item.product_type === "HiddenCharges" && item.properties?.ChargeType === "Setup Charge" && isextraSetup) {
-          
-                    let hopsUId = item.properties?._hopsUId;
-          
-                    let relatedProduct = data.items.find(i =>
-                      i.product_type !== "HiddenCharges" &&
-                      i.properties?._hopsUId === hopsUId
-                    );
-          
-                    if (!relatedProduct && !removeKeys.has(item.key)) {
-          
-                      removeKeys.add(item.key);
-          
-                      await fetch('/cart/change.js', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id: item.key, quantity: 0 })
-                      });
-          
-                      changed = true;
-          
-                      await new Promise(r => setTimeout(r, 100));
+            
+                  // ---------- REMOVE OFFER SETUP ----------
+                  if (
+                    item.product_type === "HiddenCharges" &&
+                    item.properties?.ChargeType === "Setup Charge"
+                  ) {
+                    if (!productMap.has(hopsUId)) {
+                      removes.add(item.key);
                     }
+                    continue;
                   }
-          
-                  if (item.product_type === "HiddenCharges") continue;
-          
+            
+                  // skip invalid
+                  if (item.product_type === "HiddenCharges" || item.properties?.Variation || !hopsUId) {
+                    continue;
+                  }
+            
                   let proSubType = cart_validateSetupCharge(item);
-                  let hopsUId = item.properties?._hopsUId;
-                  if (!hopsUId) continue;
-          
+                  let setupExists = setupIds.has(hopsUId);
+            
+                  //  ALL RELATED ITEMS (non hidden)
+                  let relatedItems = groupMap.get(hopsUId) || [];
                   let currentSubtype = item.properties?._productSubType;
-          
-                  //  UPDATE
+                  // ---------- UPDATE subtype for ALL ----------
                   if (proSubType && currentSubtype !== proSubType) {
-          
-                    let newProps = { ...item.properties, _productSubType: proSubType };
-          
-                    await fetch('/cart/change.js', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        id: item.key,
-                        quantity: item.quantity,
-                        properties: newProps
-                      })
-                    });
-          
-                    changed = true;
-                    await new Promise(r => setTimeout(r, 100));
-                  }
-          
-                  //  REMOVE subtype
-                  if (!proSubType && currentSubtype !== undefined) {
-          
-                    let newProps = { ...item.properties };
-                    delete newProps._productSubType;
-          
-                    await fetch('/cart/change.js', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        id: item.key,
-                        quantity: item.quantity,
-                        properties: newProps
-                      })
-                    });
-          
-                    changed = true;
-                    await new Promise(r => setTimeout(r, 100));
-                  }
-                  if (item.product_type === "HiddenCharges" || item.properties?.Variation) continue;
-                  let totalQty = data.items
-                    .filter(ci => ci.properties?._hopsUId === hopsUId && ci.product_type !== "HiddenCharges")
-                    .reduce((sum, ci) => sum + ci.quantity, 0);
-          
-                  //  ADD
-                  if (proSubType && !setupIds.includes(hopsUId)) {
-          
-                    let itemToAdd = buildSetupChargeItem(item, totalQty, proSubType);
-          
-                    if (itemToAdd) {
-                      await fetch("/cart/add.js", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ items: [itemToAdd] })
-                      });
-          
-                     // setupIds.push(hopsUId);
-                      changed = true;
-          
-                      await new Promise(r => setTimeout(r, 100));
-                    }
-                  }
-          
-                  //  REMOVE
-                  if (!proSubType && setupIds.includes(hopsUId)) {
-          
-                    for (const ci of data.items) {
-                      if (
-                        ci.properties?._hopsUId === hopsUId &&
-                        ci.product_type === "HiddenCharges" &&
-                        ci.properties?.ChargeType === "Setup Charge"
-                      ) {
-          
-                        if (!removeKeys.has(ci.key)) {
-          
-                          removeKeys.add(ci.key);
-          
-                          await fetch('/cart/change.js', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ id: ci.key, quantity: 0 })
-                          });
-          
-                          changed = true;
-          
-                          await new Promise(r => setTimeout(r, 100));
-                        }
+                    for (const ri of relatedItems) {
+                      if (!updatedKeys.has(ri.key)) {
+                        let newProps = { ...ri.properties, _productSubType: proSubType };
+            
+                        updates.push({
+                          id: ri.key,
+                          quantity: ri.quantity,
+                          properties: newProps
+                        });
+            
+                        updatedKeys.add(ri.key);
                       }
                     }
                   }
+            
+                  // ---------- REMOVE subtype for ALL ----------
+                  if (!proSubType && currentSubtype !== undefined) {
+                    for (const ri of relatedItems) {
+                      if (!updatedKeys.has(ri.key)) {
+                        let newProps = { ...ri.properties };
+                        delete newProps._productSubType;
+            
+                        updates.push({
+                          id: ri.key,
+                          quantity: ri.quantity,
+                          properties: newProps
+                        });
+            
+                        updatedKeys.add(ri.key);
+                      }
+                    }
+                  }
+            
+                  // ---------- TOTAL QTY ----------
+                  let totalQty = relatedItems.reduce((sum, ci) => sum + ci.quantity, 0);
+            
+                  // ---------- ADD SETUP ----------
+                  if (proSubType && !setupExists) {
+                    let itemToAdd = buildSetupChargeItem(item, totalQty, proSubType);
+                    if (itemToAdd) {
+                      adds.push(itemToAdd);
+                      setupIds.add(hopsUId); // prevent duplicate adds
+                    }
+                  }
+            
+                  // ---------- REMOVE SETUP ----------
+                  if (!proSubType && setupExists) {
+                    let setupItem = setupMap.get(hopsUId);
+                    if (setupItem) {
+                      removes.add(setupItem.key);
+                    }
+                  }
                 }
-          
-                if (!changed) {
-                  $(".cart-recap__checkout")[0]?.click();
+            
+                //  No changes → checkout
+                if (removes.size === 0 && adds.length === 0) {
+                  triggerCheckout();
                   return;
                 }
-          
-                // MOA + PP
-                await new Promise(r => setTimeout(r, 100));
-          
-                let updatedCart = await fetch("/cart.js").then(r => r.json());
-          
+            
+                // ============================
+                //  EXECUTION
+                // ============================
+            
+                //  REMOVE
+                for (const key of removes) {
+                  const res = await fetch('/cart/change.js', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: key, quantity: 0 })
+                  });
+                  if (!res.ok) {
+                    throw new Error("Remove failed");
+                  }
+                 // changed = true;
+                }
+            
+                //  UPDATE (Shopify limitation)
+                for (const upd of updates) {
+                  const res = await fetch('/cart/change.js', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(upd)
+                  });
+                  if (!res.ok) {
+                    throw new Error("Update failed");
+                  }
+                }
+            
+                //  ADD (BATCH)
+                if (adds.length > 0) {
+                  const res = await fetch('/cart/add.js', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items: adds })
+                  })
+                  if (!res.ok) {
+                    throw new Error("Add failed"); 
+                  }
+                }
+                
+            
+                // ============================
+                //  FINAL PROCESSING
+                // ============================
+            
+                //let updatedCart = await fetch("/cart.js").then(r => r.json());
+            
                 try {
-                  await Cart_CartMOA(minLimits, moaAmnts, updatedCart);
-                } catch(e) {
+                  await Cart_CartMOA(minLimits, moaAmnts);
+                } catch (e) {
                   console.error("MOA failed", e);
-                }          
+                }
+            
                 try {
-                  updatedCart = await fetch("/cart.js").then(r => r.json());
-                  await calculatePremiumProcessing(false);
-                } catch(e) {
+                  //updatedCart = await fetch("/cart.js").then(r => r.json());
+                  calculatePremiumProcessing(false);
+                } catch (e) {
                   console.error("PP failed", e);
                 }
-          
-                await new Promise(r => setTimeout(r, 100));
-          
-                await showAutoPopup(updatedCart);
-          
-                // $(".cart-recap__checkout")[0]?.click();
-          
+            
+                await showAutoPopup();
+                triggerCheckout();
+            
               } catch (err) {
                 console.error("Checkout error:", err);
-                $(".cart-recap__checkout")[0]?.click();
+                triggerCheckout();
               }
-          
             })
+            // .then(() => {
+            //   $(".cart-recap__checkout")[0]?.click();
+            // })
+            .catch((err) => {
+              console.error("Update failed:", err);
           
-            .then(() => {
-              $(".cart-recap__checkout")[0]?.click();
-            }) 
+              $(_this).text(btnText);
+              $(".fa-spin").hide();
+              document.getElementById("loaderbg").style.display = "none";
+            });
+           
           }).fail((data) => {
                 $(_this).text(btnText);                
                 document.getElementById("loaderbg").style.display = "none";
           });
       });
   } else {
-    var loaderEl = document.getElementById("loaderbg");
+        var loaderEl = document.getElementById("loaderbg");
     if (loaderEl) {
       loaderEl.style.display = "none";
     }
@@ -7345,9 +7345,9 @@ function validate_Extrainputtext_ontype(element) {
 
 
 $(".dependent-values").on("click","#uploadclick",function () {
-  if(!_isCanvasEnabled){
-    $(".UploadDesignNotes").css('display','none');
-  }
+if(!_isCanvasEnabled){
+  $(".UploadDesignNotes").css('display','none');
+}
  let inputElement= $('.dependent-values.show').find('.pop-chosen-value').find('input').val();
  let fileName=$('.dependent-values.show').find('#enterCenterUploadfile').val();
   if((inputElement && inputElement !== '') || (fileName && fileName !== '')) {
@@ -7361,7 +7361,7 @@ $(".dependent-values").on("click","#uploadclick",function () {
 });
 
 $("#uploadclick_seq").click(function () {
-  if (!_isCanvasEnabled) {
+if (!_isCanvasEnabled) {
     $(".UploadDesignNotes").css('display','none');
   }
 const inputElement=$('.either_grp').find('.pop-chosen-value').find('input').val();
@@ -7383,7 +7383,7 @@ function Form_upload_close() {
  $('#but_upload_ok').html('Ok');
  $("#but_upload_ok").prop("disabled",false);
  document.getElementById('err').style.display='none';
- document.getElementById('fileerr').style.display='none';
+ document.getElementById("fileerr").style.display = "none";
    error_close();
  $('#but_upload_ok').removeClass('loading');
 }
@@ -7445,6 +7445,7 @@ function hasSpecialChars(filename) {
 function blobUpload() {
 const preLoader = document.getElementById('preloader');
 var file = $('#file1')[0].files[0]
+
 if(file == undefined)
 {
   var selUrl = $(".containerupload ").find(".selectedImg").attr("data-value");
@@ -7504,7 +7505,7 @@ if(file == undefined)
     $("#yourZoom_uploader input").val(filename.toUpperCase());
     $('#uploadclick_seq').val('Change Your Design');
     $("#yourZoom_uploader").attr("data-uploader-ref", filename);
-    $("#yourZoom_uploader input").trigger('change')
+    $("#yourZoom_uploader input").trigger('change');
     $("#yourZoom_uploader").show(); 
   }
  
@@ -7535,7 +7536,7 @@ form.append("email", _email);
 form.append("productNumber", hopsProdId);
 
 var settings = {
-    "url": "https://hops-connect.dev.hodgesbadge.com/api/CustomDesign/CreateCustomDesign",
+    "url": "https://hops-connect.staging.hodgesbadge.com/api/CustomDesign/CreateCustomDesign",
     "method": "POST",
     "timeout": 0,  
     "processData": false,
@@ -7602,7 +7603,7 @@ $.ajax(settings).done(function (response) {
 
 $("#file1").on("change", function (e) {
   document.getElementById('err').style.display='none';
-  document.getElementById('fileerr').style.display='none';
+  document.getElementById("fileerr").style.display = "none";
  var previews = $("#previews");
    var prevSel = $(".containerupload ").find(".selectedImg");  
    if (prevSel.length > 0) $(prevSel).removeClass("selectedImg");
@@ -7647,7 +7648,7 @@ var arr = [];
 if(newArr == null) window.localStorage.setItem('myArr', JSON.stringify(arr));
 var settings = {
     url:
-    "https://hops-connect.dev.hodgesbadge.com/api/CustomDesign/GetCustomeDesignDestailsByEmail?email="+ _email,
+    "https://hops-connect.staging.hodgesbadge.com/api/CustomDesign/GetCustomeDesignDestailsByEmail?email="+ _email,
     method: "GET",
     timeout: 0,
 };
@@ -7717,13 +7718,13 @@ function removeclick() {
 }
 function removecancel(){
   $('#design_alert').css('display','none');
-  $('#design_alerts').css('display','none');
-  $('.showtoggle').css('display','none');
+ // $('#design_alerts').css('display','none');
+$('.showtoggle').css('display','none');
 
   return false 
 }
 function checkdesign(){
-  $('#design_alerts').css('display','none');
+$('#design_alerts').css('display','none');
 }
 function removevalue(){
   if(_designAlert){
@@ -7753,7 +7754,7 @@ function removevalue(){
   $('.custom_ui').css('display', 'block');
   $('.new_custom').css('display', 'none');
   $("#yourZoom_uploader input").trigger('change')
-  $('.showtoggle').css('display','none');
+$('.showtoggle').css('display','none');
 }
 
 
@@ -7772,7 +7773,7 @@ async function cartalert_yes(){
     document.getElementById("cart-page").style.display = "block";
   }
   else{
-    document.getElementById("loaderbg").style.display = "block";
+  document.getElementById("loaderbg").style.display = "block";
   }
   console.time("time")
   let cartLineItemAvailable = checkOrderLineItemAvailable1();
@@ -7902,6 +7903,7 @@ function stockCustomRiderVariant(element) {
 }
 }
 
+
 //custom ride number
 $(".Set_Num").on("change", function () {
   let end = $(".End").find(":selected").text();
@@ -7985,6 +7987,7 @@ function stockCustomRiderVariant(element) {
 }
 }
 
+
 //print on back logic.
 function validateprintOnBack(_this){
   var value = $(_this).val();
@@ -8037,7 +8040,22 @@ function removePrintonBackLines(arr,prop,prev,isincludes){
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    
+  var menu=document.getElementById('menuSection');
+  //const body = document.body;
+  const html = document.documentElement;
+    console.log(menu);
+
+  // // Function to toggle menu visibility and scrollbar
+  function toggleMenu() {
+     const isOpen = menu.getAttribute('aria-expanded') === 'false';
+    if(isOpen){
+      html.classList.toggle('menu-opens');
+    }
+    else{
+      html.classList.remove('menu-opens');
+    }
+  }
+  menu.addEventListener('click', toggleMenu);
     // Function to add the product title
     function addProductTtitle() {
         // Get the current path of the webpage
@@ -8077,7 +8095,7 @@ document.addEventListener("DOMContentLoaded", function() {
             newDiv.style.marginTop = '1%';
             newDiv.innerHTML = `
             <p style="text-align: center;font-size: 17px;">Welcome to the Hodges Badge Help Center.<p><br>
-            <p style="text-align: center;font-size: 16px;">What would you like help with today?   You can quickly find most answers here or  <a href="https://hodgesbadge.com/pages/contact-us" target="_self"><span style="color: rgb(0, 92, 171); text-decoration: underline;font-weight: bold;">contact us</span></a> for <br> service.</p>
+            <p style="text-align: center;font-size: 16px;">What would you like help with today? You can quickly find most answers here or  <a href="https://hodgesbadge.com/pages/contact-us" target="_self"><span style="color: rgb(0, 92, 171); text-decoration: underline;font-weight: bold;">contact us</span></a> for <br> service.</p>
             `;
             // Append the new div to a parent element in the document
             var parentElement = document.querySelector('.corner-page-banner.co-w-full.co-py-16.co-flex.co-flex-col.co-items-center.co-justify-center.co-bg-center');
@@ -8178,7 +8196,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-
 //Product Page Description Tab View.
 function openTab(tabName,event) {
 var i;
@@ -8199,199 +8216,359 @@ document.getElementById(tabName).classList.add("active");
 
 event.currentTarget.classList.add("active");
 }
+// const titleMappings = [
+//   { keyword: "Setup Charges", title: "Setup Charges", description: "Setup Charges" },
+//   { keyword: "Minimum Order", title: "Minimum Order Amount", description: "Minimum Order Amount" },
+//   { keyword: "Premium Processing", title: "Premium Processing Charges", description: "Premium Processing Charges" },
+//   { keyword: "Flat Charges", title: "Flat Charges", description: "Flat Charges fee" },
+// ];
+
+
+// const updateCartItems = async (data) => {
+//   let hasChanged = false;
+//   let updatedItems = [];
+//   for (const item of data.items) {
+//     let props = {};
+//     if (item.product_type === "HiddenCharges" && !item.title.includes("Additional Charges")) {
+//       props = { ...item.properties };
+//       let mapping = titleMappings.find((mapping) =>
+//         item.title.includes(mapping.keyword)
+//       );
+//       if (mapping && !item.properties["_legacy_product_as_fee_title"]) {
+//         if (mapping.title.includes("Flat Charges")) {
+//           const chargeType = item.properties["ChargeType"];
+//           if (chargeType === "Die Charge" || chargeType === "Logo Charge") {
+//             const chargeName = chargeType === "Die Charge" ? "Die" : "Logo";
+//             mapping = {
+//               title: `${chargeName} Charges`,
+//               description: `${chargeName} Charges`,
+//             };
+//           }
+//         }
+//         props["_legacy_product_as_fee_title"] = mapping.title;
+//         props["_legacy_product_as_fee_description"] =  mapping.description;
+//         hasChanged = true;
+//       }
+//     } else {
+//       Object.keys(item.properties).forEach((key) => {
+//         console.log(`Key: ${key}, Value: ${item.properties[key]}`);
+//         if (
+//           (key.includes("CustomDesign") || key.includes("Base")) &&
+//           !key.includes("_")
+//         ) {
+//           props[`_${key}`] = item.properties[key];
+//           hasChanged = true;
+//         } else if (key.includes(".~")) {
+//           props[`${key.split(".~")[1]}`] = item.properties[key];
+//           hasChanged = true;
+//         }else{
+//           props[key] = item.properties[key];
+//         }
+//       });
+//     }
+//     if(!item.title.includes("Additional Charges")){
+//     updatedItems.push({
+//       id: item.id,
+//       quantity: item.quantity,
+//       properties: props,
+//     });
+//     }
+//   }
+//   console.log(updatedItems, "updatedItems");
+//   if (hasChanged) {
+//       await removeCart();
+//     if (updatedItems.length) {
+//       await addItemsToCart(updatedItems);
+//     }
+//   }
+// };
+
+// async function validateCart(delAddTime){
+//   return  new Promise(async (resolve, reject) => { 
+//       document.getElementById("loaderbg").style.display = "block";    
+//       await fetch("/cart.js")
+//       .then((response) => response.json())
+//       .then(async (data) => {
+//         await updateCartItems(data);
+//         if(new Date().toLocaleDateString() == delAddTime || data.items.length == 0){
+//         document.getElementById("loaderbg").style.display = "none"; 
+//         }
+//         resolve(true)
+//       })
+//   })
+// }
+
+// async function removeCart() {
+//   return new Promise((resolve, reject) => {
+//     $.ajax({
+//       type: "POST",
+//       url: "/cart/clear.js",
+//       success: function () {
+//         resolve(true)
+//       }
+//     });
+//   });
+// }
+
+// async function addItemsToCart(items) {
+
+//   return new Promise((resolve, reject) => {
+//     var addCart = { items: items };
+//     fetch("/cart/add.js", {
+//       body: JSON.stringify(addCart),
+//       credentials: "same-origin",
+//       headers: {
+//         "Content-Type": "application/json",
+//         "X-Requested-With": "xmlhttprequest",
+//       },
+//       method: "POST",
+//     })
+//       .then((response) => {
+//         return response.json();
+//       })
+//       .then((json) => {
+//         // return (window.location.href = "/cart");
+//         $(".table-wrapper").load(location.href + " .table-wrapper > *");
+//         resolve(true)
+//       })
+//   });
+// }
 
 function validate_splChar_ontype(element) {
-  const restrictedChars = /[~|{}\[\]<>()[\]]/g;
-
-  const field = $(element);
-  const value = field.val() || '';
-  const cleanedValue = value.replace(restrictedChars, '');
-
-  const isTextarea = element.tagName.toLowerCase() === "textarea";
-
-  // Get optionId (common logic)
-  const optionId =
-  field.data("optionId")?? field.closest("li").data("optionId") ;
-
-  const error = isTextarea
-    ? $('.txtarea_validation_span')
-    : $(".error." + optionId);
-
-  // If invalid chars found
-  if (value !== cleanedValue) {
-    field.val(cleanedValue);
-
-    error.html(specialCharValidation).show();
-    return;
+    const restrictedChars = /[~|{}\[\]<>()[\]]/g;
+  
+    const field = $(element);
+    const value = field.val() || '';
+    const cleanedValue = value.replace(restrictedChars, '');
+  
+    const isTextarea = element.tagName.toLowerCase() === "textarea";
+  
+    // Get optionId (common logic)
+    const optionId =
+    field.data("optionId")?? field.closest("li").data("optionId") ;
+  
+    const error = isTextarea
+      ? $('.txtarea_validation_span')
+      : $(".error." + optionId);
+  
+    // If invalid chars found
+    if (value !== cleanedValue) {
+      field.val(cleanedValue);
+  
+      error.html(specialCharValidation).show();
+      return;
+    }
+  
+    // If valid
+    error.hide();
   }
-
-  // If valid
-  error.hide();
-}
 function buildSetupChargeItem(item, totalQty, subType) {
   
-  let pSupType = "00" + subType;
-  let setupChargeValues = setupCharges[pSupType];
-  if (!setupChargeValues) return null;
-
-  let [limit, valueId] = setupChargeValues.split(",");
-
-  if (Number(totalQty) >= Number(limit)) return null;
-
-  let variantId = SetupChargeVariants[valueId];
-
-  return {
-    quantity: 1,
-    id: variantId,
-    properties: {
-      ChargeType: "Setup Charge",
-      _SetupCharge: valueId,
-      _hopsId: item.properties._hopsId,
-      _hopsUId: item.properties._hopsUId,
-      _prodType: item.properties._prodType,
-      _legacy_product_as_fee_title: "Setup Charges",
-      _legacy_product_as_fee_description: "Setup Charges"
-    }
-  };
-}
-
-
-function cart_validateSetupCharge(item) {
-
-  let productSubType = cart_productSubType[item.properties?._hopsId] || "";
-
-  if (!subTypeIds.includes(productSubType)) return "";
-
-  if (excludeProductsSC.includes(item.properties?._hopsId)) return "";
-
-  return productSubType;
-}
-
-async function Cart_CartMOA(minLimits, moaAmnts, data) {
-  let cartTotal = data.original_total_price / 100;
-
-  if (cartTotal <= 0) {
-    sessionStorage.setItem("isKlaviyo", "true");
-    window.location.href = "/cart";
-    return;
+    let pSupType = "00" + subType;
+    let setupChargeValues = setupCharges[pSupType];
+    if (!setupChargeValues) return null;
+  
+    let [limit, valueId] = setupChargeValues.split(",");
+  
+    if (Number(totalQty) >= Number(limit)) return null;
+  
+    let variantId = SetupChargeVariants[valueId];
+  
+    return {
+      quantity: 1,
+      id: variantId,
+      properties: {
+        ChargeType: "Setup Charge",
+        _SetupCharge: valueId,
+        _hopsId: item.properties._hopsId,
+        _hopsUId: item.properties._hopsUId,
+        _prodType: item.properties._prodType,
+        _legacy_product_as_fee_title: "Setup Charges",
+        _legacy_product_as_fee_description: "Setup Charges"
+      }
+    };
   }
+  
+  
+  function cart_validateSetupCharge(item) {
+  
+    let productSubType = cart_productSubType[item.properties?._hopsId] || "";
+  
+    if (!subTypeIds.includes(productSubType)) return "";
+  
+    if (excludeProductsSC.includes(item.properties?._hopsId)) return "";
+  
+    return productSubType;
+  }
+  
+async function Cart_CartMOA(minLimits, moaAmnts) {
+  try {
+    //  Always fetch latest cart
+    let cart = await fetch("/cart.js").then(r => r.json());
 
-  let cartItems = data.items;
+    let cartTotal = cart.original_total_price / 100;
 
-  let prodMinLimit = 0;
-  let moaItemKey = null;
-  let moaItemPrice = 0;
-  let ppPrice = 0;
-
-  for (let item of cartItems) {
-
-    if (item.title.includes("Minimum Order")) {
-      moaItemKey = item.key;
-      moaItemPrice = item.price / 100;
+    if (cartTotal <= 0) {
+      sessionStorage.setItem("isKlaviyo", "true");
+      window.location.href = "/cart";
+      return;
     }
 
-    if (item.title.includes("Premium Processing")) {
-      ppPrice = item.line_price / 100;
-    }
+    let cartItems = cart.items;
 
-    if (item.product_type != "HiddenCharges") {
-      let prodType = item.properties?._prodType;
-      if (prodType && minLimits[prodType]) {
-        prodMinLimit = Math.max(prodMinLimit, minLimits[prodType]);
+    let prodMinLimit = 0;
+    let moaItem = null;
+    let ppPrice = 0;
+
+    // ============================
+    // SINGLE LOOP
+    // ============================
+    for (let item of cartItems) {
+
+      if (item.properties?._legacy_product_as_fee_title === "Minimum Order Amount") {
+        moaItem = item;
+      }
+
+      if (item.title.includes("Premium Processing")) {
+        ppPrice = item.line_price / 100;
+      }
+
+      if (item.product_type !== "HiddenCharges") {
+        let prodType = item.properties?._prodType;
+        if (prodType && minLimits[prodType]) {
+          prodMinLimit = Math.max(prodMinLimit, minLimits[prodType]);
+        }
       }
     }
-  }
 
-  let minAmnt = prodMinLimit - (cartTotal - moaItemPrice - ppPrice);
+    let moaItemPrice = moaItem ? moaItem.price / 100 : 0;
 
-  console.log("MOA Calculation:", { minAmnt });
+    let minAmnt = prodMinLimit - (cartTotal - moaItemPrice - ppPrice);
 
-  //  NEED MOA
-  if (minAmnt > 0) {
-
-    let moakey = (Math.round(minAmnt * 100) / 100).toFixed(2);
+    let moakey = Number(minAmnt > 0 ? minAmnt : 0).toFixed(2);
     let moaId = moaAmnts;
 
-    if (moaItemKey) {
-      await fetch("/cart/change.js", {
+    let existingMoaKey = moaItem?.properties?.MOA;
+
+    // ============================
+    // NO CHANGE
+    // ============================
+    if (moaItem && existingMoaKey === moakey) {
+      return;
+    }
+
+    // ============================
+    // REMOVE OLD MOA
+    // ============================
+    if (moaItem) {
+      let res = await fetch("/cart/change.js", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: moaItemKey,
+          id: moaItem.key,
           quantity: 0
         })
       });
 
-      await new Promise(res => setTimeout(res, 100));
+      if (!res.ok) {
+        throw new Error("Remove MOA failed");
+      }
     }
 
-    await fetch("/cart/add.js", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        items: [
-          {
-            quantity: 1,
-            id: moaId,
-            properties: {
-              MOA: moakey,
-              _legacy_product_as_fee_title: "Minimum Order Amount",
-              _legacy_product_as_fee_description: "Minimum Order Amount"
+    // ============================
+    // ADD NEW MOA
+    // ============================
+    if (minAmnt > 0 && moaId) {
+      let res = await fetch("/cart/add.js", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: [
+            {
+              quantity: 1,
+              id: moaId,
+              properties: {
+                MOA: moakey,
+                _legacy_product_as_fee_title: "Minimum Order Amount",
+                _legacy_product_as_fee_description: "Minimum Order Amount"
+              }
             }
-          }
-        ]
-      })
-    });
-
-    await new Promise(res => setTimeout(res, 100));
-  }
-
-  //  REMOVE MOA
-  else {
-    if (moaItemKey) {
-      await fetch("/cart/change.js", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: moaItemKey,
-          quantity: 0
+          ]
         })
       });
 
-      await new Promise(res => setTimeout(res, 100));
+      if (!res.ok) {
+        throw new Error("Add MOA failed");
+      }
     }
+
+  } catch (err) {
+    console.error("Cart_CartMOA internal error:", err);
+
+    // IMPORTANT: rethrow so outer catch works
+    throw err;
+  }
+}
+  function showAutoPopup() {
+    return new Promise((resolve) => {
+  
+      //  Create elements
+      const overlay = document.createElement("div");
+      overlay.classList.add("auto-popup-overlay");
+  
+      const popupBox = document.createElement("div");
+      popupBox.classList.add("auto-popup-box");
+  
+      const message = document.createElement("p");
+      message.classList.add("auto-popup-message");
+  
+      //  Get message from metafields
+      let popupText = validationMessage;
+  
+      message.textContent = popupText;
+  
+      // Build structure
+      popupBox.appendChild(message);
+      overlay.appendChild(popupBox);
+      document.body.appendChild(overlay);
+  
+      // Auto close
+      setTimeout(() => {
+        overlay.remove();
+        resolve(); // continue checkout
+      }, 3000);
+    });
   }
 
- // await cart_calculatePremiumProcessing(data);
+  function triggerCheckout() {
+  console.log(checkoutTriggered,"checkoutTriggered");
+  if (checkoutTriggered) return;
+  checkoutTriggered = true;
+  $(".cart-recap__checkout")[0]?.click();
 }
 
-function showAutoPopup(cart) {
-  return new Promise((resolve) => {
+if (window.location.pathname === "/cart") {
 
-    //  Create elements
-    const overlay = document.createElement("div");
-    overlay.classList.add("auto-popup-overlay");
+  function trackPrint(method) {
+    if (typeof gtag === "function") {
+      gtag("event", "print_cart", {
+        method,
+        page_location: window.location.href
+      });
+    }
+  }
 
-    const popupBox = document.createElement("div");
-    popupBox.classList.add("auto-popup-box");
+  function printCart() {
+    trackPrint("print_button");
+    window.print();
+  }
 
-    const message = document.createElement("p");
-    message.classList.add("auto-popup-message");
+  document.addEventListener("keydown", function (event) {
+    if ((event.ctrlKey || event.metaKey) &&
+        event.key.toLowerCase() === "p") {
 
-    //  Get message from metafields
-    let popupText = validationMessage;
-
-    message.textContent = popupText;
-
-    // Build structure
-    popupBox.appendChild(message);
-    overlay.appendChild(popupBox);
-    document.body.appendChild(overlay);
-
-    // Auto close
-    setTimeout(() => {
-      overlay.remove();
-      resolve(); // continue checkout
-    }, 3000);
+      trackPrint("browser_print");
+    }
   });
+
 }

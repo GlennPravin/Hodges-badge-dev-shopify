@@ -14,20 +14,12 @@
 {%- assign optionsLimit =  shop.metafields.optionFamily[family].value.optionsLimit-%}
 {% assign prodSubTypeId = product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductSubType |  strip %}
 
-<script> 
-  var SeqOptions = {{SeqChangableOptions | json}}; 
-  var Seq_Options = {{shop.metafields.SeqChangableOptions | json}}; 
-  var popupeitherOptions = {{SeqChangableOptions | json}};
-  var popup_eitherOptions = {{shop.metafields.SeqChangableOptions | json}};
-  var EitherOption = {{EitherOrOptions | json}};
-  var Either_Option = {{shop.metafields.EitherOrOptions | json}};
- </script>
 <div class="product-form__option info-option clearfix"  >
   <ul id="sortableoptions" >
    {%- if canvasEnabled -%}
       <div class="spacer topSpacer"></div>
      <div style="display: inline-block; margin-right: 10px; margin-bottom: 7px;">
-      <button id="02All" data-label="Apply All Print Lines" name="apply font" data-option-display data-font-family='{{ProductDefaultFont.fontFamily}}' data-font-size='{{ProductDefaultFont.fontSize}}'></button>
+      <button id="02All" data-label="Apply All Print Lines" name="apply font" data-option-display data-font-family="Gothic" data-font-size="30"></button>
       <span style="margin-right: 5px;">Font Family & Font Size :</span>
      <button data-toggle="tooltip" data-placement="top" onclick="fontedit(this,'02All','Apply to All Print Lines','{{productFontSizes}}')" data-original-title="" title="The formatting set here will automatically carry over to all print lines">
     <span class="fontEditText" style="margin-bottom: -6px;">Apply All</span>
@@ -47,7 +39,6 @@
         id="topSpacer"
         style="display: none;">
     {% endif %}
-
     {%- for option in SeqChangableOptions -%}
         {%- assign sortable_option = shop.metafields.SeqChangableOptions[option].value -%}      
         {%- assign content_length = sortable_option.values.size -%}
@@ -77,16 +68,15 @@
         <li class="list-group-item" 
           data-type="{{ sort_type }}" 
           data-option-id="{{ sortable_option['optionId'] }}" 
-           style="border: 0px !important;  padding: {%- if canvasEnabled -%} 5px 10px 0px 0px {%- else -%} 0px !important ;{%- endif -%}">
+          style="border: 0px !important;  padding: {%- if canvasEnabled -%} 5px 10px 0px 0px {%- else -%} 0px !important ;{%- endif -%}">
           <div class="content_comes_here">
             {%- if sortable_option.valueType == 'SeqChangableMR' and sortable_option['isUploadEnabled']==false -%}
               <div class="product-form__option into-option" data-selector-type="select">
                 {%- if sortable_option['isViewOption'] -%}
                   <div id="{{sortable_option['optionId']}}_popup" class="popup" ></div>
-                  {% comment %} <script>
+                  <script>
                     var popupeitherOptions = {{SeqChangableOptions | json}};
-                    var popup_eitherOptions = {{shop.metafields.SeqChangableOptions | json}};
-                  </script> {% endcomment %}
+                  </script> 
                   {%- if shop.metafields.SeqChangableMR[sortable_option.metaReferenceValues[0]].values[0].size > 0 -%}
                     <div class="custom_ui">
 <!--                       <span class="my-handle fa fa-bars"></span>
@@ -148,7 +138,7 @@
                         data-key="{{sortable_option['optionId']}}" />
                       <input 
                         class="btn choose-button set_width_ii" readonly="readonly"
-                        onclick="popUp('{{sortable_option.optionId}}', popup_eitherOptions, popupeitherOptions)" 
+                        onclick="popUp('{{ sortable_option.optionId }}', {{ shop.metafields.SeqChangableOptions[sortable_option.optionId].value | json }}, popupeitherOptions)"
                         {% if sortable_option["optionMessage"] %} 
                           data-toggle="tooltip" 
                           data-placement="top" 
@@ -250,7 +240,7 @@
                       *
                     {% endif %}
                   <input type="text" 
-                   {%- if canvasEnabled -%} style="margin-bottom:11px;" {% endif %}
+                    {%- if canvasEnabled -%} style="margin-bottom:11px;" {% endif %}
                     {% if printonBackLines contains sortable_option['optionId'] %}  
                       oninput="validate_splChar_ontype(this),canvasColorization(this),validateprintOnBackLines()"
                     {% else %}
@@ -260,7 +250,6 @@
                     data-label="{{ sortable_option['label'] }}"  
                     class="{%- if canvasEnabled -%}SpacerBtn{% endif %}  test11 fontapply"
                     name="{{ sortable_option['optionId'] }}" 
-                    {%- assign limit=sortable_option['optionDisplay']  -%}
                     {% if sortable_option['isRequired'] %} required {% endif %} 
                     {% if sortable_option["optionMessage"] %} 
                       data-toggle="tooltip" 
@@ -268,10 +257,13 @@
                       title="{{ sortable_option["optionMessage"] }}" 
                       data-html="true" 
                     {% endif %} 
-                    {% if optionsLimit[sortable_option['optionId']]  %}
+                    
+                    {%- assign limit=sortable_option['optionDisplay']  -%}
+                    {% if optionsLimit[sortable_option['optionId']]  %} 
                       {%- assign limit=optionsLimit[sortable_option['optionId']] -%}
                     {% endif %} 
                     data-option-display={{limit}} maxlength ={{limit}}>
+                    
 					{%- if canvasEnabled -%}
                     <button
                       data-toggle='tooltip'
@@ -280,7 +272,7 @@
                       class="fontEdit"
                       title='Edit Font'>
                       {% comment %} <i class="fa fa-ellipsis-v" aria-hidden="true"></i> {% endcomment %}
-                      <img class="fonteditImg" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/edit_icon_863405ed-20e1-4cd2-a8e6-37e5280c65e8.png?v=1704190370" >
+                     <img class="fonteditImg" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/edit_icon_863405ed-20e1-4cd2-a8e6-37e5280c65e8.png?v=1704190370" >
                     </button>
                     <button
                       class="spacerbtn"
@@ -288,7 +280,7 @@
                       onclick="addSpacer(this,'{{ sortable_option['optionId'] }}')"
                       data-toggle='tooltip'
                       data-placement='top'
-                      title='Add Spacer'>
+                      title='Add Spacer '>
                       <i class="fa fa-plus-square" aria-hidden="true"></i>
                     </button>
                   {%- endif -%}
@@ -312,17 +304,16 @@
                 title="&nbsp;&nbsp;&nbsp;&nbsp;Click and drag <img src='https://cdn.shopify.com/s/files/1/0691/7082/3461/files/Customizer-Tooltip.png?v=1724334191' width='25px' > <br> to move print line <br>up or down"></img>
                 
                 <span class="sort_index"></span> 
-                {%- endif -%}
+				 {%- endif -%}
                 <label for="{{sortable_option['optionId']}}" 
                   class="product-form__option-name text--strong seq">
                   {{ sortable_option.label }}: {% if sortable_option['isRequired'] %} * {% endif %}
                 </label>
                 {%- if sortable_option['isViewOption'] -%}
                   <div id="{{sortable_option['optionId']}}_popup" class="popup" ></div>
-                  {% comment %} <script> 
+                   <script> 
                   var SeqOptions = {{SeqChangableOptions | json}}; 
-                  var Seq_Options = {{shop.metafields.SeqChangableOptions | json}}; 
-                  </script> {% endcomment %}
+                  </script> 
                   <div class="choose-value-container set_width_div_input">
                     <script> 
                       ac["{{sortable_option['optionId']}}"] = {{ sortable_option.values | json }}; 
@@ -339,7 +330,7 @@
                       class="autocomplete" 
                       data-key="{{sortable_option['optionId']}}" />
                     <input class="btn choose-button  fix_choose" readonly="readonly"
-                      onclick="popUp('{{sortable_option['optionId']}}',SeqOptions, Seq_Options)" 
+                     onclick='popUp("{{ sortable_option.optionId }}", SeqOptions, {{ shop.metafields.SeqChangableOptions[sortable_option.optionId].value | json }})' 
                       {% if common_option[1]["optionMessage"] %} 
                         data-toggle="tooltip" 
                         data-placement="top" 
@@ -352,7 +343,7 @@
                         class="spacerbtn"
                         onclick="addSpacer(this,'{{sortable_option['optionId']}}_dn')"
                         data-toggle='tooltip'
-                        style="margin-left: 55%; padding:0px!important;position: absolute;top: 45%;"
+                       style="margin-left: 55%; padding:0px!important;position: absolute;top: 45%;"
                         data-placement='top'
                         title='Add Spacer '>
                         <i
@@ -465,7 +456,7 @@
                           class="fontEdit"
                           title='Edit Font'>
                           {% comment %} <i class="fa fa-ellipsis-v" aria-hidden="true"></i> {% endcomment %}
-                      <img class="fonteditImg" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/edit_icon_863405ed-20e1-4cd2-a8e6-37e5280c65e8.png?v=1704190370" >
+                          <img class="fonteditImg" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/edit_icon_863405ed-20e1-4cd2-a8e6-37e5280c65e8.png?v=1704190370" >
                         </button>
                         <button
                           class="spacerbtn "
@@ -476,9 +467,8 @@
                           title='Add Spacer '>
                           <i class="fa fa-plus-square" aria-hidden="true"></i>
                         </button>
-                      {%- endif -%}			
+                      {%- endif -%}					
                   </div>
-                  
                   {% endif %}
                 {%- endif -%}
               </div>
@@ -555,23 +545,23 @@
                       <span class="sort_index-seqeor-empty"></span>
                     {%- endif -%}
                   {%- endif -%}
-              <label data-toggle="tooltip" 
-                data-placement="top" 
+                  <label data-toggle="tooltip" 
+                  data-placement="top" 
                 title= "{{shop.metafields.helpText.stkcusDesign}}"
                 style=" width: 20px;">
                 <i class="fa fa-info-circle" style="font-size:15px;color:#00badb"></i></label>
-                <span class="showtoggle" style="color: red; cursor: pointer; float: right; display:none;" onclick="closeCustomDesign()">
+               <span class="showtoggle" style="color: red; cursor: pointer; float: right; display:none;" onclick="closeCustomDesign()">
                   <i class="fa fa-times" aria-hidden="true"    
                   data-toggle="tooltip" 
                   data-placement="top" 
-                  title="Close" 
+                    {%  comment  %} title="Close"  {% endcomment %}
                   data-html="true"></i>
                 </span>
-				{%  comment  %} 
-                {%- if canvasEnabled -%}
+              {%  comment  %} 
+				 {%- if canvasEnabled -%}
                     <button
                       class="spacerbtn"
-                      style="float:right; margin-right: 0%;;"
+                      style="float:right; margin-right: 0%;"
                       onclick="addSpacer(this,'eitherorSeq_option')"
                       data-toggle='tooltip'
                       data-placement='top'
@@ -581,10 +571,9 @@
                   {% endif %} {% endcomment %}
               {%- if eitheror_option['isViewOption'] -%}
                 <div id="{{eitheror_option['optionId']}}_popup" class="popup" ></div>
-                {% comment %} <script>
+                <script>
                   var popupeitherOptions = {{EitherOrOptions | json}};
-                  var popup_eitherOptions = {{shop.metafields.EitherOrOptions | json}};
-                </script> {% endcomment %}
+                </script>
                 {%- if eitheror_option.stockDesignValue != "" -%}
                   <div class="custom_ui" >
                     <label class="product-form__option-name text--strong" 
@@ -646,7 +635,7 @@
                       data-key="{{eitheror_option['optionId']}}" />
                     <input 
                       class="btn choose-button set_width_i" readonly="readonly"
-                      onclick="popUp('{{eitheror_option.optionId}}', popupeitherOptions, popup_eitherOptions)" 
+                      onclick="popUp('{{ eitheror_option.optionId }}', popupeitherOptions, {{ shop.metafields.EitherOrOptions[eitheror_option.optionId].value | json }})"  
                       {% if eitheror_option["optionMessage"] %} 
                         data-toggle="tooltip" 
                         data-placement="top" 
@@ -778,28 +767,39 @@
                       Enter file Name or <br><span>Design # on file w/ Hodges</span>
                    
                   </label>
-                 <!-- <i class="fa fa-info-circle"
+                 {% comment %} <i class="fa fa-info-circle"
                           title="{{ shop.metafields.helpText.PreviousDesignLimit.value }}"
-                          style="font-size:16px;color:#ae1a1a"></i> -->
-                  <label data-toggle="tooltip" 
-                  data-placement="top" 
-                  title= "{{shop.metafields.helpText.PreviousDesignLimit.value}}"style="
-                  width: 20px;">
+                          style="font-size:16px;color:#ae1a1a"></i> {% endcomment %}
+                          <label data-toggle="tooltip" 
+                          data-placement="top" 
+                          title= "{{shop.metafields.helpText.PreviousDesignLimit.value}}"style="
+                          width: 20px;">
                   <i class="fa fa-info-circle"  style="font-size:15px;color:#00badb"></i></label>
+                      <!-- {%- if canvasEnabled -%}
+                    <button
+                      class="spacerbtn"
+                      style="float:right; margin-right: 0%; margin-top:10px;"
+                      onclick="addSpacer(this,'eitherorSeq_option')"
+                      data-toggle='tooltip'
+                      data-placement='top'
+                      title='Add Spacer '>
+                      <i class="fa fa-plus-square" aria-hidden="true"></i>
+                    </button>
+                  {% endif %} -->
                   <input type="text" 
                     id="enterUploadfile"  class="previouslimit"  maxlength="7"               
                     data-option-id="{{ eitheror_option.optionId }}_enterUploadfile" 
-                    name="{{ eitheror_option.optionId }}_enterUploadfile"
-                    oninput="validate_splChar_ontype(this)"/>
+                    name="{{ eitheror_option.optionId }}_enterUploadfile" oninput="validate_splChar_ontype(this)"/>
                    <br>
-              <span id="error-message" style="display:none;color:red;font-size:12px;">A maximum of 6 characters are allowed</span>
+              <span id="error-message" style="display:none;color:#E65100;font-size:12px;font-weight:bold;">Maximum character limit of 6 reached</span>
               <span class="error {{ eitheror_option.optionId }}_enterUploadfile" style="display:none;color:red;font-size:12px;"></span>
-
-                <button class="spacerbtn" style="float:right; margin-right: 0%;margin-top: -31px; display: block;" onclick="addSpacer(this,'eitherorSeq_option')" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add Spacer ">
+              {%- if canvasEnabled -%}
+              <button class="spacerbtn" style="float:right; margin-right: 0%;margin-top: -31px; display: block;" onclick="addSpacer(this,'eitherorSeq_option')" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add Spacer ">
                 <i class="fa fa-plus-square" aria-hidden="true"></i>
                  </button>
-                </div>
-                 {% comment %}{%- if canvasEnabled -%}
+              {% endif %}
+              </div>
+                  {% comment %} {%- if canvasEnabled -%}
                   <button
                     class="spacerbtn"
                     style="float:right; margin-right: 0%;"
@@ -809,7 +809,7 @@
                     title='Add Spacer '>
                     <i class="fa fa-plus-square" aria-hidden="true"></i>
                   </button>
-                {% endif %}{% endcomment %}
+                {% endif %} {% endcomment %}
                 </div>
               {%- else -%}                
                 <div class="product-form__option info-option" data-selector-type="select">
@@ -862,10 +862,9 @@
                   </label>
                   {%- if eitheror_option['isViewOption'] -%}
                     <div id="{{eitheror_option['optionId']}}_popup" class="popup" ></div>
-                    {% comment %} <script>
+                    <script>
                       var EitherOption = {{EitherOrOptions | json}};
-                      var Either_Option = {{shop.metafields.EitherOrOptions | json}};
-                    </script> {% endcomment %}
+                    </script>
                     <input data-key="{{eitheror_option['optionId']}}" 
                       data-label="{{ eitheror_option['label'] }}" 
                       name="{{eitheror_option['optionId']}}" 
@@ -874,7 +873,7 @@
                       type="button" readonly="readonly"
                       data-bind="autocomplete" 
                       value="Select an Option" 
-                      onclick="popUp('{{eitheror_option['optionId']}}',EitherOption,Either_Option)" 
+                      onclick="popUp('{{eitheror_option['optionId']}}',EitherOption,'{{shop.metafields.EitherOrOptions['eitheror_option.optionId'].value | json}}')"
                       {% if eitheror_option["optionMessage"] %} 
                         data-toggle="tooltip" 
                         data-placement="top" 
@@ -919,7 +918,7 @@
         </div>
         <div class="error {{  }}"></div>
       {%- endfor -%}
-	    {%- if canvasEnabled -%}
+	   {%- if canvasEnabled -%}
             <div class="new_custom" style="display: none;" >
             <img
             src=""
@@ -933,9 +932,9 @@
               <img class="fonteditImg" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/edit_icon_863405ed-20e1-4cd2-a8e6-37e5280c65e8.png?v=1704190370">
             </button>
           </div>
-             <!-- <button class="spacerbtn" style="float:right; margin-right: 0%;margin-top: -31px; display: block;" onclick="addSpacer(this,'eitherorSeq_option')" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add Spacer ">
+          {% comment %} <button class="spacerbtn" style="float:right; margin-right: 0%;margin-top: -31px; display: block;" onclick="addSpacer(this,'eitherorSeq_option')" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add Spacer ">
              <i class="fa fa-plus-square" aria-hidden="true"></i>
-         </button> -->
+         </button> {% endcomment %}
           {%- endif -%}
           {%- if canvasEnabled -%}
             <div class="slider-container eitherorSeq_option" style="margin-left: 42%;display:none">
@@ -950,7 +949,7 @@
                 onchange="onSliderChange(this,'eitherorSeq_option')" />
               <span id="sliderValue">70</span></div>
             </div>
-            <div class="spacer eitherorSeq_option design_option" id='eitherorSeq_option'></div>
+            <div class="spacer eitherorSeq_option" id='eitherorSeq_option'></div>
           {%- endif -%}
     </li>
   {%- endif -%}

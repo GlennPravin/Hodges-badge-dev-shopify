@@ -129,6 +129,12 @@
             <img style="position:relative !important;aspect-ratio: {{ m360Images0.width }} / {{ m360Images0.height }};" alt="{% if m360Images0.alt != blank %}{{ m360Images0.alt  | escape }}{% else %}{{ product.title  | escape }}{% endif %}" src="{{ m360Images0 | image_url: width: MagicToolboxThumbnailImageSize }}" />
         </a>
     {% endcapture %}
+
+
+
+
+
+
 {%- capture contentForQuerystring -%}{{ content_for_header }}{%- endcapture -%}
     {%- assign pageUrl = contentForQuerystring | split:'"pageurl":"' | last | split:'"' | first | split:'.myshopify.com' | last |
        replace:'\/','/' | 
@@ -148,20 +154,17 @@
         {% endif%}
       {%- endfor -%}
     {%- endfor -%}
-    {% assign canvasEnabled = false %}
-{%- if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true -%}
-{% assign canvasEnabled = product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled %}
-{%- endif -%}
+    
     
     {%- if product.media.size > 0 -%}
       {%- assign show_thumbnails_if_one_media = true -%}
-       {%- assign shopifyAlternateImages = product.metafields.ProductMeta.ProductAdditionalInfo.ExtraInfoAboutProduct.shopifyAlternateImages -%} 
+       {%- assign shopifyAlternateImages = product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.shopifyAlternateImages -%} 
     
-    <div class="{% if canvasEnabled %}customizer {% endif %}card">
+      <div class="card customizer">
         <div class="card__section card__section--tight">
         {% if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true %}
             <span id="canvasName" style="visiblity:hidden;"></span>
-            <!-- <span
+            {% comment %} <span
               id='info-btn'
               class="fa fa-play"
               onclick="VideoPopup()"
@@ -170,8 +173,8 @@
               data-toggle="tooltip"
               data-placement="top"
               title="Click to View Customizer FAQ"
-              style="cursor:pointer;"></span> -->
-            <!-- <span
+              style="cursor:pointer;"></span> {% endcomment %}
+            <span
               id='info-btn'
               onclick="redirectToNewLink()"
               class="fa fa-question-circle"
@@ -179,17 +182,7 @@
               data-toggle="tooltip"
               data-placement="top"
               title="Click to View Customizer FAQ"
-              style="cursor:pointer;"></span> -->
-              <button 
-
-              onclick="redirectToNewLink()"
-             {% comment %} class="fa fa-question-circle"  {% endcomment %}
-               class="custom-button"
-              aria-hidden="true"
-              data-toggle="tooltip"
-              data-placement="top"
-              {% comment %} title="Click to View Customizer FAQ" {% endcomment %}
-              style="cursor:pointer;"><span class="help-text" >Help Me</span></button >
+              style="cursor:pointer;"></span>
             <img
               id='info-btn'
               onclick="applyRuler(true)"
@@ -202,19 +195,17 @@
               title="Click to View ruler"
               style="cursor:pointer;"></img>
           {% endif %}
-           {% if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true %}
-          <div class="customization">
-            {{ shop.metafields.helpText.customizationNotes.value }}
-          </div>
-          {% endif %}
           <div class="product-gallery {% if show_thumbnails_if_one_media %}product-gallery--with-thumbnails{% endif %}">
             {%- assign selected_media = product.selected_variant.featured_media | default: product.featured_media -%}
     
             <div class="product-gallery__carousel-wrapper">
-              <div class="{% if canvasEnabled %}block-product {% endif %}product-gallery__carousel {% if template != 'product.quick-view' and section.settings.enable_image_zoom %}product-gallery__carousel--zoomable{% endif %}" data-media-count="{{ product.media.size }}" data-initial-media-id="{{ selected_media.id }}">
+              <div class="product-gallery__carousel {% if template != 'product.quick-view' and section.settings.enable_image_zoom %}product-gallery__carousel--zoomable{% endif %}" data-media-count="{{ product.media.size }}" data-initial-media-id="{{ selected_media.id }}">
        
                   {%- if shopifyAlternateImages.size > 0 -%}
                       {%- assign counter = 0 -%}
+
+
+                    
                       {%- for media in product.media -%}
 {% if forloop.index0 < still_images_count %}
                         
@@ -336,7 +327,7 @@
                                                           </div>
                                                       </div>
                                           </div>
-             
+                    
                     {%- if product.metafields.Specialimages.size  > 0  -%}
                     
                     
@@ -507,11 +498,11 @@
               {%- endif -%}
             </div>
     
-            <div class="big_image"   data-media-type="image"  style="position: absolute; opacity: 1;width: 100%;display:none;">
+            <div class="big_image "   data-media-type="image"  style="position: absolute; opacity: 1;width: 100%;display:none;">
               <div class="product-gallery__size-limiter" style="max-width: 380px">
                <div
                   class="aspect-ratio"
-                  style="{%- if canvasEnabled -%} padding-bottom: 0% {%- else -%} padding-bottom: 100.0% {%- endif -%}" 
+                  style="padding-bottom: 100.0%"
                   style="width:fit-content">
                   <div class="customizer-content">
                     <div id="container1">
@@ -521,17 +512,13 @@
                       <canvas id="myCanvas2"></canvas>
                     </div>
                   </div>
+                 
                 </div>
-                {% if canvasEnabled %}
-                <div id="MobileCanvasImage">
-                    <img class= "canvasimagecss" src="" >
-                </div>
-               {% endif %}
                </div>
             </div>
            
             {%- if show_thumbnails_if_one_media -%}
-              <div class="{%- if canvasEnabled -%}is-canvas-enabled{% endif %} scroller">
+              <div class="scroller">
                 <div class="scroller__inner">
                   <div class="product-gallery__thumbnail-list">
                     {%- if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true -%}
@@ -541,8 +528,13 @@
                     </div>
                     </a>
                      {%- endif -%}
+    
+                    
+                    
                      {%- if shopifyAlternateImages.size > 0  -%}
                           {%- assign counter = 0 -%}
+
+                       
                           {%- for media in product.media -%}
     {% if forloop.index0 < still_images_count %}
                               {%- for image in product.images -%}
@@ -778,44 +770,7 @@
             {%- endif -%}
           </div>
         </div>
-    {% if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true %}
-      <div>
-
-            <button class="View-button" type="button" id="dropdownToggle"  data-toggle="dropdown" style="--clr:#1e2a5e">
-              View
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownToggle">
-              <button class="dropdown-item" onclick="viewCanvasImage()">Canvas Image</button>
-              <hr>
-              <button class="dropdown-item" onclick="expandProperties()">Options</button>
-            </div> 
-
-          
-          
-{% comment %} <div class="dropdown">
-  <input type="checkbox" id="dropdown__btn">
-  <label class="View-button" for="dropdown__btn" type="button" data-toggle="dropdown" style="--clr:#0d7c66">
-    Dropdown button
-  </label>
-  <div class="dropdown-menu">
-    <a class="dropdown-item" href="#">Action</a>
-    <a class="dropdown-item" href="#">Another action</a>
-    <a class="dropdown-item" href="#">Something else here</a>
-  </div>
-</div> {% endcomment %}
-
- </div>
-{% comment %}     
-    <img
-    id="expand-details"
-    onclick="expandProperties()"
-    src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/maximize.png?v=1721291087"
-    class="expand-view">
-  </img>  {% endcomment %}
-   {% endif %}
-    
-        </div>
-
+      </div>
       <div class="image-container" style="display:none;"></div> 
       <canvas id="stockCanvas" style="display: none;"></canvas>
     {%- endif -%}
@@ -823,20 +778,20 @@
       var CanvasColors = {{shop.metafields.CanvasColors | json}};
       var CanvasImages = {{shop.metafields.OptionImages | json}};
       var OptionsType = {{ shop.metafields.optiontype | json}}
-      var defaultFont = {{ shop.metafields.ProductDefaultFont.Font | json}}
+      var defaultFont = {{ shop.metafields.ProductDefaultFont.Font.value | json}}
       var CanvasPatterns = {{product.metafields.PatternImages| json}};
-      var CanvasLayers = {{product.metafields.CanvasLayerOptions.Layers.canvasConfigLayers | json}};
+      var CanvasLayers = {{product.metafields.CanvasLayerOptions.Layers.value.canvasConfigLayers | json}};
       var CanvasConfig = {{product.metafields.Placeholder | json}}
-      var CanvasOptions = {{product.metafields.CanvasLayerOptions.Options | json}};
+      var CanvasOptions = {{product.metafields.CanvasLayerOptions.Options.value | json}};
       var CanvasSpecs = {{ product.metafields.printableArea |json }};
       var MedalConfig = {{ product.metafields.medalFinishMap.config.value | json}};
-      var Medal = {{ product.metafields.ProductMeta.ProductAdditionalInfo.ExtraInfoAboutProduct | json}};
+      var Medal = {{ product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct | json}};
       var isMedal = Medal.filterName == 'Custom Medal'
         ? true
         : false;
       var MedalPattern = {{ product.metafields.MedalPattern.config.value | json}};
       var MedalPC = {{ product.metafields.MedalPrintColor.optionId.value | json}};
-      var ProductDefaultFont = {{shop.metafields.ProductDefaultFont.Font | json}};
+      var ProductDefaultFont = {{shop.metafields.ProductDefaultFont.Font.value | json}};
       var productFamily = {{shop.metafields.customizerFonts.fontFamily.value | json }};
       var borderdetail = {{ shop.metafields.border.details.value | json}};
     

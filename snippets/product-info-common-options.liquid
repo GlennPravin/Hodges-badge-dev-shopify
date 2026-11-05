@@ -128,7 +128,7 @@
        padding-top:5px ! important;
        padding-bottom:3px ! important;
     border: 0px;
-    margin-bottom: 5px;
+    margin-bottom:5px;
   }
   
     @media screen and (min-width: 1181px) and (orientation: landscape) {
@@ -162,7 +162,6 @@
 {%- assign optionsLimit =  shop.metafields.optionFamily[family].value.optionsLimit -%}
 <script>
   var popupOptions = {{CommonOptions | json}};
-  var popup_Options = {{shop.metafields.CommonOptions | json}};
 </script>
 <div class="product-form__option info-option">
   <ul id="CommonOptions" >
@@ -282,14 +281,14 @@
                       name="{{common_option['optionId']}}" 
                       class="autocomplete" 
                       data-key="{{common_option['optionId']}}" 
-                      {% if printonBack contains common_option['optionId'] %}  
+                     {% if printonBack contains common_option['optionId'] %}  
                       onchange="canvasColorization(this),validateprintOnBack(this)"
-                      {% else %}
+                    {% else %}
                       onchange="canvasColorization(this)"
                     {% endif %}
                       />
                     <input class="btn choose-button set_width_mob" readonly="readonly"
-                      onclick="popUp('{{common_option.optionId}}', popupOptions, popup_Options)" 
+                      onclick='popUp("{{common_option.optionId}}", popupOptions, {{ shop.metafields.CommonOptions[common_option.optionId].value | json }})' 
                       {% if common_option["optionMessage"] %} 
                         data-toggle="tooltip" 
                         data-placement="top" 
@@ -461,7 +460,7 @@
                                     oninput="validate_splChar_ontype(this)"
                                   /><br>
                                  <span id="error-messageCenter" style="display:none;color:red;font-size:12px;">A maximum of 6 characters are allowed</span>
-                                  <span class="error {{ eitheror_option.optionId }}_enterCenterUploadfile" style="display:none;color:red;font-size:12px;"></span>
+                                 <span class="error {{ eitheror_option.optionId }}_enterCenterUploadfile" style="display:none;color:red;font-size:12px;"></span>
 
                                 </div>
                               </div>
@@ -586,14 +585,14 @@
                   title="{{ common_option["optionMessage"] }}"
                   data-html="true" 
                 {% endif %} 
-                  {%- assign limit= common_option['optionDisplay']  -%}
+                {%- assign limit= common_option['optionDisplay']  -%}
                 {% if optionsLimit[ common_option['optionId']]  %}
                   {%- assign limit=optionsLimit[ common_option['optionId']] -%}
                 {% endif %} 
                 data-key="{{ common_option['optionId'] }}" 
                 data-charge="{{ common_option['additionalCharge'] }}" 
                 data-charge-type="{{ common_option["chargeType"]}}" 
-               data-option-display={{limit }} maxlength = {{limit}} >
+                data-option-display={{limit }} maxlength = {{limit}} >
             </div>
             {%- endif -%}
           {%- elsif content_length > 0 -%}
@@ -621,7 +620,7 @@
                   name="{{common_option['optionId']}}"
                   type="button" readonly="readonly"
                   class="btn set_width_mob WithoutAutoComplete"
-                  onclick="popUp('{{common_option.optionId}}', popupOptions, popup_Options)"
+                  onclick='popUp("{{common_option.optionId}}", popupOptions, {{ shop.metafields.CommonOptions[common_option.optionId].value | json }} )'
                   value="Choose a {{ common_option.label }}" 
                   data-key="{{common_option['optionId']}}"/> </div>
                 {%- else -%}
@@ -638,10 +637,10 @@
                     onchange="canvasColorization(this),validateprintOnBack(this)"
                   {% else %}
                     onchange="canvasColorization(this)"
-                  {% endif %}
+                  {% endif %} 
                 />
                 <input class="btn set_width_mob" readonly="readonly"
-                  onclick="popUp('{{common_option.optionId}}', popupOptions, popup_Options)" 
+                  onclick='popUp("{{common_option.optionId}}", popupOptions, {{ shop.metafields.CommonOptions[common_option.optionId].value | json }})'
                   {% if common_option["optionMessage"] %} 
                     data-toggle="tooltip" 
                     data-placement="top" 

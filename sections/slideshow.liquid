@@ -41,10 +41,10 @@
               {%- assign image_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
 
               <div class="aspect-ratio {% if block.settings.mobile_image %}hidden-phone{% endif %}" style="padding-bottom: {{ 100.0 | divided_by: block.settings.image.aspect_ratio }}%">
-                <img class="slideshow__image lazyload image--fade-in" alt="{{ block.settings.image.alt | escape }}" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto">
+                <img loading='lazy'  class="slideshow__image lazyload image--fade-in" alt="{{ block.settings.image.alt | escape }}" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto">
 
                 <noscript>
-                  <img src="{{ block.settings.image | img_url: '1200x' }}" alt="{{ block.settings.image.alt | escape }}">
+                  <img loading='lazy'  src="{{ block.settings.image | img_url: '1200x' }}" alt="{{ block.settings.image.alt | escape }}">
                 </noscript>
               </div>
 
@@ -53,10 +53,10 @@
                 {%- assign image_url = block.settings.mobile_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
 
                 <div class="aspect-ratio hidden-tablet-and-up" style="padding-bottom: {{ 100.0 | divided_by: block.settings.mobile_image.aspect_ratio }}%">
-                  <img class="slideshow__image lazyload image--fade-in" alt="{{ block.settings.mobile_image.alt | escape }}" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto">
+                  <img loading='lazy'  class="slideshow__image lazyload image--fade-in" alt="{{ block.settings.mobile_image.alt | escape }}" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto">
 
                   <noscript>
-                    <img src="{{ block.settings.mobile_image | img_url: '800x' }}" alt="{{ block.settings.mobile_image.alt | escape }}">
+                    <img loading='lazy'  src="{{ block.settings.mobile_image | img_url: '800x' }}" alt="{{ block.settings.mobile_image.alt | escape }}">
                   </noscript>
                 </div>
               {%- endif -%}

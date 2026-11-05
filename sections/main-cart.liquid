@@ -1,5 +1,5 @@
 {% render 'product-info-script' %}
-<div id="loaderbg" class="loaderbg">
+<div id="loaderbg" class="loaderbg" style="display: none;">
   <div id="loader-cart" ></div>
 </div>
 <div id="ship-calendar-data" hidden aria-hidden="true">{%- if shop.metafields.ShipCalender.value != blank -%}{{ shop.metafields.ShipCalender.value | json }}{%- else -%}{{ shop.metafields.ShipCalender | json }}{%- endif -%}</div>
@@ -15,12 +15,9 @@ $(window).on('load', function() {
  const premiumProcessingCharges = {{shop.metafields.PPFee | json}};
  let shipCalendar = {%- if shop.metafields.ShipCalender.value != blank -%}{{ shop.metafields.ShipCalender.value | json }}{%- else -%}{{ shop.metafields.ShipCalender | json }}{%- endif -%};
  const CalendarAlerts = {{shop.metafields.CalenderAlerts | json}};
- const shopPermanentDomain = {{ shop.permanent_domain | json }};
-const stockProductType = "{{ shop.metafields.helpText.StockProductType.value }}";
- var popup_Options = {{shop.metafields.CommonOptions | json}};
+ const stockProductType = "{{ shop.metafields.helpText.StockProductType.value }}";
  const flatCharges = {{shop.metafields.FlatCharges | json}};
 {% assign promotionCartHandle = shop.metafields.helpText.PromotionCollectionName.value | parse_json | first | default: "" %}
-const PromotionCart = "{{ promotionCartHandle }}";
 {% if promotionCartHandle != "" and collections[promotionCartHandle] != nil and collections[promotionCartHandle].products.size > 0 %}
   const PromotionProductsCart = {{ collections[promotionCartHandle].products | map: "id" | json }};
    {% assign promo_ids = collections[promotionCartHandle].products | map: "id" %}
@@ -32,7 +29,7 @@ const PromotionCart = "{{ promotionCartHandle }}";
  
  issBo = false;
  let cart_productSubType = {};
- let updateCart = [];
+ //let updateCart = [];
 const subTypeIds = {{ shop.metafields.ProductSubType.subTypeIds | split: "," | json}}
 const excludeProductsSC = {{ shop.metafields.ExcludeProductsSC.ProductIds | split: "," | json}}
 const validationMessage = {{ shop.metafields.helpText.validationMessage.value |  json }}
@@ -55,7 +52,7 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
   {%- assign isCustomRideQty = false -%}
    {%- assign acCharge = false  -%}
   {%- assign RemoveBuyButton =  shop.metafields.helpText.RemoveAddtoCartButton.value -%}
-  {%- assign  removedPrintColor =  shop.metafields.helpText.RemovedPrintColor.value -%} 
+  {%- assign  removedPrintColor =  shop.metafields.helpText.RemovedPrintColor.value | parse_json -%} 
   {%- assign  removedOptionIds =  shop.metafields.helpText.RemovedOptionIds.value | parse_json -%}
  {% comment %} <button type="button" onclick="clearCart();" >ClearCart</button> {% endcomment %}
 <section data-section-id="{{ section.id }}" data-section-type="cart" data-section-settings='{{ section_settings }}' data-item-count="{{ cart.item_count }}">
@@ -81,7 +78,7 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
     </div>
   {%- else -%}
     <div class="container">
-        {%- comment -%} ── Print-only cart header (hidden on screen via cart-print.css) ── {%- endcomment -%}
+      {%- comment -%} ── Print-only cart header (hidden on screen via cart-print.css) ── {%- endcomment -%}
       <div class="cart-print-summary" aria-hidden="true">
         <div class="cart-print-summary__logo-row">
           <div class="cart-print-summary__logo">
@@ -240,7 +237,7 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
                   <h5 class="modal-title"></h5>
                 </div>
                 <div class="modal-body" style="padding: 40px 20px;">
-                  <p class="head-top-ship_date" style="text-align:center;">Your delivery date is no longer valid based on our current order cutoff time. Please choose another delivery date.</p>
+                  <p class="head-top-ship_date" style="text-align:center;">{{ shop.metafields.helpText.Notify-Stockcutoff-validation.value }}</p>
                 </div>
                 <div class="modal-footer">
                   <input type="button" id="delivery_cutoff_date" class="btn_ship edit_date" onclick="alter_please_select_delivery_cutoff()" value="Choose delivery date"/>
@@ -248,7 +245,7 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
               </div>
             </div>
           </div>
-          <!----delivery cutoff alert pop up end -->
+          <!----delivery cutoff alert pop up end -->            
 
           {%- comment -%}
           --------------------------------------------------------------------------------------
@@ -565,7 +562,7 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
 
                               {%- if promo_ids contains line_item.product_id -%}
                                 <span style="font-size:16px; color:#ff0707; margin-top:4px; display:block;">
-                                  Free engraved logo!
+                                  Free Engraved Logo!
                                 </span>
                               {%- endif -%}
 
@@ -583,7 +580,7 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
                                       {%- assign Product_hopsUId = line_item.properties["_hopsUId"]  -%}
                                       <div id="{{ Property_firstValue }}_popup" class="popup" ></div>
                                       <button id="{{ Property_firstValue }}_cart" class="btn set_width_mob btn_cart_PC" readonly="readonly" 
-                                      onclick="popUp('{{ Property_firstValue }}', '{{ Property_firstValue }}', popup_Options,'{{ Product_hopsUId }}')" 
+                                      onclick='popUp("{{ Property_firstValue }}", "{{ Property_firstValue }}", {{ shop.metafields.CommonOptions[Property_firstValue].value | json }},"{{ Product_hopsUId }}")'
                                       value >Choose Print Color</button>
                                     {%- endif -%}
                                     {%- assign first_character_in_key = property.first | truncate: 1, '' -%}
@@ -603,7 +600,7 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
                                     {%- endif -%}
 
                                     <!-- <li class="line-item__property">{{ property.first }}: {{ property.last }}</li> -->
-                                    {%- if property.first == '_CustomDesign' or property.first == '_CustomDesignCenter' -%}
+                                    {%- if property.first contains 'CustomDesign'-%}
                                 {% assign url_parts = property.last | split: '.' %}
                                 {% assign extension = url_parts.last | prepend: 0 %}
                                 {% assign key = property.first  %}
@@ -622,8 +619,6 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
                                         {%- endif -%}
 
                                      {%- endif -%}
-                      
-              
                                   {%- endfor -%}
                                 </ul>
                               {%- endunless -%}                              
@@ -636,12 +631,14 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
                                   {% capture lineItemUrl %} {{ line_item.url }}?cart_id={{ line_item.key }}&edit{% endcapture %}
                                 {%- endif -%}
                                  
-                                   {% if RemoveBuyButton contains line_item.properties["_hopsId"] %}
+                                        {% if RemoveBuyButton contains line_item.properties["_hopsId"] %}
                                        <p class="line-item__title"> {{ shop.metafields.helpText.ContactForPurchase.value }} </p>
                                     {%- else -%}
-                                       <a class="line-item__title link text--strong" style="color:#ae1a1a" href="{{ lineItemUrl }}" >EDIT CUSTOMIZATION FOR THIS PRODUCT</a>
+                                    <a class="line-item__title link text--strong" style="color:#ae1a1a" href="{{ lineItemUrl }}" >EDIT CUSTOMIZATION FOR THIS PRODUCT</a>
                                     {%- endif -%}
                                  
+                            
+
                               {% comment %} <div class="line-item__price-list">
                                 {%- if line_item.original_price > line_item.final_price -%}
                                   {%- if line_item.final_price == 0 -%}
@@ -729,6 +726,7 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
 
                         <td class="line-item__quantity table__cell--center hidden-phone">
                           {%- comment -%}If the product has the tag "__gift", we remove the price{%- endcomment -%}
+
                           {%- unless line_item.product.tags contains '__gift' -%}
                             <div class="quantity-selector">
                               {%- assign allow_to_add_more = true -%}
@@ -1002,7 +1000,7 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
                       {% comment %} {%- assign  tmpmoaAlertAmount = cart.total_price  | minus: ppCharges -%} {% endcomment %}
                        <!-- {%- assign moaAlertAmount = cart.total_price  | minus: ppCharges -%} -->
                       {%- assign moaAlertAmount = cart.original_total_price | minus: ppCharges -%}
-                        
+
                         <div class="cart-recap__price-line text--pull">
                           <span class="cart-recap__price-line-label"> Minimum Order Charges </span>
                           <span class="cart-recap__price-line-price">{{minOrderAmount | money }} </span> 
@@ -1104,7 +1102,7 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
                    data-unavailoptionidsmsg ='{{ shop.metafields.helpText.Notify-Checkout-PrintonBack.value }}'
                     type="button" name="checkout" style="background-color: #ae1a1a;" class="button button--primary button--full button--large ">{{ 'cart.general.checkout' | t }}</button>
                     <button hidden id = "testqq" type="submit" name="checkout" style="background-color: #ae1a1a;" class=" cart-recap__checkout button button--primary button--full button--large ">{{ 'cart.general.checkout' | t }}</button>
-                     <a href="#" onclick="window.print(); return false;" class="cart-print-link">
+                    <a href="#" onclick="printCart(); return false;" class="cart-print-link">
                       🖨️ Print your cart
                     </a>
                   </div>
@@ -1295,6 +1293,165 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
   </div>
   </div>
   <canvas id="cartcanvas" style="display: none;"></canvas>
+
+{% comment %} ── Klaviyo Cart Saved Event ───────────────────────────────────── {% endcomment %}
+<script>
+var _learnq = window._learnq || [];
+/* ---------------- Customer Identify ---------------- */
+{% if customer %}
+
+  _learnq.push(['identify', {
+    '$email': '{{ customer.email }}',
+    '$first_name': '{{ customer.first_name }}',
+    '$last_name': '{{ customer.last_name }}'
+  }]);
+
+{% endif %}
+
+/* ---------------- Cart Saved Event ---------------- */
+
+{% if cart.item_count > 0 and customer.email != blank %}
+
+  if (sessionStorage.getItem('isKlaviyo') === 'true') {
+
+    {%- assign amp = '&' -%}
+    {%- assign dquote = '"' -%}
+    {%- assign apos = "'" -%}
+    {%- assign ndash = '–' -%}
+    {%- assign mdash = '—' -%}
+    {%- assign htmlamp = amp | append: 'amp;' -%}
+    {%- assign htmlquot = amp | append: 'quot;' -%}
+    {%- assign htmlapos = amp | append: 'apos;' -%}
+    {%- assign htmlapos2 = amp | append: '#39;' -%}
+    {%- assign htmllt = amp | append: 'lt;' -%}
+    {%- assign htmlgt = amp | append: 'gt;' -%}
+    {%- assign htmlndash = amp | append: 'ndash;' -%}
+    {%- assign htmlmdash = amp | append: 'mdash;' -%}
+
+    {%- assign cartItemCount = 0 -%}
+
+    {%- for line_item in cart.items -%}
+      {%- unless line_item.product.type == 'HiddenCharges' -%}
+        {%- assign cartItemCount = cartItemCount | plus: 1 -%}
+      {%- endunless -%}
+    {%- endfor -%}
+
+    (function () {
+
+      var cartItems = [
+
+        {% assign isFirstItem = true %}
+
+        {% for line_item in cart.items %}
+
+          {% unless line_item.product.type == 'HiddenCharges' %}
+
+            {% unless isFirstItem %},{% endunless %}
+            {% assign isFirstItem = false %}
+
+            {%- assign pt = line_item.product.title | default: line_item.title -%}
+            {%- assign pt = pt | replace: htmlamp, amp -%}
+            {%- assign pt = pt | replace: htmlquot, dquote -%}
+            {%- assign pt = pt | replace: htmlapos, apos -%}
+            {%- assign pt = pt | replace: htmlapos2, apos -%}
+            {%- assign pt = pt | replace: htmllt, '<' -%}
+            {%- assign pt = pt | replace: htmlgt, '>' -%}
+            {%- assign pt = pt | replace: htmlndash, ndash -%}
+            {%- assign pt = pt | replace: htmlmdash, mdash -%}
+
+            {
+              "title": {{ line_item.title | json }},
+              "product_title": {{ pt | json }},
+              "product_id": {{ line_item.product_id }},
+              "variant_id": {{ line_item.variant_id }},
+              "vendor": {{ line_item.vendor | json }},
+              // "base_additional_charge": {{ line_item.properties['Base Additional Charge'] | default: '' | json }},
+              "quantity": {{ line_item.quantity }},
+              "price": {{ line_item.price | divided_by: 100.0 }},
+              "line_price": {{ line_item.line_price | divided_by: 100.0 }},
+              {% if line_item.properties['_canvasImage'] %}
+                "image": {{ line_item.properties['_canvasImage'] | prepend: 'https:' | json }},
+              {% else %}
+                "image": {{ line_item.image | img_url: '180x' | prepend: 'https:' | json }},
+              {% endif %}
+              "url": {{ line_item.url | prepend: shop.url | json }},
+              "properties": [
+                {% assign isFirstProp = true %}
+                {% for property in line_item.properties %}
+                  {% assign propFirstChar = property.first | truncate: 1, '' %}
+                  {% assign skipProp = false %}
+                  {% if property.last == blank %}
+                    {% assign skipProp = true %}
+                  {% endif %}
+                  {% if property.first == '_Base Additional Charge' %}
+                    {% assign skipProp = true %}
+                  {% endif %}
+                  {% if propFirstChar == '_' and property.first != '_CustomDesign' and property.first != '_CustomDesignCenter' %}
+                    {% assign skipProp = true %}
+                  {% endif %}
+                  {% unless skipProp %}
+                    {% unless isFirstProp %},{% endunless %}
+                    {% assign isFirstProp = false %}
+                    {%- assign pval = property.last | replace: htmlamp, amp -%}
+                    {%- assign pval = pval | replace: htmlquot, dquote -%}
+                    {%- assign pval = pval | replace: htmlapos, apos -%}
+                    {%- assign pval = pval | replace: htmlapos2, apos -%}
+                    {%- assign pval = pval | replace: htmllt, '<' -%}
+                    {%- assign pval = pval | replace: htmlgt, '>' -%}
+                    {%- assign pval = pval | replace: htmlndash, ndash -%}
+                    {%- assign pval = pval | replace: htmlmdash, mdash -%}
+                    {%- assign pname = property.first | replace: htmlamp, amp -%}
+                    {%- assign pname = pname | replace: htmlquot, dquote -%}
+                    {%- assign pname = pname | replace: htmlapos, apos -%}
+                    {%- assign pname = pname | replace: htmlapos2, apos -%}
+                    {"name": {{ pname | json }},"value": {{ pval | json }}}
+                  {% endunless %}
+                {% endfor %}
+              ]
+            }
+          {% endunless %}
+        {% endfor %}
+      ];
+      {% assign merch_total = cart.original_total_price | minus: hiddenCharges %}
+      var cartCharges = [
+        { "name": "Merchandise Total", "value": {{ merch_total | divided_by: 100.0 }} }
+        {% if setupAmount > 0 %},{ "name": "Setup Charges", "value": {{ setupAmount | divided_by: 100.0 }} }{% endif %}
+        {% if ppCharges > 0 %},{ "name": "Premium Processing Charges", "value": {{ ppCharges | divided_by: 100.0 }} }{% endif %}
+        {% if minOrderAmount > 0 %},{ "name": "Minimum Order Charges", "value": {{ minOrderAmount | divided_by: 100.0 }} }{% endif %}
+        {% if flatCharges > 0 %}
+        {% assign flatItems = flatChargeItems | split: "," %}
+           {% for item in flatItems %}
+            {% assign itemVal = item | split: ":" %}
+            {% assign itemValChargeType = itemVal[0] %}
+            {% assign itemValCharges = itemVal[1] %}
+            ,{
+              "name": "{{ itemValChargeType }}",
+              "value": {{ itemValCharges | divided_by: 100.0 }}
+            }
+          {% endfor %}
+        {% endif %}
+      ];
+      _learnq.push(['track', 'Cart Saved', {
+        '$value': {{ cart.original_total_price | divided_by: 100.0 }},
+        'ItemCount': {{ cartItemCount }},
+        'Currency': {{ cart.currency.iso_code | json }},
+        'DiscountCodes': {{ cart.discount_codes | map: 'code' | json }},
+        'TotalDiscounts': {{ cart.total_discount | divided_by: 100.0 }},
+        'Charges': cartCharges,
+        'extra': {
+          'line_items': cartItems,
+          'responsive_checkout_url': {{ shop.url | append: '/cart' | json }},
+          'full_landing_site': {{ shop.url | json }}
+        }
+      }]);
+      sessionStorage.setItem('isKlaviyo', 'false');
+    })();
+  }
+{% else %}
+    sessionStorage.setItem('isKlaviyo', 'false');
+{% endif %}
+</script>
+
 </section>
 <script>
   document.getElementById("phone").onkeyup = function()

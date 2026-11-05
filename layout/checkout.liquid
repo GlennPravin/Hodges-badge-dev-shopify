@@ -145,6 +145,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                  let _text = $(this).text().split(':')[0].trim().toString(); 
                {% comment %}  let _src = $(this).text().split(':')[1].trim().toString(); {% endcomment %}
                   let _src = $(this).text().replace(_text + ":", "");
+                 
                 let extension = _src
                 .split(/[#?]/)[0]
                 .split('.')
@@ -186,12 +187,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 // $(".section--shipping-method .small-text").hide();   
               $("#shipDate").show();
             }
-
+          
           }
-          // if(Shopify.Checkout.step == 'payment_method'){
-          //   var paymentMethodSection = $('.section--payment-method').find('.section__header')
-          //    .append('<div style="margin-top: 2%;" > {{ shop.metafields.helpText.paymentNotes }} </div>');
-          // }
+          if(Shopify.Checkout.step == 'payment_method'){
+            var paymentMethodSection = $('.section--payment-method').find('.section__header')
+             .append('<div style="margin-top: 2%;" > {{ shop.metafields.helpText.paymentNotes }} </div>');
+          }
           
           hideHiddenChargeProducts();{% comment %}addOrtherChargesInSummary();{% endcomment %}mergeAddChargeWithProducts();
 
@@ -295,9 +296,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               //   productPrice = base.toFixed(2)
               // } 
                if($("span.reduction-code").length > 0 && $("li.reduction-code").length > 0 ){
-                // if($(Price).next(".product__description__property.order-summary__small-text[style='font-weight: 700; color: #01bddd;']").length == 0){
-                $(Price).after("<span class='product__description__property order-summary__small-text'style='font-weight: 700; color: #01bddd;' >Price : $" + productPrice + "</span>")
-                // }
+                if($(Price).next(".product__description__property.order-summary__small-text[style='font-weight: 700; color: #01bddd;']").length == 0){
+                $(Price).after("<span class='product__description__property order-summary__small-text'style='font-weight: 700; color: #01bddd;' >Unit Price : $" + productPrice + "</span>")
+                }
                 if (variable['_canvasImage']) {
                   imgElement = $(Price).parent().prev().find('.product-thumbnail__image');
                   $(imgElement).attr('src', variable['_canvasImage']);
@@ -306,7 +307,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                  let value =  variable["_CustomDesignCenter"] != undefined ?  "_CustomDesignCenter":"_CustomDesign"
                  let extension = variable[value].split(/[#?]/)[0].split('.').pop().trim();
                extension = 0 + extension;
-                              let preview = previewicon[extension] ?? variable[value];
+               let preview = previewicon[extension] ?? variable[value];
                   const $span = $('<span>', {
                               class: 'product__description__property order-summary__small-text',
                               text: value.split("_")[1] 
@@ -320,9 +321,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                }
               } else{
               $(window).on("load", function() {
-                // if($(Price).next(".product__description__property.order-summary__small-text[style='font-weight: 700; color: #01bddd;']").length == 0){
-                $(Price).after("<span class='product__description__property order-summary__small-text'style='font-weight: 700; color: #01bddd;' >Price : $" + productPrice + "</span>")
-                // }
+                if($(Price).next(".product__description__property.order-summary__small-text[style='font-weight: 700; color: #01bddd;']").length == 0){
+                $(Price).after("<span class='product__description__property order-summary__small-text'style='font-weight: 700; color: #01bddd;' >Unit Price : $" + productPrice + "</span>")
+                }
                 if (variable['_canvasImage']) {
                   imgElement = $(Price).parent().prev().find('.product-thumbnail__image');
                   $(imgElement).attr('src', variable['_canvasImage']);

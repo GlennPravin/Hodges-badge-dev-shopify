@@ -159,7 +159,7 @@
                           {%- if article.image -%}
                             <a href="{{ article.url }}" class="blog-sidebar__post-image-wrapper">
                               <div class="blog-sidebar__post-image-overflow">
-                                <img src="{{ article.image | img_url: '100x80', crop: 'center', scale: 2 }}" alt="{{ article.image.alt | escape }}" class="blog-sidebar__post-image">
+                                <img loading='lazy'  src="{{ article.image | img_url: '100x80', crop: 'center', scale: 2 }}" alt="{{ article.image.alt | escape }}" class="blog-sidebar__post-image">
                               </div>
                             </a>
                           {%- endif -%}

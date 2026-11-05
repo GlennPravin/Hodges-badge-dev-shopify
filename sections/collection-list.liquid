@@ -16,7 +16,7 @@
           {%- for block in section.blocks -%}
             {%- assign collection = block.settings.collection -%}
 
-            <a href="{{ block.settings.link | default: collection.url | default: '#' }}" class="collection-item" data-collection-index="{{ forloop.index0 }}" style="margin-left: 22px;" {{ block.shopify_attributes }}>
+            <a href="{{ block.settings.link | default: collection.url | default: '#' }}" class="collection-item" data-collection-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
               {%- unless collection == blank -%}
                 {%- assign collection_image = block.settings.image | default: collection.image | default: collection.products.first.featured_image -%}
 
@@ -25,10 +25,10 @@
                   {%- assign image_url = collection_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
 
                   <div class="aspect-ratio" style="padding-bottom: 100%">
-                    <img class="lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" alt="{{ collection_image.alt | escape }}">
+                    <img loading='lazy'  class="lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" alt="{{ collection_image.alt | escape }}">
 
                     <noscript>
-                      <img src="{{ collection_image | img_url: '450x' }}" alt="{{ collection_image.alt | escape }}">
+                      <img loading='lazy'  src="{{ collection_image | img_url: '450x' }}" alt="{{ collection_image.alt | escape }}">
                     </noscript>
                   </div>
                 </div>

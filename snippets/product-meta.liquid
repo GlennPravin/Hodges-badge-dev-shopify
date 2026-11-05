@@ -43,7 +43,7 @@
       <li style="color: #3b5998;" class="social-media__item social-media__item--facebook facebook_icon ">
         
         <a class="" href="https://www.facebook.com/sharer.php?u={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.facebook_share' | t }}">{%- render 'icon', icon: 'facebook' -%}</a>
-<!--         <a href="https://www.facebook.com/sharer.php?u={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.facebook_share' | t }}"><img src="//cdn.shopify.com/s/files/1/0574/5901/5852/t/4/assets/FB-Logo__32.gif?v=15765800314746081793"></a> -->
+<!--         <a href="https://www.facebook.com/sharer.php?u={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.facebook_share' | t }}"><img src="//hodgesbadge.azureedge.net/test-aydev/facebook_nobackground.png"></a> -->
       </li>
 
       <li style="  color: #bd081c;" class="social-media__item social-media__item--pinterest">
@@ -53,13 +53,18 @@
 
       <li style="color: #1da1f2;" class="social-media__item social-media__item--twitter">
         <a href="https://twitter.com/share?{% if twitter_text != blank %}text={{twitter_text}}&{% endif %}url={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.twitter_tweet' | t }}">{%- render 'icon', icon: 'twitter' -%}</a>
-<!--         <a href="https://twitter.com/share?{% if twitter_text != blank %}text={{twitter_text}}&{% endif %}url={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.twitter_tweet' | t }}"><img src="//cdn.shopify.com/s/files/1/0574/5901/5852/t/4/assets/twitter-bird-big-32w.png?v=4130767318676523134"></a> -->
+<!--         <a href="https://twitter.com/share?{% if twitter_text != blank %}text={{twitter_text}}&{% endif %}url={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.twitter_tweet' | t }}"><img src="//hodgesbadge.azureedge.net/test-images-ayuat/x_web2024.png"></a> -->
       </li>
 
+      <li style="color: #000000;" class="social-media__item social-media__item--tiktok tiktok_icon">  
+        <a class="" href="https://www.tiktok.com/@hodgesbadge" target="_blank" rel="noopener" aria-label="TikTok">{%- render 'icon', icon: 'tiktok' -%}</a>
+      </li>
+      
       <li style="color:#0056b3;" class="social-media__item">
         <a href="mailto:?&subject={{ product.title | escape }}&body={{ share_url }}" aria-label="{{ 'general.social.email_share' | t }}">{% render 'icon', icon: 'email' %}</a>
 <!--           <a href="mailto:?&subject={{ product.title | escape }}&body={{ share_url }}" aria-label="{{ 'general.social.email_share' | t }}"><img style="width: 37px; position: relative;  top: -2px;" src="https://cdn.shopify.com/s/files/1/0602/3148/3555/files/176-1765612_should-you-have-any-questions-or-comments-listed.png?v=1655455811"></a> -->
-      </li>
+      </li>            
+
     </ul>
   {%- endcapture -%}
 {%- endif -%}
@@ -128,7 +133,7 @@
         <div
             id="expand-details">
           </div>
-{%- endif -%}  
+{%- endif -%}        
       {%- endif -%}
 
       {%- if block.settings.show_vendor -%}

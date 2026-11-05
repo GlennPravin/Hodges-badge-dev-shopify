@@ -5,10 +5,10 @@
       {%- assign image_url = article.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
 
       <div class="aspect-ratio" style="padding-bottom: 54%">
-        <img class="article-item__image lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" alt="{{ article.image.alt | escape }}">
+        <img loading='lazy'  class="article-item__image lazyload image--fade-in" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" alt="{{ article.image.alt | escape }}">
 
         <noscript>
-          <img class="article-item__image" src="{{ article.image | img_url: '600x' }}" alt="{{ article.image.alt | escape }}">
+          <img loading='lazy'  class="article-item__image" src="{{ article.image | img_url: '600x' }}" alt="{{ article.image.alt | escape }}">
         </noscript>
       </div>
     </a>

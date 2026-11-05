@@ -8,10 +8,10 @@
   {% for rule in group.rules %}
     {{- rule -}}
   {% endfor %}
- {%- if group.user_agent.value == '*' -%}
+  
+   {%- if group.user_agent.value == '*' -%}
 {{ 'Disallow: /*en-ca/' }}
   {%- endif -%}
-
   
   {%- if group.sitemap != blank -%}
     {{ group.sitemap }}
@@ -20,3 +20,55 @@
 
 User-agent: Googlebot 
 Disallow: /en-ca/
+
+User-agent: Bingbot
+Disallow: /en-ca/
+
+User-agent: ChatGPT
+Disallow: /en-ca/
+
+User-agent: PerplexityAI
+Disallow: /en-ca/
+
+User-agent: JotformAI
+Disallow: /en-ca/
+
+User-agent: Drift
+Disallow: /en-ca/
+
+User-agent: Intercom
+Disallow: /en-ca/
+
+User-agent: ZendeskAnswerBot
+Disallow: /en-ca/
+
+User-agent: LivePerson
+Disallow: /en-ca/
+
+User-agent: Tidio
+Disallow: /en-ca/
+
+User-agent: Freshchat
+Disallow: /en-ca/
+
+User-agent: ManyChat
+Disallow: /en-ca/
+
+User-agent: Replika
+Disallow: /en-ca/
+
+User-agent: Kore.ai
+Disallow: /en-ca/
+
+User-agent: Grok
+Disallow: /en-ca/
+
+User-agent: xAI
+Disallow: /en-ca/
+
+User-agent: Zendesk
+Disallow: /en-ca/
+
+User-agent: Drift
+Disallow: /en-ca/
+

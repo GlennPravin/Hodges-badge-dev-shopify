@@ -14,7 +14,7 @@
       "settings": {
         "show_collection_image": true,
         "collapse_collection_description": true,
-        "collection_image_size": "small",
+        "collection_image_size": "preserve_ratio",
         "products_per_row": "4",
         "default_products_per_page": 24,
         "default_view_layout": "grid",
@@ -27,6 +27,23 @@
         "open_group_filters_mode": "all_closed"
       }
     },
+    "17857537701266ba18": {
+      "type": "apps",
+      "blocks": {
+        "trusted_faq_faq_block_jk4ALF": {
+          "type": "shopify://apps/trusted-faq/blocks/faq-block/3c13bf97-def2-4442-b06f-a64e813a2392",
+          "settings": {
+            "custom_css": ".faq-heading-title{\n    font-size:32px !important;\n    font-weight:700 !important;\n    color:#1f3c88 !important;\n}\n\n.faq-article-header{\n    font-size:17px !important;\n    font-weight:600 !important;\n    border-bottom:1px solid #e5e5e5;\n    transition:.3s;\n}\n\n.faq-article-header:hover{\n    color:#0056b3;\n}\n\n.faq-subcategory-content {\n    font-size: 16px !important;\n    font-family: Arial, sans-serif !important;\n    font-weight: 400 !important;\n    line-height: 1.8 !important;\n    color: #555 !important;\n}"
+          }
+        }
+      },
+      "block_order": [
+        "trusted_faq_faq_block_jk4ALF"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
     "recently-viewed-products": {
       "type": "recently-viewed-products",
       "settings": {
@@ -34,24 +51,27 @@
         "show_quick_buy": false
       }
     },
-    "16838779537f28813b": {
-      "type": "apps",
-      "disabled": true,
+    "custom_html_JHjamC": {
+      "type": "custom-html",
+      "name": "Custom HTML",
       "settings": {
-        "include_margins": true
+        "title": "",
+        "html": "<div style=\"max-width: 1200px; margin: 0 auto; padding: 40px 20px; font-family: inherit; border-top: 1px solid #e8e8e8;\">\n\n  <div style=\"display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px;\">\n    \n    <div>\n      <h2 style=\"font-size: 0.95em; margin-bottom: 10px;\">America's Premier Award Manufacturer Since 1920</h2>\n      <p style=\"font-size: 0.9em; line-height: 1.6; margin: 0;\">Family-owned and headquartered in Portsmouth, Rhode Island, with offices and manufacturing in Washington, Missouri, Hodges Badge has been crafting custom rosettes, ribbons, medals, trophies, and plaques since 1920. Trusted by dog show clubs, equestrian competitions, county and state fairs, 4-H programs, schools, and sports organizations across the United States, we are the name judges, organizers, and champions trust.</p>\n    </div>\n\n    <div>\n      <h2 style=\"font-size: 0.95em; margin-bottom: 10px;\">Fully Customizable &amp; Made to Order</h2>\n      <p style=\"font-size: 0.9em; line-height: 1.6; margin: 0;\">Every custom award is made to your  specifications, choose your colors, materials, and styles, then personalize with your event name, logo, divisions, titles, placement and dates. From 50 awards for a small invitational to 50,000 for a major state fair, we deliver on time and on budget. Express Line and Stock Quick Ship options available for fast turnaround.</p>\n    </div>\n\n    <div>\n      <h2 style=\"font-size: 0.95em; margin-bottom: 10px;\">We're Here to Help</h2>\n      <p style=\"font-size: 0.9em; line-height: 1.6; margin: 0;\">Our customer service specialists are ready to help you build the perfect award for every event on any  budget. Browse our <a href=\"/pages/buying-guide-rosettes\">Buyer's Guides</a> for tips on styles and ordering, or contact us directly. Call <a href=\"tel:18005562440\">1-800-556-2440</a>, email <a href=\"mailto:info@hodgesbadge.com\">info@hodgesbadge.com</a>, or use our online design tools to start customizing today.</p>\n    </div>\n\n  </div>\n\n</div>"
       }
     },
-    "collection-faq": {
+      "collection-faq": {
       "type": "collection-faq",
       "settings": {
         "heading": "Frequently Asked Questions"
       }
     }
   },
-  "order": [
-    "main",
-    "recently-viewed-products",
-    "16838779537f28813b",
-    "collection-faq"
-  ]
+  
+ "order": [
+  "main",
+  "17857537701266ba18",
+  "recently-viewed-products",
+  "custom_html_JHjamC",
+  "collection-faq"
+]
 }

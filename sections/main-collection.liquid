@@ -286,7 +286,7 @@
 
                   <div class="collection__image-wrapper collection__image-wrapper--preserve-ratio">
                     <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: collection.image.aspect_ratio }}%">
-                      <img class="lazyload image--fade-in" data-src="{{ image_url }}" data-sizes="auto" data-widths="[{{ supported_sizes }}]" alt="{{ collection.image.alt | escape }}">
+                      <img loading='lazy'  class="lazyload image--fade-in" data-src="{{ image_url }}" data-sizes="auto" data-widths="[{{ supported_sizes }}]" alt="{{ collection.image.alt | escape }}">
                     </div>
                   </div>
                 {%- else -%}
@@ -541,7 +541,7 @@
       {%- endpaginate -%}
     </div>
   </div>
-
+  
   {%- if has_filters -%}
     <div id="mobile-collection-filters" class="drawer" aria-hidden="true">
       <div class="drawer__inner">

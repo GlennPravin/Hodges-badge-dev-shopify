@@ -1,3 +1,4 @@
+{%- if section.settings.show_section -%}
 {%- case section.settings.text_width -%}
   {%- when 'narrow' -%}
     {%- assign container_classes = 'container container--narrow' -%}
@@ -8,14 +9,13 @@
   {%- when 'wide' -%}
     {%- assign container_classes = 'container' -%}
 {%- endcase -%}
-
 <section class="section section--text-centered" data-section-id="{{ section.id }}" data-section-type="rich-text">
   <div class="{{ container_classes }}">
     {%- if section.settings.title != blank -%}
-      <h2 class="heading h1">{{ section.settings.title | escape }}</h2>
+      <h2 class="heading h1" style="color: {{ section.settings.heading_color }};">{{ section.settings.title | escape }}</h2>
     {%- endif -%}
 
-    <div class="rte">
+    <div class="rte"  style="color: {{ section.settings.text_color }};">
       {{ section.settings.content }}
 
       {%- if section.settings.button_link != blank and section.settings.button_text != blank -%}
@@ -24,12 +24,32 @@
     </div>
   </div>
 </section>
+{%- endif -%}
 
 {% schema %}
 {
   "name": "Rich text",
   "settings": [
     {
+  "type": "checkbox",
+  "id": "show_section",
+  "label": "Show rich text",
+  "default": false
+    },
+    {
+  "type": "color",
+  "id": "heading_color",
+  "label": "Heading color",
+  "default": "#000000"
+    },
+    {
+  "type": "color",
+  "id": "text_color",
+  "label": "Text color",
+  "default": "#000000"
+  },
+    {
+      
       "type": "select",
       "id": "text_width",
       "label": "Text width",

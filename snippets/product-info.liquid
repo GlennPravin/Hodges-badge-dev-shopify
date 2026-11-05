@@ -18,7 +18,6 @@
                   {%- if mkt.mktId == market -%}
                     {%- assign product_specification = mkt.detailedDescr -%}
                     {%- assign product_description = mkt.AdditionalProductDescr -%}
-                    {{ mkt.AdditionalProductDescr }}
                     {% elsif mkt.mktId == "C" %}
                     {%- assign manualobject = mkt -%}
                   {%- endif -%}
@@ -94,9 +93,14 @@
               <a href="https://twitter.com/share?{% if twitter_text != blank %}text={{twitter_text}}&{% endif %}url={{ share_url }}" target="_blank" rel="noopener" aria-label="{{ 'general.social.twitter_tweet' | t }}">{%- render 'icon', icon: 'twitter' -%}</a>
             </li>
 
+            <li class="social-media__item social-media__item--tiktok">
+              <a href="https://www.tiktok.com/@hodgesbadge" target="_blank" rel="noopener" aria-label="TikTok">{%- render 'icon', icon: 'tiktok' -%}</a>
+            </li>
+            
             <li class="social-media__item">
               <a href="mailto:?&subject={{ product.title | escape }}&body={{ share_url }}" aria-label="{{ 'general.social.email_share' | t }}">{% render 'icon', icon: 'email' %}</a>
             </li>
+
           </ul>
         </div>
       {%- endif -%}

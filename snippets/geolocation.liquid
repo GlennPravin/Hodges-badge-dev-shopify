@@ -1,0 +1,164 @@
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  // Prevent duplicate execution
+  if (document.getElementById('geo-blocking-modal')) {
+    return;
+  }
+
+  // Check if already accepted
+  try {
+    if (sessionStorage.getItem('geoAccepted')) {
+      return;
+    }
+  } catch (e) {}
+
+  fetch(window.Shopify.routes.root + 'browsing_context_suggestions.json')
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+
+      const detectedCountryHandle =
+        data?.detected_values?.country?.handle?.toUpperCase();
+
+      const detectedCountryName =
+        data?.detected_values?.country?.name;
+
+      if (!detectedCountryHandle) {
+        return;
+      }
+
+      // Do nothing for US and Canada
+      if (
+        detectedCountryHandle === 'US' ||
+        detectedCountryHandle === 'CA'
+      ) {
+        return;
+      }
+
+      // Prevent duplicate style injection
+      if (!document.getElementById('geo-modal-styles')) {
+
+        const style = document.createElement('style');
+
+        style.id = 'geo-modal-styles';
+
+        style.innerHTML = `
+          #geo-blocking-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+          }
+
+          .geo-modal-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+          }
+
+          #geo-modal-heading {
+            font-size: 22px;
+            font-weight: 700;
+          }
+
+          .geo-modal-content {
+            position: relative;
+            max-width: 500px;
+            margin: 10% auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 1;
+          }
+
+          .geo-modal-content h2 {
+            margin-bottom: 15px;
+          }
+
+          .geo-modal-content p {
+            margin-bottom: 12px;
+            line-height: 1.5;
+          }
+
+          #geo-modal-accept {
+            margin-top: 20px;
+            padding: 9px 18px;
+            background: #00badb;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+          }
+        `;
+
+        document.head.appendChild(style);
+
+      }
+
+      // Prevent duplicate modal injection
+      if (document.getElementById('geo-blocking-modal')) {
+        return;
+      }
+
+      document.body.insertAdjacentHTML('beforeend', `
+        <div id="geo-blocking-modal" role="dialog" aria-modal="true">
+
+          <div class="geo-modal-overlay"></div>
+
+          <div class="geo-modal-content">
+
+            <h2 id="geo-modal-heading">
+              {{ shop.metafields.helpText.geotitle.value }}
+            </h2>
+
+            <p>
+              We’ve detected that you’re visiting from
+              <strong>${detectedCountryName || ''}</strong>.
+            </p>
+
+            <p>
+              {{ shop.metafields.helpText.geodescription.value }}
+            </p>
+
+            <button id="geo-modal-accept" autofocus>
+              OK, I Understand
+            </button>
+
+          </div>
+
+        </div>
+      `);
+
+      const closeModal = function() {
+
+        try {
+          sessionStorage.setItem('geoAccepted', 'true');
+        } catch (e) {}
+
+        document
+          .getElementById('geo-blocking-modal')
+          ?.remove();
+
+      };
+
+      document
+        .getElementById('geo-modal-accept')
+        ?.addEventListener('click', closeModal);
+
+    })
+    .catch(function(error) {
+
+      console.error(
+        'Geolocation detection failed:',
+        error
+      );
+
+      // Fail-safe:
+      // If the API fails, customers can continue browsing normally.
+    });
+
+});
+</script>

@@ -194,19 +194,18 @@
       </div>
 
       <div class="mini-cart__recap">
-       {%- comment -%} {%- if cart.cart_level_discount_applications != blank -%}
+        <!-- {%- if cart.cart_level_discount_applications != blank -%}
           {%- for discount_application in cart.cart_level_discount_applications -%}
             <div class="mini-cart__recap-price-line mini-cart__recap-price-line--highlight text--pull">
               <span>{{ discount_application.title }}</span>
               <span>-{{ discount_application.total_allocated_amount | money }}</span>
             </div>
           {%- endfor -%}
-        {%- endif -%} {%- endcomment -%}
+        {%- endif -%} -->
 
         <div class="mini-cart__recap-price-line">
           <span>{{ 'cart.general.total' | t }}</span>
-          <!-- <span>{{ cart.total_price | money_with_currency }}</span> -->
-           <span>{{ cart.original_total_price | money_with_currency }}</span>
+          <span>{{ cart.original_total_price | money_with_currency }}</span>
         </div>
 
         {%- comment -%}To calculate the total discount, we take both into account the Shopify Script (for Plus merchants), but we also add the compare at price{%- endcomment -%}

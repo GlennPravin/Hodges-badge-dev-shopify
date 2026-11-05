@@ -3,6 +3,7 @@
 <link rel="preconnect"  href="https://live.visually-io.com/" crossorigin>
 <link rel="dns-prefetch" href="https://live.visually-io.com/">
 <script>
+(()=> {
     const env = 2;
     var store = "{{ shop.permanent_domain }}";
     var alias = store.replace(".myshopify.com", "").replaceAll("-", "_").toUpperCase();
@@ -26,14 +27,17 @@
 	product.price = {{ product.price }} ;
 	window.loomi_ctx.current_product=product;
 	window.loomi_ctx.productId={{product.id}};
-	window.loomi_ctx.variantId={{ product.selected_or_first_available_variant.id }};
+	{%- if product.selected_or_first_available_variant %}
+	window.loomi_ctx.variantId = {{ product.selected_or_first_available_variant.id  }};
+	{%- endif %}
 	{% endif %}
+})()
 </script>
-<link href="https://live.visually-io.com/widgets/vsly-preact.min.js?k=js.69170823461&e=2&s=HODGES_BADGE_SANDBOX_DEV" rel="preload" as="script">
-<script type="text/javascript" src="https://live.visually-io.com/widgets/vsly-preact.min.js?k=js.69170823461&e=2&s=HODGES_BADGE_SANDBOX_DEV"></script>
-<link href="https://live.visually-io.com/cf/HODGES_BADGE_SANDBOX_DEV.js" rel="preload" as="script">
+<link href="https://live.visually-io.com/widgets/vsly-preact.min.js?k=js.69287739711&e=2&s=HODGES_BADGE_SANDBOX_UAT" rel="preload" as="script">
+<script type="text/javascript" src="https://live.visually-io.com/widgets/vsly-preact.min.js?k=js.69287739711&e=2&s=HODGES_BADGE_SANDBOX_UAT"></script>
+<link href="https://live.visually-io.com/cf/HODGES_BADGE_SANDBOX_UAT.js" rel="preload" as="script">
 <link href="https://live.visually-io.com/v/visually.js" rel="preload" as="script">
-<script type="text/javascript" src="https://live.visually-io.com/cf/HODGES_BADGE_SANDBOX_DEV.js"></script>
+<script type="text/javascript" src="https://live.visually-io.com/cf/HODGES_BADGE_SANDBOX_UAT.js"></script>
 <script type="text/javascript" src="https://live.visually-io.com/v/visually.js"></script>
 <script defer type="text/javascript" src="https://live.visually-io.com/v/visually-a.js"></script>
 <!--LOOMI SDK-->

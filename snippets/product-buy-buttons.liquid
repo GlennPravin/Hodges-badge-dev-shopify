@@ -63,7 +63,7 @@
  const printonBack = {{ shop.metafields.printOnBack.optionIds.value | split: "," | json }};
  const seqOptions = {{ SeqChangableOptions |json}};
  const commonOptions = {{ CommonOptions |json}};
- {% comment %} const isSetupCharge = {{product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.isProductSubType}} ; {% endcomment %}
+ {% comment %} const isSetupCharge = {{product.metafields.ProductMeta.ProductAdditionalInfo.ExtraInfoAboutProduct.isProductSubType}} ; {% endcomment %}
  const removedPC_dropdown = {{ shop.metafields.helpText.RemovedPrintColor.value | json }};
  const isFlatCharges = {{ isFlat | json }};
 const promotionProductsEdit = {% if promotionCollection != "" and collections[promotionCollection] != nil and collections[promotionCollection].products.size > 0 %}{{ collections[promotionCollection].products | map: "id" | json }}{% else %}[]{% endif %};

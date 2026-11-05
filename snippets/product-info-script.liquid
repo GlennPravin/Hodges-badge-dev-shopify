@@ -4,6 +4,7 @@
     {%- assign VariationOptions =  shop.metafields.optionFamily[family].value.variationOptions -%}
     {% assign SubType = product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductSubType  %}
     {% assign stockCustomRider = shop.metafields.stockCustomRider.SubType | split:',' %}
+    var charge_code = {{ product.metafields.chargecode | json }}; 
 	{% assign canvasEnabled = false %}
     {% if product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled == true %}
 	{% assign canvasEnabled = product.metafields.CanvasLayerOptions.IsCanvasConfigEnabled %}
@@ -18,7 +19,7 @@
         {%- continue -%}
     {%- endif -%}
     {% endfor %} 
-    var  charge_code = {{ product.metafields.chargecode | json }};   
+  
     const ItemLabel = ({vc}) => `
             <div id="variation_${vc}" class="product-form__option info-option clearfix variationsAddToCart" ><div>
             <hr/>
@@ -29,7 +30,6 @@
                     {%- for option in VariationOptions -%}
                        {%- assign variation_option = shop.metafields.VariationOptions[option].value -%}
                         {%- assign content_length = variation_option.values.size -%}
-                       {%- assign limit=variation_option['optionDisplay']  -%}
                         {%- assign sort_type = 'input-text' -%}
                         {%- if content_length <= 0 -%}
                             {%- if variation_option.isUploadEnabled  -%}
@@ -44,7 +44,8 @@
                             {%- assign sort_type = 'select' -%}
                             {%- endif -%}
                         {%- endif -%}
-                       {% if optionsLimit[variation_option['optionId']]  %}
+                        {%- assign limit=variation_option['optionDisplay']  -%}
+                        {% if optionsLimit[variation_option['optionId']]  %}
                             {%- assign limit=optionsLimit[variation_option['optionId']] -%}
                         {% endif %} 
                         <li class="list-group-item" style="border: 0px !important; padding: 0px !important;" data-type="{{ sort_type }}" data-option-id="{{ variation_option['optionId'] }}_v${vc}" >
@@ -59,7 +60,7 @@
                                         <label for="{{ variation_option['optionId'] }}" class="product-form__option-name text--strong">{{ variation_option['label'] }} {% if variation_option['isRequired'] %} * {% endif %}</label>
                                         <input type="text" data-label="{{ variation_option['label'] }}" oninput="validate_splChar_ontype(this);canvasVariation(this)" id="{{ variation_option['optionId'] }}" class="variant_division fontapply" name="{{ variation_option['optionId'] }}" {% if variation_option['isRequired'] %} required {% endif %} placeholder="{{ variation_option['label'] }}" {% if variation_option["optionMessage"] %} data-toggle="tooltip" data-placement="top" title="{{ variation_option["optionMessage"] }}" data-html="true" {% endif %} data-option-display="{{limit}}"  maxlength = "{{limit}}">
                                             {% comment %}
-                                            {%- if canvasEnabled -%}
+                                    {%- if canvasEnabled -%}
                                     <button
                                     data-toggle='tooltip'
                                     data-placement='top'
@@ -82,7 +83,7 @@
                                                 ac["{{ variation_option.optionId }}_v${vc}"] = {{ variation_option['values'] | json}}; 
                                             <\/script>
                                           <input type="text" data-label="{{ variation_option['label'] }}" onchange="canvasVariation(this)" class="autocomplete" name="{{variation_option['optionId']}}" id="{{variation_option['optionId']}}_v${vc}_dn" {% if variation_option['IsRetainOptionsInVariants'] %} data-value="Variant" {% endif %} data-charge="" data-chargeCode="" data-dn="" data-key="{{variation_option['optionId']}}_v${vc}" {% if variation_option['isRequired'] %} required {% endif %} />
-                                            <input class="btn input_fix_btn" readonly="readonly" onclick="popUp('{{variation_option['optionId']}}_v${vc}','variation')" {% if variation_option["optionMessage"] %} data-toggle="tooltip" data-placement="top" title="{{ variation_option["optionMessage"] }}" data-html="true" {% endif %} value="(Or) Choose" >
+                                            <input class="btn input_fix_btn" readonly="readonly" onclick='popUp("{{ variation_option.optionId }}_v${vc}", "variation", {{ shop.metafields.VariationOptions[variation_option.optionId].value | json }})' {% if variation_option["optionMessage"] %} data-toggle="tooltip" data-placement="top" title="{{ variation_option["optionMessage"] }}" data-html="true" {% endif %} value="(Or) Choose" >
                                         </div>
     
                                         <div class="pop-chosen-value" data-option-id="{{variation_option['optionId']}}_v${vc}" >
@@ -107,7 +108,7 @@
                                             <option value="" selected> - Select an Option - </option>
                                             {%- for block_swatch in variation_option.values -%}
                                                 {%- capture block_swatch_id -%}{{block_swatch.id}}-{{forloop.index}}{%- endcapture -%}
-                                                <option value="{{ block_swatch.id }}" {%if block_swatch.sequence==0 %} selected {%endif%} >{{ block_swatch.name | escape }}</option>
+                                                <option value="{{ block_swatch.id }}" >{{ block_swatch.name | escape }}</option>
                                             {%- endfor -%}
                                         </select>
                                         {% comment %}
@@ -118,7 +119,7 @@
                                                 onclick="fontedit(this,'{{ variation_option['optionId'] }}','{{ variation_option['label'] }}','{{productFontSizes}}','true')"
                                                 class="fontEdit"
                                                 title='Edit Font'>
-                                               <img class="fonteditImg" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/edit_icon_863405ed-20e1-4cd2-a8e6-37e5280c65e8.png?v=1704190370">
+                                                <img class="fonteditImg" src="https://cdn.shopify.com/s/files/1/0691/7082/3461/files/edit_icon_863405ed-20e1-4cd2-a8e6-37e5280c65e8.png?v=1704190370">
                                             </button>
                                             {%- endif -%}
                                         {% endcomment %}
@@ -142,7 +143,7 @@
                                                 data-placement="top" 
                                                 title="{{ variation_option["optionMessage"] }}" 
                                                 data-html="true" 
-                                                {% endif %} data-option-display="30" maxlength="30"/>
+                                                {% endif %} data-option-display="30" maxlength="30"/> 
                                                 {% comment %} 
                                                  {%- if canvasEnabled -%}
                                                     <button
@@ -173,7 +174,7 @@
                     <div class="product-form__info-content">
                         <div class="quantity-selector quantity-selector--product">
                             <button type="button" onclick="minusQty(${vc})" {% if isCustomRideQty == true %} disabled {% endif %} class="quantity-selector__button" >{% render 'icon', icon: 'minus' %}</button>
-                            <input id="varQty${vc}" name="quantity" aria-label="{{ 'product.form.quantity' | t }}" {% if isCustomRideQty == true %} disabled {% endif %} class="quantity-selector__value varQtyAddToCart set_input q_number" inputmode="numeric" value="0" size="3" min="0" max="99999" maxlength="5" oninput="this.value = this.value.replace(/[^0-9.]/g, '') )">
+                            <input id="varQty${vc}" name="quantity" aria-label="{{ 'product.form.quantity' | t }}" {% if isCustomRideQty == true %} disabled {% endif %} class="quantity-selector__value varQtyAddToCart set_input q_number" inputmode="numeric" value="0" size="3" min="0" max="99999" maxlength="5" oninput="this.value = this.value.replace(/[^0-9.]/g, ''))">
                             <button type="button" onclick="plusQty(${vc})" {% if isCustomRideQty == true %} disabled {% endif %} class="quantity-selector__button" >{% render 'icon', icon: 'plus' %}</button>
                         </div>
                     </div>
@@ -217,7 +218,7 @@
         }
     };
     function addVariation(_this){
-       if({{canvasEnabled}}){
+        if({{canvasEnabled}}){
             $(".customizer_btn.product-gallery__thumbnail").click();
             $('.image-container').show();
         }
@@ -277,12 +278,12 @@
         setValue.setAttribute('data-font-family', fontFamilyValue);
         setValue.setAttribute('data-font-size', fontSizeValue);
     }
-}
+  }
     canvasVariation($(`label[data-variation=${vCount}]`).nextAll('div').children('ul'), 'V'+vCount)
     }
     
-    function popUp(id, popupOptions, popup_Options,product_hopsUId) {
-       if (!Array.isArray(popupOptions)) {
+       function popUp(id, popupOptions, popup_Options,product_hopsUId) {
+        if (!Array.isArray(popupOptions)) {
             popupOptions = [popupOptions];
         }
         $('#'+id+'_popup').empty();
@@ -291,15 +292,15 @@
         $('#'+id+'_popup').append([{oId:id}].map(popSearch).join(''));   
         var  meta_ref = {{ shop.metafields.MetaReference | json }}
         var  charge_code = {{ product.metafields.chargecode | json }}
-        var  removedPC_popup = {{ shop.metafields.helpText.RemovedPrintColor.value | json}}
+        var  removedPC_popup = {{ shop.metafields.helpText.RemovedPrintColor.value | json }}
         if(popupOptions == "variation"){
-            var VariationOptions = {{shop.metafields.VariationOptions | json}};
+            var VariationOptions = popup_Options;
             for (option in VariationOptions) {
                 var idV = id.split('_v')[0];
-                if(idV == option){
+                if(idV == VariationOptions.optionId){
                    
-                    for ( var pop_value in VariationOptions[option].values) {
-                        var popvalues = VariationOptions[option].values[pop_value];
+                    for ( var pop_value in VariationOptions.values) {
+                        var popvalues = VariationOptions.values[pop_value];
                         if (removedPC_popup.includes(popvalues.id)) {
                             continue;
                         }
@@ -315,7 +316,7 @@
                             value_name_add= valName;
                             
                             if(valAdd != "0" && valAdd != "" &&
-          $("#streamer-size").val() != undefined){
+                            $("#streamer-size").val() != undefined){
                                 var charges = charge_code[valAdd];
                                 var strsize = $('#streamer-size').val().toString();
                                 str_val = charges[strsize];
@@ -336,12 +337,12 @@
             }
         } else {
             for (option in popupOptions) {
-                if(id == popupOptions[option]){                    
-                    if(popup_Options[popupOptions[option]].metaReferenceValues){
+                if(id == popupOptions[option]){
+                    if(popup_Options.metaReferenceValues){
                         
-                        for ( var meta_ref_id in popup_Options[popupOptions[option]].metaReferenceValues) {
+                        for ( var meta_ref_id in popup_Options.metaReferenceValues) {
                                   
-                            var metrefid = popup_Options[popupOptions[option]].metaReferenceValues[meta_ref_id]
+                            var metrefid = popup_Options.metaReferenceValues[meta_ref_id]
                             var metarefvalues = meta_ref[metrefid];
                             var valId = metarefvalues.values.id;
                             var valName = metarefvalues.values.name;
@@ -356,7 +357,7 @@
                                 value_name_add= valName;
                                
                                 if(valAdd != "0" &&
-          $("#streamer-size").val() != undefined){
+                                    $("#streamer-size").val() != undefined){
                                     var chargescode = charge_code[valAdd];
                                     var strsize = $('#streamer-size').val().toString();
                                     charges = chargescode[strsize];
@@ -376,12 +377,12 @@
                         }
                         break;
                     } else {
-                        for ( var pop_value in popup_Options[popupOptions[option]].values) {
+                        for ( var pop_value in popup_Options.values) {
                              
-                            var popvalues = popup_Options[popupOptions[option]].values[pop_value];
+                            var popvalues = popup_Options.values[pop_value];
                             if (removedPC_popup.includes(popvalues.id)) {
                             continue;
-                            }
+                             }
                             var valId = popvalues.id;
                             var valName = popvalues.name;
                             var valImage = popvalues.image;
@@ -389,13 +390,13 @@
                             var valChargeType = popvalues.chargeType;
                             let str_val = valAdd;
                             var value_name_add = valName + ' - Add: $'+valAdd;
-                            var color_label =popup_Options[popupOptions[option]].label;
+                            var color_label =popup_Options.label;
     
                             if(valChargeType != "Amount"){
                                 value_name_add= valName;
     
                                 if(valAdd != "0" && valAdd != "" &&
-          $("#streamer-size").val() != undefined){
+                                $("#streamer-size").val() != undefined){
                                      
                                
                                     var charges = charge_code[valAdd];
@@ -407,7 +408,7 @@
                                 }
                             }
                             if(product_hopsUId){
-                               $("#popup1").css("display", "block");
+                              $("#popup1").css("display", "block");
                                 const popupOption = ({oId,vImage,vName,vName1,vId,str_val,valAdd,product_hopsUId,color_label}) => `
                                 <div class="view-option-block" onmouseover="dis_image_enlarge('${vImage}','${vName1}')">
                                     <div id="selectedImagePC_cart" class="image-tag" >
@@ -438,8 +439,64 @@
         $(".overlay").append($("#"+id+"_popup")); 
         // $("#"+id+"_popup").css("display", "block");
     }
-    
+     let stockImageDataCache = null;
+
+
+// Load stock images data from Shopify section
+function getStockImagesData() {
+    if (stockImageDataCache) {
+        return Promise.resolve(stockImageDataCache);
+    }
+
+
+    return fetch('/?sections=stock-images-data')
+        .then(response => response.json())
+        .then(data => {
+
+            let html = data["stock-images-data"];
+
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, "text/html");
+
+
+            let jsonElement = doc.querySelector("#stock-images-data");
+
+            if (!jsonElement) {
+                console.error("stock-images-data script not found");
+                return {};
+            }
+
+
+            stockImageDataCache = JSON.parse(
+                jsonElement.textContent
+            );
+            return stockImageDataCache;
+
+        })
+        .catch(error => {
+            console.error("Stock image fetch error:", error);
+            return {};
+        });
+}
     function popUpD(id, pId,stkColor) {
+           getStockImagesData()
+    .then(stockData => {
+
+
+        let stockValues = {};
+
+
+        // Based on color select data
+        if (stkColor.toLowerCase() === "black") {
+
+        stockValues = stockData.BlackStkImgMR || {};
+
+        } 
+        else {
+
+        stockValues = stockData.ColorStkImgMR || {};
+
+        }
             const inputElement = $('.dependent-values.show').find('#yourZoom_centerUploader').find('input').attr('value');
             if (inputElement && inputElement!== ''){
                popUpdesign("Please remove the Custom Design or File Name if you want to add Stock Design");
@@ -468,16 +525,14 @@
         }
             
        
-        var  dependValues={};
-         
+        let dependValues = {};
         if(stkColor.toLowerCase() == "black"){
-            dependValues = {{ shop.metafields.BlackStkImgMR | json}};
-			dependValues1 ={{ shop.metafields.HpDesign | json }}        
+            dependValues = stockData.BlackStkImgMR;
+			dependValues1 =stockData.HpDesign;
             dependValues = { ...dependValues, ...dependValues1 };
-            console.log('dependValues',dependValues)
         }else{
-            dependValues = {{ shop.metafields.ColorStkImgMR | json}};
-			dependValues1 ={{ shop.metafields.HpDesign | json }}        
+            dependValues = stockData.ColorStkImgMR;
+			dependValues1 =stockData.HpDesign;        
             dependValues = { ...dependValues, ...dependValues1 };
         }
     
@@ -529,22 +584,39 @@
         $('.overlay').css("opacity", "1");
         $(".overlay").append($("#"+id+"_popup")); 
         $("#"+id+"_popup").css("display", "block");
-    
+     });
     }
-       function popUpdesign(message){
+     function popUpdesign(message){
         $('#design_alerts .modalbody h1').text(message);
         $('#design_alerts').css('display', 'block');
     }
     function popUpM(id, pId,stkcolor) {
-
+        
         {% comment %} if ($('#'+id+'_btn').closest("li").find('.or_clause')[0] != undefined){
           if ($('#'+id+'_btn').closest("li").find('.uploader-preview')[0] != undefined){
             if( !$('#yourZoom_uploader').find('.uploader-preview')[0].hasAttribute('hidden')) {
-               alert('Please remove the custom design if you want to add stock design');
+               alert('Please remove the custom design if you want to ad stock design');
                return;
             }
           }
         }  {% endcomment %}
+            getStockImagesData()
+    .then(stockData => {
+
+
+        let stockValues = {};
+
+        // Based on color select data
+        if (stkcolor.toLowerCase() === "black") {
+
+        stockValues = stockData.BlackStkImgMR || {};
+
+        } 
+        else {
+
+        stockValues = stockData.ColorStkImgMR || {};
+
+        }
           var inputElement=$("#yourZoom_uploader").find('input').attr('value');
           if (inputElement && inputElement !== ''){
                popUpdesign("Please remove the Custom Design or File Name if you want to add Stock Design");
@@ -577,10 +649,10 @@
     
         if(pId ="EithersMR"){
             
-            if(stkcolor == "color"){
-                dependValues = {{ shop.metafields.ColorStkImgMR | json}};
+           if(stkcolor == "color"){
+                dependValues = stockData.ColorStkImgMR;
             }else{
-                dependValues = {{ shop.metafields.BlackStkImgMR | json}};
+                dependValues = stockData.BlackStkImgMR;
             }
             
             
@@ -639,6 +711,7 @@
         $('.overlay').css("opacity", "1");
         $(".overlay").append($("#"+id+"_popup")); 
         $("#"+id+"_popup").css("display", "block");
+        });
     }
     
     function popUpS(id, pId) {
@@ -703,7 +776,7 @@
                     const popupOption = ({oId,vImage,vName,vName1,vId, parId,dc,dk,str_val,valAdd}) => `
                         <div class="view-option-block" onmouseover="dis_image_enlarge('${vImage}','${vName1}')">
                             <div class="image-tag " >
-                                <img loading="lazy" onmouseover="dis_image_enlarge('${vImage}','${vName1}')" onclick="selectedImage1('${vImage}', '${oId}','${vName}', this,'${parId}','${str_val}','${valAdd}')" src="${vImage}" data-id="${valId}"  data-charge='${str_val}' />
+                                <img loading="lazy" onmouseover="dis_image_enlarge('${vImage}','${vName1}')" onclick="selectedImage('${vImage}', '${oId}','${vName}', this,'${parId}','${str_val}','${valAdd}')" src="${vImage}" data-id="${valId}"  data-charge='${str_val}' />
                             </div>
                             <div class="label" >${vName}</div>
                             <div hidden class="label" >${dc}</div>

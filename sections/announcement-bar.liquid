@@ -359,7 +359,7 @@
          alertemail.style.display = "none";
 		  $(".lds-dual-ring").show();
       $.ajax({
-        url: 'https://hops-connect.dev.hodgesbadge.com/api/Barilliance/GetSubscriberInterests?email=' + $(".cfoucs").val() + '&requestMode=Subscription&isHodges=true',
+        url: 'https://hops-connect.staging.hodgesbadge.com/api/Barilliance/GetSubscriberInterests?email=' + $(".cfoucs").val() + '&requestMode=Subscription&isHodges=true',
         type: 'GET',
         dataType: 'json',
         success: function (data, textStatus, xhr) {
@@ -448,7 +448,7 @@ else{
 
     $.ajax({
       type: 'POST',
-      url: `https://hops-connect.dev.hodgesbadge.com/api/Barilliance/CatalogRequest?requestMode=Subscription&isHodges=true`,
+      url: "https://hops-connect.staging.hodgesbadge.com/api/Barilliance/CatalogRequest?requestMode=Subscription&isHodges=true",
       data: JSON.stringify(person),
       dataType: 'text',
       contentType: "application/json; charset=utf-8",
@@ -510,8 +510,8 @@ else{
 
     $.ajax({
       type: 'POST',
-      url: `https://hops-connect.dev.hodgesbadge.com/ShopifyCustomer/UpdateAcceptsMarketStatus?email=${getlocaldata}&isHodges=true`,
-      //url: "https://hops-connect.dev.hodgesbadge.com/ShopifyCustomer/UpdateAcceptsMarketStatus?email="+emailval, 
+      url: `https://hops-connect.staging.hodgesbadge.com/ShopifyCustomer/UpdateAcceptsMarketStatus?email=${getlocaldata}&isHodges=true`,
+      //url: "https://hops-connect.staging.hodgesbadge.com/ShopifyCustomer/UpdateAcceptsMarketStatus?email="+emailval, 
       dataType: 'text',
       contentType: "application/json; charset=utf-8",
       // encode: true,
@@ -543,7 +543,8 @@ else{
 
     $.ajax({
       type: 'POST',
-      url: `https://hops-connect.dev.hodgesbadge.com/ShopifyCustomer/UpdateAcceptsMarketStatus?email=${inputval}&isHodges=true`,
+      
+      url: "https://hops-connect.staging.hodgesbadge.com/ShopifyCustomer/UpdateAcceptsMarketStatus?email=" + inputval + "&isHodges=true",
       //url: "https://hopsconnectapi.azurewebsites.net/ShopifyCustomer/UpdateAcceptsMarketStatus?email="+emailval, 
       dataType: 'text',
       contentType: "application/json; charset=utf-8",

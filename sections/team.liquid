@@ -12,7 +12,7 @@
         {%- when 'member' -%}
           <div class="team__block-item team__member" {{ block.shopify_attributes }}>
             {%- if block.settings.image -%}
-              <img src="{{ block.settings.image | img_url: '250x250', crop: 'center' }}" alt="{{ block.settings.image.alt | escape }}" class="team__member-pic {% if section.settings.round_image %}team__member-pic--rounded{% endif %}">
+              <img loading='lazy'  src="{{ block.settings.image | img_url: '250x250', crop: 'center' }}" alt="{{ block.settings.image.alt | escape }}" class="team__member-pic {% if section.settings.round_image %}team__member-pic--rounded{% endif %}">
             {%- endif -%}
 
             {%- if block.settings.title != blank -%}

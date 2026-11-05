@@ -134,7 +134,7 @@
 }
    /* .width_size:nth-child(n+4){
    border-top: 1px solid transparent ! important;
-}                       }  */
+}                       } 
                             /**************************/
                         @media only screen and (min-device-width: 280px) and (max-device-width: 653px) and (orientation: landscape) {
  .width_size{
@@ -164,9 +164,8 @@
 {%- else -%}
   {%- assign quantity_range_prices = '{}' | json -%}
 {%- endif -%}
-
 {% assign SubType = product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductSubType  %}
-{% assign stockCustomRider = shop.metafields.stockCustomRider.SubType | split:',' %}
+{% assign stockCustomRider = shop.metafields.stockCustomRider.SubType.value | split:',' %}
 
     {% for subTypeId in stockCustomRider %}
     {% assign subId = subTypeId | plus:0 %}
@@ -179,16 +178,17 @@
 {%- assign RemoveBuyButton =  shop.metafields.helpText.RemoveAddtoCartButton.value -%}
 {%- assign ProductIDs =  product.metafields.search.productId.value  -%}
 {%- unless product.has_only_default_variant -%}
+
+  
   <div class="product-form__variants" {{ block.shopify_attributes }}>
     
     {%- render 'product-info-variant-selector', product: product, form: form, block: block -%}
 
     {%- if quantity_range_prices.isStreamerAvailable == true -%}
-       {% unless RemoveBuyButton contains ProductIDs %}
+      {% unless RemoveBuyButton contains ProductIDs %}
       <div class="">
           {%- capture option_name -%}{{ section.id }}-{{ product.id }}-"streamer-size"{%- endcapture -%}
           {%- assign streamer_size = quantity_range_prices.quantityRange -%}
-         
           <div class="product-form__option  info-option" data-selector-type="select">
               <label class="product-form__option-name text--strong" for="streamer-size" class="">Streamer Size: {% if streamer_size['isRequired'] %} * {% endif %}</label>
               <select class="" data-label="Streamer Size" name="{{quantity_range_prices.OptionId}}" id="streamer-size" {% if streamer_size['isRequired'] %} required {% endif %} {% if streamer_size.optionMessage %} data-toggle="tooltip" data-placement="top" title="{{ streamer_size.optionMessage }}" data-html="true" {% endif %} >
@@ -199,11 +199,10 @@
                   {%- endfor -%}
               </select>
               <div class="error streamer-size"></div>
-          </div>
-         
+          </div> 
       </div>
-       {%- endunless -%} 
-
+      {%- endunless -%} 
+      
       {%- assign streamer_size = quantity_range_prices.quantityRange -%}
       {%- for streamer_option in streamer_size -%}
       {%- assign quantity_price = quantity_range_prices.StreamerSizes[streamer_option.id] -%}
@@ -331,7 +330,6 @@
   <input type="hidden" name="id" data-sku="{{ selected_variant.sku }}" value="{{ selected_variant.id }}">
 {%- endunless -%}
 {% unless RemoveBuyButton contains ProductIDs %}
-
 <div class="product-form__info-list">
   <div class="product-form__info-item hide">
     <span class="product-form__info-title text--strong">{{ 'product.form.price' | t }}:</span>
@@ -458,7 +456,7 @@
             <button type="button" class="quantity-selector__button" data-action="increase-picker-quantity" aria-label="{{ 'cart.items.increase_quantity' | t }}" title="{{ 'cart.items.increase_quantity' | t }}">{% render 'icon', icon: 'plus' %}</button>
           </div> {% endcomment %}
             <div class="quantity-selector quantity-selector--product">
-            <button type="button" onclick="minusQty('')" class="quantity-selector__button" {% if isCustomRideQty == true %} disabled {% endif %}>{% render 'icon', icon: 'minus' %}</button>
+             <button type="button" onclick="minusQty('')" class="quantity-selector__button" {% if isCustomRideQty == true %} disabled {% endif %}>{% render 'icon', icon: 'minus' %}</button>
             <input id="varQty" name="quantity" aria-label="{{ 'product.form.quantity' | t }}" class="quantity-selector__value varQtyAddToCart  q_number" {% if isCustomRideQty == true %} disabled data-label = "stockCustomRider" {% endif %} inputmode="numeric" value="0" size="3" min="0" max="99999" maxlength="5" oninput="this.value = this.value.replace(/[^0-9.]/g, '')">
             <button type="button" onclick="plusQty('')" class="quantity-selector__button" {% if isCustomRideQty == true %} disabled {% endif %} >{% render 'icon', icon: 'plus' %}</button>
           </div>
@@ -482,5 +480,3 @@
 <div class="error add-to-cart"></div>
 
 {%- render 'product-info-script', product: product, form: form, block: block -%}
-
-

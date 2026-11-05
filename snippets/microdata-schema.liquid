@@ -18,12 +18,13 @@ or change the format of some info
     {%- endif -%}
   {%- endif -%}
 
-  {%- comment -%} Check for custom schema in metafield namespace: global, key: product_schema {%- endcomment -%}
-  {%- comment -%} Check for custom schema in metafield namespace: global, key: faq_schema {%- endcomment -%}
-  {%- if product.metafields.global.product_schema.value != blank or product.metafields.global.faq_schema.value != blank -%}
+  {%- comment -%}
+    Only skip default Product when global.product_schema is present.
+    faq_schema is additive and can sit alongside default or custom Product.
+  {%- endcomment -%}
+  {%- if product.metafields.global.product_schema.value != blank -%}
     {%- assign use_product_metafield_schema = true -%}
   {%- else -%}
-  {%- comment -%} No metafield found — fall back to default generated schema {%- endcomment -%}
     {%- capture main_entity_microdata -%}
       "@type": "Product",
       "offers": [
@@ -306,14 +307,12 @@ or change the format of some info
     }
     {%- endif -%}
 
-    {%- if use_product_metafield_schema -%}
-      {%- if product.metafields.global.product_schema.value != blank -%}
+    {%- if use_product_metafield_schema and product.metafields.global.product_schema.value != blank -%}
     ,{{ product.metafields.global.product_schema.value | json }}
-      {%- endif -%}
+    {%- endif -%}
 
-      {%- if product.metafields.global.faq_schema.value != blank -%}
+    {%- if request.page_type == 'product' and product.metafields.global.faq_schema.value != blank -%}
     ,{{ product.metafields.global.faq_schema.value | json }}
-      {%- endif -%}
     {%- endif -%}
 
     {%- if request.page_type == 'collection' -%}
@@ -321,15 +320,15 @@ or change the format of some info
          or collection.metafields.global.item_list_schema.value != blank
          or collection.metafields.global.faq_schema.value != blank -%}
 
-        {%- if collection.metafields.global.collection_schema != blank -%}
+        {%- if collection.metafields.global.collection_schema.value != blank -%}
     ,{{ collection.metafields.global.collection_schema.value | json }}
         {%- endif -%}
 
-        {%- if collection.metafields.global.item_list_schema != blank -%}
+        {%- if collection.metafields.global.item_list_schema.value != blank -%}
     ,{{ collection.metafields.global.item_list_schema.value | json }}
         {%- endif -%}
 
-        {%- if collection.metafields.global.faq_schema != blank -%}
+        {%- if collection.metafields.global.faq_schema.value != blank -%}
     ,{{ collection.metafields.global.faq_schema.value | json }}
         {%- endif -%}
 

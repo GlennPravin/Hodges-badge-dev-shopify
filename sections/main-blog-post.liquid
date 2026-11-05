@@ -32,10 +32,10 @@
             {%- assign image_url = article.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
 
             <div class="aspect-ratio" style="padding-bottom: {{ 100.0 | divided_by: article.image.aspect_ratio }}%">
-              <img class="lazyload image--fade-in" data-src="{{ image_url }}" data-sizes="auto" data-widths="[{{ supported_sizes }}]" alt="{{ article.image.alt | escape }}">
+              <img loading='lazy'  class="lazyload image--fade-in" data-src="{{ image_url }}" data-sizes="auto" data-widths="[{{ supported_sizes }}]" alt="{{ article.image.alt | escape }}">
 
               <noscript>
-                <img src="{{ article.image | img_url: '800x' }}" alt="{{ article.image.alt | escape }}">
+                <img loading='lazy'  src="{{ article.image | img_url: '800x' }}" alt="{{ article.image.alt | escape }}">
               </noscript>
             </div>
           </div>
@@ -145,7 +145,7 @@
                   {%- for comment in article.comments -%}
                     <div class="article-comment">
                       {%- if section.settings.show_gravatar -%}
-                        <img class="article-comment__gravatar" src="//www.gravatar.com/avatar/{{ comment.email | md5 }}?s=100" alt="{{ comment.author }}">
+                        <img loading='lazy'  class="article-comment__gravatar" src="//www.gravatar.com/avatar/{{ comment.email | md5 }}?s=100" alt="{{ comment.author }}">
                       {%- endif -%}
 
                       <div class="article-comment__inner">
@@ -293,7 +293,7 @@
                           {%- if article.image -%}
                             <a href="{{ article.url }}" class="blog-sidebar__post-image-wrapper">
                               <div class="blog-sidebar__post-image-overflow">
-                                <img src="{{ article.image | img_url: '100x80', crop: 'center', scale: 2 }}" alt="{{ article.image.alt | escape }}" class="blog-sidebar__post-image">
+                                <img loading='lazy'  src="{{ article.image | img_url: '100x80', crop: 'center', scale: 2 }}" alt="{{ article.image.alt | escape }}" class="blog-sidebar__post-image">
                               </div>
                             </a>
                           {%- endif -%}

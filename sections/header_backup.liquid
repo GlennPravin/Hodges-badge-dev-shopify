@@ -24,7 +24,7 @@
 
         {%- if navigation_menu.links.size > 0 -%}
           <nav class="header__mobile-nav hidden-lap-and-up">
-            <button class="header__mobile-nav-toggle icon-state touch-area" data-action="toggle-menu" aria-expanded="false" aria-haspopup="true" aria-controls="mobile-menu" aria-label="{{ 'header.navigation.open_menu' | t }}">
+            <button id="menuSection" class="header__mobile-nav-toggle icon-state touch-area" data-action="toggle-menu" aria-expanded="false" aria-haspopup="true" aria-controls="mobile-menu" aria-label="{{ 'header.navigation.open_menu' | t }}">
               <span class="icon-state__primary">{%- render 'icon', icon: 'hamburger-mobile' -%}</span>
               <span class="icon-state__secondary">{%- render 'icon', icon: 'close' -%}</span>
             </button>
@@ -60,7 +60,7 @@
             {%- if section.settings.logo != blank -%}
               {%- capture image_size -%}{{ section.settings.logo_max_width }}x{%- endcapture -%}
               <span class="visually-hidden">{{ shop.name }}</span>
-              <img class="header__logo-image"
+              <img loading='lazy'  class="header__logo-image"
                    style="max-width: {{ section.settings.logo_max_width }}px"
                    width="{{ section.settings.logo.width }}"
                    height="{{ section.settings.logo.height }}"

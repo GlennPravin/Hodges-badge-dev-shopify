@@ -31,8 +31,8 @@
   line-height: 1.2 !important;
   color: #1a1a1a !important;
 }
-
-/* .collection-faq .faq__title::after {
+/* 
+.collection-faq .faq__title::after {
   content: "";
   position: absolute;
   left: 50%;
