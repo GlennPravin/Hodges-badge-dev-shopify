@@ -332,7 +332,7 @@
         {% form 'customer_address', customer.default_address, class: 'form' %}
           {%- if request.locale.iso_code == 'ja' -%}
             <div class="form__input-wrapper form__input-wrapper--labelled">
-              <input id="address-{{ address.id }}[last_name]" type="text" class="form__field form__field--text {% if form.last_name != blank %}is-filled{% endif %}" name="address[last_name]" value="{{ form.last_name }}" autofocus>
+              <input id="address-{{ address.id }}[last_name]" type="text" class="form__field form__field--text {% if form.last_name != blank %}is-filled{% endif %}" name="address[last_name]" value="{{ form.last_name }}">
               <label for="address-{{ address.id }}[last_name]" class="form__floating-label">{{ 'customer.addresses.last_name' | t }}</label>
             </div>
 
@@ -390,7 +390,7 @@
             </div>
           {%- else -%}
             <div class="form__input-wrapper form__input-wrapper--labelled">
-              <input id="address-{{ address.id }}[first_name]" type="text" class="form__field form__field--text {% if form.first_name != blank %}is-filled{% endif %}" name="address[first_name]" value="{{ form.first_name }}" autofocus>
+              <input id="address-{{ address.id }}[first_name]" type="text" class="form__field form__field--text {% if form.first_name != blank %}is-filled{% endif %}" name="address[first_name]" value="{{ form.first_name }}">
               <label for="address-{{ address.id }}[first_name]" class="form__floating-label">{{ 'customer.addresses.first_name' | t }}</label>
             </div>
 
@@ -459,7 +459,7 @@
             <label for="address-{{ customer.default_address.id }}[default]">{{ 'customer.addresses.set_default' | t }}</label>
           </div>
 
-          <button class="form__submit button button--primary button--full">{{ 'customer.addresses.edit_address' | t }}</button>
+          <button class="form__submit button button--primary button--full">{{ 'customer.addresses.save_address' | t }}</button>
         {% endform %}
       </div>
     </div>
@@ -488,7 +488,7 @@
             {% form 'customer_address', address, class: 'form' %}
               {%- if request.locale.iso_code == 'ja' -%}
                 <div class="form__input-wrapper form__input-wrapper--labelled">
-                  <input id="address-{{ address.id }}[last_name]" type="text" class="form__field form__field--text {% if form.last_name != blank %}is-filled{% endif %}" name="address[last_name]" value="{{ form.last_name }}" autofocus>
+                  <input id="address-{{ address.id }}[last_name]" type="text" class="form__field form__field--text {% if form.last_name != blank %}is-filled{% endif %}" name="address[last_name]" value="{{ form.last_name }}">
                   <label for="address-{{ address.id }}[last_name]" class="form__floating-label">{{ 'customer.addresses.last_name' | t }}</label>
                 </div>
 
@@ -546,7 +546,7 @@
                 </div>
               {%- else -%}
                 <div class="form__input-wrapper form__input-wrapper--labelled">
-                  <input id="address-{{ address.id }}[first_name]" type="text" class="form__field form__field--text {% if form.first_name != blank %}is-filled{% endif %}" name="address[first_name]" value="{{ form.first_name }}" autofocus>
+                  <input id="address-{{ address.id }}[first_name]" type="text" class="form__field form__field--text {% if form.first_name != blank %}is-filled{% endif %}" name="address[first_name]" value="{{ form.first_name }}">
                   <label for="address-{{ address.id }}[first_name]" class="form__floating-label">{{ 'customer.addresses.first_name' | t }}</label>
                 </div>
 
@@ -615,7 +615,7 @@
                 <label for="address-{{ address.id }}[default]">{{ 'customer.addresses.set_default' | t }}</label>
               </div>
 
-              <button class="form__submit button button--primary button--full">{{ 'customer.addresses.edit_address' | t }}</button>
+              <button class="form__submit button button--primary button--full">{{ 'customer.addresses.save_address' | t }}</button>
             {% endform %}
           </div>
         </div>
