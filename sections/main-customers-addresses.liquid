@@ -1,3 +1,16 @@
+<style>
+  .account-page-2-addresses-section .address-list__item-top,
+  .account-page-2-addresses-section .address-list__item-top p:not(.heading),
+  #modal-address-new input.form__field,
+  [id^="modal-address-"] input.form__field {
+    text-transform: none;
+  }
+
+  .account-page-2-addresses-section button[aria-controls="modal-address-new"] {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+</style>
 <section class="account-page-2-addresses-section" data-section-id="{{ section.id }}" data-section-type="account">
   <div class="container container--flush">
     <div class="page__sub-header">
@@ -332,7 +345,7 @@
         {% form 'customer_address', customer.default_address, class: 'form' %}
           {%- if request.locale.iso_code == 'ja' -%}
             <div class="form__input-wrapper form__input-wrapper--labelled">
-              <input id="address-{{ address.id }}[last_name]" type="text" class="form__field form__field--text {% if form.last_name != blank %}is-filled{% endif %}" name="address[last_name]" value="{{ form.last_name }}" autofocus>
+              <input id="address-{{ address.id }}[last_name]" type="text" class="form__field form__field--text {% if form.last_name != blank %}is-filled{% endif %}" name="address[last_name]" value="{{ form.last_name }}">
               <label for="address-{{ address.id }}[last_name]" class="form__floating-label">{{ 'customer.addresses.last_name' | t }}</label>
             </div>
 
@@ -390,7 +403,7 @@
             </div>
           {%- else -%}
             <div class="form__input-wrapper form__input-wrapper--labelled">
-              <input id="address-{{ address.id }}[first_name]" type="text" class="form__field form__field--text {% if form.first_name != blank %}is-filled{% endif %}" name="address[first_name]" value="{{ form.first_name }}" autofocus>
+              <input id="address-{{ address.id }}[first_name]" type="text" class="form__field form__field--text {% if form.first_name != blank %}is-filled{% endif %}" name="address[first_name]" value="{{ form.first_name }}">
               <label for="address-{{ address.id }}[first_name]" class="form__floating-label">{{ 'customer.addresses.first_name' | t }}</label>
             </div>
 
@@ -488,7 +501,7 @@
             {% form 'customer_address', address, class: 'form' %}
               {%- if request.locale.iso_code == 'ja' -%}
                 <div class="form__input-wrapper form__input-wrapper--labelled">
-                  <input id="address-{{ address.id }}[last_name]" type="text" class="form__field form__field--text {% if form.last_name != blank %}is-filled{% endif %}" name="address[last_name]" value="{{ form.last_name }}" autofocus>
+                  <input id="address-{{ address.id }}[last_name]" type="text" class="form__field form__field--text {% if form.last_name != blank %}is-filled{% endif %}" name="address[last_name]" value="{{ form.last_name }}">
                   <label for="address-{{ address.id }}[last_name]" class="form__floating-label">{{ 'customer.addresses.last_name' | t }}</label>
                 </div>
 
@@ -546,7 +559,7 @@
                 </div>
               {%- else -%}
                 <div class="form__input-wrapper form__input-wrapper--labelled">
-                  <input id="address-{{ address.id }}[first_name]" type="text" class="form__field form__field--text {% if form.first_name != blank %}is-filled{% endif %}" name="address[first_name]" value="{{ form.first_name }}" autofocus>
+                  <input id="address-{{ address.id }}[first_name]" type="text" class="form__field form__field--text {% if form.first_name != blank %}is-filled{% endif %}" name="address[first_name]" value="{{ form.first_name }}">
                   <label for="address-{{ address.id }}[first_name]" class="form__floating-label">{{ 'customer.addresses.first_name' | t }}</label>
                 </div>
 
