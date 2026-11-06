@@ -324,7 +324,6 @@
     function setOrdersUrl() {
       var url = new URL(window.location.href);
       url.searchParams.delete("order_name");
-      url.searchParams.delete("page");
       url.searchParams.delete("address_page");
       url.hash = "";
       history.replaceState(null, "", url.pathname + url.search);
@@ -541,8 +540,27 @@
       return !!(link.closest(".account-page-2-panel--addresses") && link.closest(".pagination"));
     }
 
+    function isOrdersPaginationLink(link) {
+      return !!(link.closest(".account-page-2-orders-content") && link.closest(".pagination"));
+    }
+
+    function ordersPaginationUrl(link) {
+      var pageUrl = new URL(link.href, window.location.origin);
+      pageUrl.pathname = "/pages/account-page";
+      pageUrl.hash = "";
+      pageUrl.searchParams.delete("order_name");
+      pageUrl.searchParams.delete("address_page");
+      var page = parseInt(pageUrl.searchParams.get("page") || link.getAttribute("data-page") || "1", 10);
+      if (page > 1) {
+        pageUrl.searchParams.set("page", String(page));
+      } else {
+        pageUrl.searchParams.delete("page");
+      }
+      return pageUrl.pathname + pageUrl.search;
+    }
+
     function isOrdersLink(link) {
-      if (isAddressPaginationLink(link)) return false;
+      if (isAddressPaginationLink(link) || isOrdersPaginationLink(link)) return false;
       if (isLogoutLink(link) || isTaxDetailsLink(link) || isOrderDetailLink(link) || isBackToOrdersLink(link) || isAddressesLink(link) || isProfileLink(link)) return false;
       var path = getLinkPath(link);
       return path === accountPath || path === normalizePath(accountPageUrl);
@@ -784,6 +802,14 @@
         document.documentElement.setAttribute("data-account-tab", "addresses");
         rememberAddressesTab();
         window.location.href = pageUrl.pathname + pageUrl.search + pageUrl.hash;
+        return;
+      }
+
+      if (isOrdersPaginationLink(link)) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        document.documentElement.setAttribute("data-account-tab", "orders");
+        window.location.href = ordersPaginationUrl(link);
         return;
       }
 

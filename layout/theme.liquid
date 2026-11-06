@@ -5,7 +5,7 @@
     {%- if customer and request.path == '/account/addresses' -%}
       <script>window.location.replace('/pages/account-page#addresses');</script>
     {%- elsif customer and request.path == '/account' -%}
-      <script>window.location.replace('/pages/account-page');</script>
+      <script>window.location.replace('/pages/account-page' + window.location.search);</script>
     {%- endif -%}
     {% comment %} <script async src="{{ 'avada-cookiebar-gcm-integration.js' | asset_url }}"></script> {% endcomment %}
 {% comment %} <script src="{{ 'pandectes-rules.js' | file_url }}"></script> {% endcomment %}
