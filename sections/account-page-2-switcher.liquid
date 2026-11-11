@@ -1,5 +1,8 @@
 {%- if customer == blank -%}
   <script>
+        try {
+      sessionStorage.setItem('hodges_b2b_login_pending', String(Date.now()));
+    } catch (e) {}
     window.location.href = "/customer_authentication/login?return_to=" + encodeURIComponent("/pages/account-page" + window.location.search);
   </script>
 {%- endif -%}

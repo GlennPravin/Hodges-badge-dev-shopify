@@ -1,74 +1,21 @@
+
 # we use Shopify as our ecommerce platform
 {%- comment -%}
 # Caution! Please read https://help.shopify.com/en/manual/promoting-marketing/seo/editing-robots-txt before proceeding to make changes to this file.
 {% endcomment %}
-{% for group in robots.default_groups %}
-  {{- group.user_agent -}}
 
-  {% for rule in group.rules %}
-    {{- rule -}}
-  {% endfor %}
-  
-   {%- if group.user_agent.value == '*' -%}
-{{ 'Disallow: /*en-ca/' }}
-  {%- endif -%}
-  
-  {%- if group.sitemap != blank -%}
-    {{ group.sitemap }}
-  {%- endif -%}
-{% endfor %}
+{%- for group in robots.default_groups -%}
+  {{- group.user_agent }}
+  {%- for rule in group.rules %}
+{{ rule }}
+  {%- endfor %}
+  {%- if group.user_agent.value == '*' %}
+Disallow: /pages/search-results-page
+Disallow: /*?*q=*
+  {%- endif %}
+  {%- if group.sitemap != blank %}
+{{ group.sitemap }}
+  {%- endif %}
+{% endfor -%}
 
-User-agent: Googlebot 
-Disallow: /en-ca/
-
-User-agent: Bingbot
-Disallow: /en-ca/
-
-User-agent: ChatGPT
-Disallow: /en-ca/
-
-User-agent: PerplexityAI
-Disallow: /en-ca/
-
-User-agent: JotformAI
-Disallow: /en-ca/
-
-User-agent: Drift
-Disallow: /en-ca/
-
-User-agent: Intercom
-Disallow: /en-ca/
-
-User-agent: ZendeskAnswerBot
-Disallow: /en-ca/
-
-User-agent: LivePerson
-Disallow: /en-ca/
-
-User-agent: Tidio
-Disallow: /en-ca/
-
-User-agent: Freshchat
-Disallow: /en-ca/
-
-User-agent: ManyChat
-Disallow: /en-ca/
-
-User-agent: Replika
-Disallow: /en-ca/
-
-User-agent: Kore.ai
-Disallow: /en-ca/
-
-User-agent: Grok
-Disallow: /en-ca/
-
-User-agent: xAI
-Disallow: /en-ca/
-
-User-agent: Zendesk
-Disallow: /en-ca/
-
-User-agent: Drift
-Disallow: /en-ca/
-
+Sitemap: https://hodgesbadge.com/a/blog/sitemap.xml
