@@ -130,8 +130,7 @@
     line-height: 1.4;
   }
 
-  input.account-profile__input[type="text"],
-  input.account-profile__input[type="email"] {
+  input.account-profile__input[type="text"] {
     display: none;
     width: 100%;
     height: 44px;
@@ -254,8 +253,8 @@
 
     <div class="account-profile__email">
       <span class="account-profile__label">Email address</span>
-      <span class="account-profile__value" data-profile-value="email">{{ customer.email | escape }}</span>
-      <input id="profile-email" class="account-profile__input" type="email" name="email" value="{{ customer.email | escape }}" autocomplete="email" data-profile-name data-profile-email data-account-email="{{ customer.email | escape }}">
+      <span class="account-profile__value">{{ customer.email | escape }}</span>
+      <input type="hidden" name="email" value="{{ customer.email | escape }}" data-profile-email data-account-email="{{ customer.email | escape }}">
     </div>
 
     <div class="account-page-2-profile-actions">
@@ -950,7 +949,7 @@
         var accountEmail = emailField ? (emailField.getAttribute("data-account-email") || "") : "";
         var panel = document.querySelector(".account-page-2-panel--profile");
 
-        if (!first || !last || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (!first || !last || email.toLowerCase() !== accountEmail.toLowerCase()) {
           showProfileMessage("Profile could not be saved.", false);
           return;
         }
@@ -963,9 +962,7 @@
 
         var currentFirst = panel ? panel.getAttribute("data-profile-first") : "";
         var currentLast = panel ? panel.getAttribute("data-profile-last") : "";
-        var emailChanged = !namesMatch(email, accountEmail);
-        var nameChanged = !namesMatch(first, currentFirst) || !namesMatch(last, currentLast);
-        if (!emailChanged && !nameChanged) {
+        if (namesMatch(first, currentFirst) && namesMatch(last, currentLast)) {
           setEditing(false);
           showProfileMessage("Profile saved.", true);
           return;
@@ -973,11 +970,8 @@
 
         var saveUrl = "https://hops-connect.dev.hodgesbadge.com/ShopifyCustomer/UpdateCustomerName"
           + "?customer_id=" + encodeURIComponent(customerId)
-          + "&first_name=" + encodeURIComponent(first)        
+          + "&first_name=" + encodeURIComponent(first)
           + "&last_name=" + encodeURIComponent(last);
-        if (emailChanged) {
-          saveUrl += "&email=" + encodeURIComponent(email);
-        }
 
         setSaving(true);
         fetch(saveUrl, { method: "POST" })
