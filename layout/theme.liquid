@@ -27,6 +27,79 @@
           if (path !== dest) window.location.replace(dest);
         })();
       </script>
+      <script>
+        (function () {
+          var logoutPath = {{ routes.account_logout_url | json }};
+          var root = {{ routes.root_url | json }};
+          if (root.slice(-1) !== '/') root += '/';
+          var clearing = false;
+    
+          function pathOf(href) {
+            try {
+              return new URL(href, window.location.origin).pathname.replace(/\/+$/, '') || '/';
+            } catch (e) {
+              return '';
+            }
+          }
+    
+          var logoutPathname = pathOf(logoutPath);
+    
+          function isLogoutHref(href) {
+            var path = pathOf(href);
+            return path === logoutPathname || path.indexOf('/account/logout') !== -1;
+          }
+    
+          function fetchCollectionProductIds(page, ids) {
+            return fetch(root + 'collections/goldswim-products/products.json?limit=250&page=' + page, { credentials: 'same-origin' })
+              .then(function (res) { return res.ok ? res.json() : { products: [] }; })
+              .then(function (data) {
+                var products = data.products || [];
+                products.forEach(function (product) { ids[String(product.id)] = true; });
+                if (products.length === 250) return fetchCollectionProductIds(page + 1, ids);
+                return ids;
+              });
+          }
+    
+          function removeGoldswimItems() {
+            return Promise.all([
+              fetch(root + 'cart.js', { credentials: 'same-origin' }).then(function (res) { return res.json(); }),
+              fetchCollectionProductIds(1, {})
+            ]).then(function (results) {
+              var cart = results[0] || {};
+              var ids = results[1] || {};
+              var updates = {};
+              (cart.items || []).forEach(function (item) {
+                if (ids[String(item.product_id)]) updates[item.key] = 0;
+              });
+              if (!Object.keys(updates).length) return;
+              return fetch(root + 'cart/update.js', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ updates: updates })
+              });
+            });
+          }
+    
+          document.addEventListener('click', function (event) {
+            var node = event.target;
+            if (node && node.nodeType !== 1) node = node.parentElement;
+            var link = node && node.closest ? node.closest('a[href]') : null;
+            if (!link || !isLogoutHref(link.getAttribute('href'))) return;
+            if (link.getAttribute('data-goldswim-cart-cleared') === '1' || clearing) return;
+    
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            clearing = true;
+            var href = link.href;
+    
+            removeGoldswimItems().catch(function () {}).then(function () {
+              link.setAttribute('data-goldswim-cart-cleared', '1');
+              window.location.href = href;
+            });
+          }, true);
+        })();
+      </script>
     {%- endif -%}
     <script>
       (function () {

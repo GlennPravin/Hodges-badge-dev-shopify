@@ -793,6 +793,10 @@
       var link = event.target.closest("a[href]");
       if (!link) return;
 
+      if (link.getAttribute("data-action") === "toggle-popover" && link.getAttribute("aria-controls") === "account-popover") {
+        return;
+      }
+
       if (isTaxDetailsLink(link) || isLogoutLink(link)) {
         return;
       }

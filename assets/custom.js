@@ -5157,14 +5157,14 @@ function prefillLineItems(cartData, cartLineItemAvailable) {
     cartItems = SortCartItems(cartItems,_hopsId)
     $(cartItems).each((index, lineItem) => {
       // if (lineItem["key"] == cartLineItemAvailable) {
-      if (
-        lineItem.properties["_hopsId"] == lineItem.properties["_hopsVId"] &&
-        lineItem.properties["_hopsUId"] == _hopsId
-      ) {
-
-        if (lineItem.quantity) {
-          $("#varQty").val(lineItem.quantity);
-        }
+        if (
+          lineItem.properties["_hopsId"] == lineItem.properties["_hopsVId"] &&
+          lineItem.properties["_hopsUId"] == _hopsId
+        ) {
+  
+          if (lineItem.quantity) {
+            $("#varQty").val(lineItem.quantity);
+          }
         
         const productProperties = lineItem["properties"]
           ? lineItem["properties"]

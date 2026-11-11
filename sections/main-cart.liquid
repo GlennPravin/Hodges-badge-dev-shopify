@@ -624,18 +624,18 @@ const validationMessage = {{ shop.metafields.helpText.validationMessage.value | 
                               {%- endunless -%}                              
                               
                             
-                                {%- assign lineItemUrl = line_item.url -%}
-                                {%- if line_item.url contains "?" -%}
-                                  {% capture lineItemUrl %} {{ line_item.url }}&cart_id={{ line_item.key }}&edit{% endcapture %}
+                              {%- assign lineItemUrl = line_item.url -%}
+                              {%- if line_item.url contains "?" -%}
+                                {% capture lineItemUrl %} {{ line_item.url }}&cart_id={{ line_item.key }}&edit{% endcapture %}
+                                {%- else -%}
+                                {% capture lineItemUrl %} {{ line_item.url }}?cart_id={{ line_item.key }}&edit{% endcapture %}
+                              {%- endif -%}
+                               
+                                 {% if RemoveBuyButton contains line_item.properties["_hopsId"] %}
+                                     <p class="line-item__title"> {{ shop.metafields.helpText.ContactForPurchase.value }} </p>
                                   {%- else -%}
-                                  {% capture lineItemUrl %} {{ line_item.url }}?cart_id={{ line_item.key }}&edit{% endcapture %}
-                                {%- endif -%}
-                                 
-                                        {% if RemoveBuyButton contains line_item.properties["_hopsId"] %}
-                                       <p class="line-item__title"> {{ shop.metafields.helpText.ContactForPurchase.value }} </p>
-                                    {%- else -%}
-                                    <a class="line-item__title link text--strong" style="color:#ae1a1a" href="{{ lineItemUrl }}" >EDIT CUSTOMIZATION FOR THIS PRODUCT</a>
-                                    {%- endif -%}
+                                     <a class="line-item__title link text--strong" style="color:#ae1a1a" href="{{ lineItemUrl }}" >EDIT CUSTOMIZATION FOR THIS PRODUCT</a>
+                                  {%- endif -%}
                                  
                             
 

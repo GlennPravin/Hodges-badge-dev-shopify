@@ -288,14 +288,14 @@
 
               <div class="header__action-item-content">
                 {%- if customer -%}
-                  <a href="{{ account_page_path }}" class="header__action-item-link header__account-icon icon-state hidden-desk" aria-label="{{ 'header.general.account' | t }}" aria-controls="account-popover" aria-expanded="false" data-action="toggle-popover" data-follow-link="phone">
+                  <a href="{{ account_page_path }}" class="header__action-item-link header__account-icon icon-state hidden-desk" aria-label="{{ 'header.general.account' | t }}" aria-controls="account-popover" aria-expanded="false" data-action="toggle-popover">
                     <span class="icon-state__primary">{%- render 'icon', icon: 'account' -%}</span>
                     <span class="icon-state__secondary">{%- render 'icon', icon: 'close' -%}</span>
                   </a>
 
-                  <a href="{{ account_page_path }}" class="header__action-item-link hidden-pocket hidden-lap" aria-controls="account-popover" aria-expanded="false" data-action="toggle-popover">
+                  <button type="button" class="header__action-item-link hidden-pocket hidden-lap" aria-controls="account-popover" aria-expanded="false" data-action="toggle-popover">
                     {{ 'header.general.account' | t }} {% render 'icon', icon: 'arrow-bottom' %}
-                  </a>
+                  </button>
                 {%- else -%}
                   <a href="{{ account_login_with_return }}" class="header__action-item-link header__account-icon icon-state hidden-desk" aria-label="{{ 'header.general.account' | t }}" data-no-instant>
                     <span class="icon-state__primary">{%- render 'icon', icon: 'account' -%}</span>
