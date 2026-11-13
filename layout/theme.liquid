@@ -67,10 +67,33 @@
             ]).then(function (results) {
               var cart = results[0] || {};
               var ids = results[1] || {};
+              var items = cart.items || [];
               var updates = {};
-              (cart.items || []).forEach(function (item) {
-                if (ids[String(item.product_id)]) updates[item.key] = 0;
+              var hopsIds = {};
+
+              items.forEach(function (item) {
+                if (!ids[String(item.product_id)]) return;
+                updates[item.key] = 0;
+                var hopsId = item.properties && item.properties._hopsUId;
+                if (hopsId) hopsIds[hopsId] = true;
               });
+
+              items.forEach(function (item) {
+                var hopsId = item.properties && item.properties._hopsUId;
+                if (hopsId && hopsIds[hopsId]) updates[item.key] = 0;
+              });
+
+              var realProductRemains = items.some(function (item) {
+                if (updates[item.key] === 0) return false;
+                return item.product_type !== 'HiddenCharges';
+              });
+
+              if (!realProductRemains) {
+                items.forEach(function (item) {
+                  if (item.product_type === 'HiddenCharges') updates[item.key] = 0;
+                });
+              }
+
               if (!Object.keys(updates).length) return;
               return fetch(root + 'cart/update.js', {
                 method: 'POST',
