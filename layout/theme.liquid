@@ -49,59 +49,27 @@
             return path === logoutPathname || path.indexOf('/account/logout') !== -1;
           }
     
-          function fetchCollectionProductIds(page, ids) {
-            return fetch(root + 'collections/goldswim-products/products.json?limit=250&page=' + page, { credentials: 'same-origin' })
-              .then(function (res) { return res.ok ? res.json() : { products: [] }; })
-              .then(function (data) {
-                var products = data.products || [];
-                products.forEach(function (product) { ids[String(product.id)] = true; });
-                if (products.length === 250) return fetchCollectionProductIds(page + 1, ids);
-                return ids;
-              });
-          }
-    
-          function removeGoldswimItems() {
-            return Promise.all([
-              fetch(root + 'cart.js', { credentials: 'same-origin' }).then(function (res) { return res.json(); }),
-              fetchCollectionProductIds(1, {})
-            ]).then(function (results) {
-              var cart = results[0] || {};
-              var ids = results[1] || {};
-              var items = cart.items || [];
-              var updates = {};
-              var hopsIds = {};
-
-              items.forEach(function (item) {
-                if (!ids[String(item.product_id)]) return;
-                updates[item.key] = 0;
-                var hopsId = item.properties && item.properties._hopsUId;
-                if (hopsId) hopsIds[hopsId] = true;
-              });
-
-              items.forEach(function (item) {
-                var hopsId = item.properties && item.properties._hopsUId;
-                if (hopsId && hopsIds[hopsId]) updates[item.key] = 0;
-              });
-
-              var realProductRemains = items.some(function (item) {
-                if (updates[item.key] === 0) return false;
-                return item.product_type !== 'HiddenCharges';
-              });
-
-              if (!realProductRemains) {
+          function clearB2bCart() {
+            return fetch(root + 'cart.js', { credentials: 'same-origin' })
+              .then(function (res) { return res.json(); })
+              .then(function (cart) {
+                var items = (cart && cart.items) || [];
+                var updates = {};
                 items.forEach(function (item) {
-                  if (item.product_type === 'HiddenCharges') updates[item.key] = 0;
+                  updates[item.key] = 0;
                 });
-              }
-
-              if (!Object.keys(updates).length) return;
-              return fetch(root + 'cart/update.js', {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({ updates: updates })
+                var attributes = {};
+                Object.keys((cart && cart.attributes) || {}).forEach(function (key) {
+                  attributes[key] = '';
+                });
+                if (!items.length && !Object.keys(attributes).length && !(cart && cart.note)) return;
+                return fetch(root + 'cart/update.js', {
+                  method: 'POST',
+                  credentials: 'same-origin',
+                  headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                  body: JSON.stringify({ updates: updates, note: '', attributes: attributes })
+                });
               });
-            });
           }
     
           document.addEventListener('click', function (event) {
@@ -116,7 +84,7 @@
             clearing = true;
             var href = link.href;
     
-            removeGoldswimItems().catch(function () {}).then(function () {
+            clearB2bCart().catch(function () {}).then(function () {
               link.setAttribute('data-goldswim-cart-cleared', '1');
               window.location.href = href;
             });
