@@ -8409,3 +8409,22 @@ function showAutoPopup(cart) {
     }, 3000);
   });
 }
+
+function isPrintLineField(element) {
+  return element &&
+      (element.tagName === "INPUT" ||
+       element.tagName === "TEXTAREA");
+}
+
+["dragenter", "dragover", "drop"].forEach(function (eventName) {
+  document.addEventListener(eventName, function (event) {
+      if (!isPrintLineField(event.target)) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (event.dataTransfer) {
+          event.dataTransfer.dropEffect = "none";
+      }
+  }, true);
+});
