@@ -43,13 +43,16 @@ or change the format of some info
           }{% unless forloop.last %},{% endunless %}
         {%- endfor -%}
       ],
-      {%- if product.metafields.reviews.rating.value != blank -%}
+      {%- assign rating = product.metafields.reviews.rating.value -%}
+      {%- assign rc = product.metafields.reviews.rating_count.value | default: 0 -%}
+
+      {%- if rating != blank and rc > 0 -%}
         "aggregateRating": {
           "@type": "AggregateRating",
-          "ratingValue": "{{ product.metafields.reviews.rating.value }}",
-          "reviewCount": "{{ product.metafields.reviews.rating_count.value }}",
-          "worstRating": "{{ product.metafields.reviews.rating.value.scale_min }}",
-          "bestRating": "{{ product.metafields.reviews.rating.value.scale_max }}"
+          "ratingValue": {{ rating.rating | json }},
+          "reviewCount": {{ rc | json }},
+          "worstRating": {{ rating.scale_min | json }},
+          "bestRating": {{ rating.scale_max | json }}
         },
       {%- endif -%}
       {%- if is_barcode_available and is_valid_gtin_length %}
@@ -244,6 +247,10 @@ or change the format of some info
           "addressCountry": "US"
         }
       ],
+      "areaServed": {
+          "@type": "Country",
+          "name": "United States"
+        },
       "knowsAbout": [
         "Custom Award Ribbons",
         "Rosette Awards",

@@ -1,7 +1,8 @@
 
 # we use Shopify as our ecommerce platform
 {%- comment -%}
-# Caution! Please read https://help.shopify.com/en/manual/promoting-marketing/seo/editing-robots-txt before proceeding to make changes to this file.
+# Caution! Please read https://help.shopify.com/en/manual/promoting-marketing/seo/editing-robots-txt
+ before proceeding to make changes to this file.
 {% endcomment %}
 
 {%- for group in robots.default_groups -%}
@@ -16,6 +17,7 @@ Disallow: /*?*q=*
   {%- if group.sitemap != blank %}
 {{ group.sitemap }}
   {%- endif %}
+
 {% endfor -%}
 
 Sitemap: https://hodgesbadge.com/a/blog/sitemap.xml
