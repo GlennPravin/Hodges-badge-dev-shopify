@@ -258,7 +258,13 @@ if (!document.cookie || document.cookie.indexOf('AVPDCAP=') == -1) {document.wri
       crossorigin="anonymous"> {% render 'social-meta-tags' %}
     {% render 'css-variables' %}
 
-    {{ content_for_header }}
+  {%- capture content_for_header_captured -%}{{ content_for_header }}{%- endcapture -%}
+    {{ content_for_header_captured }}
+    {%- assign account_requested_order_name = '' -%}
+    {%- assign account_orders_page_url = content_for_header_captured | split: '"pageurl":"' | last | split: '"' | first | replace: '\/', '/' | replace: '\u0026', '&' | replace: '\u003D', '=' | replace: '\u003d', '=' | replace: '%26', '&' | replace: '%3D', '=' | replace: '%3d', '=' -%}
+    {%- if account_orders_page_url contains 'order_name=' -%}
+      {%- assign account_requested_order_name = account_orders_page_url | split: 'order_name=' | last | split: '&' | first | split: '#' | first -%}
+    {%- endif -%}
 
     <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}">
     {%- if request.page_type == 'cart' -%}

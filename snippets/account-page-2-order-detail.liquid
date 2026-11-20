@@ -1,4 +1,10 @@
-{%- if customer and customer.orders.size > 0 -%}
+{%- comment -%}
+  Render this only for one order passed in: {% render 'account-page-2-order-detail', order: order %}
+  Do not loop customer.orders here. Loading every order's line items, product
+  metafields, and JSON exceeds Shopify's Liquid memory limit.
+{%- endcomment -%}
+{% comment %} shghdghgh{{all_products[line_item.product.handle]}}  {% endcomment %}
+{%- if order.name != blank -%}
   <script>
     var chargeCode = [];
     var reorder = [];
@@ -31,15 +37,8 @@
     {%- endif -%}
   </script>
   {% render 'loader' %}
-  <script>
-    (function () {
-      var loaderEl = document.getElementById("loaderbg");
-      if (loaderEl) loaderEl.style.display = "none";
-    })();
-  </script>
 
   <div class="account-page-2-order-details">
-    {%- for order in customer.orders -%}
       {%- assign order_key = order.name | remove: "#" -%}
       {%- assign is_entirely_fulfilled = false -%}
       {%- assign has_one_fulfillment = false -%}
@@ -182,16 +181,88 @@
                   <tr class="line-item tr_respon_data">
                     <td class="line-item__product-info">
                       <div class="line-item__product-info-wrapper repon_tab">
-                        <div class="line-item__image-wrapper">
-                          <div class="aspect-ratio aspect-ratio--square">
-                            {%- if line_item.properties["_canvasImage"] -%}
-                              <img src="{{ line_item.properties['_canvasImage'] }}" alt="{{ line_item.image.alt | escape }}">
-                            {%- else -%}
-                              <img src="{{ line_item.image | img_url: '90x90', scale: 2 }}" alt="{{ line_item.image.alt | escape }}">
-                            {%- endif -%}
-                          </div>
+                        <div
+                          class="line-item__image-wrapper"
+                          data-account-line-image
+                          data-line-index="{{ forloop.index0 }}"
+                          data-product-handle="{{ line_item.product.handle | escape }}"
+                          data-product-url="{{ line_item.url | escape }}"
+                          data-product-id="{{ line_item.product_id }}"
+                          data-variant-id="{{ line_item.variant_id }}"
+                          data-hops-id="{{ line_item.properties['_hopsId'] | escape }}"
+                          data-sku="{{ line_item.sku | escape }}"
+                          data-title="{{ line_item.title | escape }}"
+                        >
+                          {%- assign line_product = line_item.product -%}
+                          {%- assign selected_media = line_item.variant.featured_media | default: line_product.featured_media -%}
+                          {%- if selected_media == blank -%}
+                            {%- assign selected_media = line_product.featured_image -%}
+                          {%- endif -%}
+                          {%- if selected_media == blank and line_product.media.size > 0 -%}
+                            {%- assign selected_media = line_product.media.first -%}
+                          {%- endif -%}
+                          {%- if selected_media == blank -%}
+                            {%- assign selected_media = line_item.image -%}
+                          {%- endif -%}
+                          {%- assign alternate_images = line_product.metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.shopifyAlternateImages -%}
+                          {%- if alternate_images.size > 0 and line_product.media.size > 0 -%}
+                            {%- assign alternate_found = false -%}
+                            {%- for hops_media in alternate_images -%}
+                              {%- if alternate_found -%}{%- break -%}{%- endif -%}
+                              {%- assign hops_market = hops_media.marketId | append: "" | strip -%}
+                              {%- if hops_market != blank -%}{%- continue -%}{%- endif -%}
+                              {%- assign hops_image_id = hops_media.imageSrc | append: "" -%}
+                              {%- for media in line_product.media -%}
+                                {%- assign media_id = media.id | append: "" -%}
+                                {%- assign media_image_id = media.preview_image.id | append: "" -%}
+                                {%- if media_id == hops_image_id or media_image_id == hops_image_id -%}
+                                  {%- assign selected_media = media -%}
+                                  {%- assign alternate_found = true -%}
+                                  {%- break -%}
+                                {%- endif -%}
+                              {%- endfor -%}
+                            {%- endfor -%}
+                          {%- endif -%}
+                          {%- assign line_image_src = "" -%}
+                          {%- if selected_media != blank -%}
+                            {%- assign line_image_src = selected_media | image_url: width: 240 -%}
+                          {%- endif -%}
+                          {%- if line_image_src == blank and selected_media.preview_image -%}
+                            {%- assign line_image_src = selected_media.preview_image | image_url: width: 240 -%}
+                          {%- endif -%}
+                          {%- if line_image_src == blank and selected_media.preview_image.src != blank -%}
+                            {%- assign line_image_src = selected_media.preview_image.src -%}
+                          {%- endif -%}
+                          {%- if line_image_src == blank and selected_media.src != blank -%}
+                            {%- assign line_image_src = selected_media.src -%}
+                          {%- endif -%}
+                          {%- if line_image_src == blank and line_item.image -%}
+                            {%- assign line_image_src = line_item.image | image_url: width: 240 -%}
+                          {%- endif -%}
+                          {%- if line_image_src == blank and line_item.image.src != blank -%}
+                            {%- assign line_image_src = line_item.image.src -%}
+                          {%- endif -%}
+                          {%- if line_image_src == blank and line_product.images.size > 0 -%}
+                            {%- assign line_image_src = line_product.images.first | image_url: width: 240 -%}
+                          {%- endif -%}
+                          {%- if line_image_src == blank and selected_media != blank -%}
+                            {%- assign line_image_src = selected_media | img_url: "240x" -%}
+                          {%- endif -%}
+                          {%- assign canvas_image = line_item.properties["_canvasImage"] -%}
+                          {%- if line_image_src == blank and canvas_image contains "//" -%}
+                            {%- assign line_image_src = canvas_image -%}
+                          {%- endif -%}
+                          {%- if line_image_src contains "//" -%}
+                            {%- unless line_image_src contains "http" -%}
+                              {%- assign line_image_src = line_image_src | prepend: "https:" -%}
+                            {%- endunless -%}
+                          {%- endif -%}
+                          {%- assign line_image_src = line_image_src | strip -%}
+                          {%- if line_image_src != blank -%}
+                            <img class="account-order-line-image" src="{{ line_image_src | escape }}" alt="{{ line_item.title | escape }}" width="90" height="90" style="width:90px;height:90px;max-width:90px;object-fit:contain;display:block;">
+                          {%- endif -%}
                         </div>
-
+                        {% comment %} warner{{line_item |  json}}  {% endcomment %}
                         <div class="line-item__meta">
                           <a href="{{ line_item.url }}" class="line-item__title link text--strong ang_line">{{ line_item.product.title }}</a>
                           <span class="line-item__price">{{ line_item.properties["_hopsId"] }}</span>
@@ -261,10 +332,27 @@
                           {%- assign variations = "isVariant" -%}
                         {%- endif -%}
                       {%- endfor -%}
-                      {%- if variations != "isVariant" -%}
+                      {%- if variations == "isVariant" -%}
+                        
+                      {%- else -%}
                         {%- if all_products[line_item.product.handle] == empty -%}
+                          {% comment %} shghdghgh{{line_item |  json}}  {% endcomment %}
+    
                           <p style="color:red">{{ shop.metafields.helpText.draftProductMsg.value }}</p>
-                        {%- elsif RemoveBuyButton contains line_item.properties["_hopsId"] -%}
+                          <script>
+                            console.log("[order unavailable] Order {{ order.name | escape }}", {
+                              lineTitle: {{ line_item.title | json }},
+                              hopsId: {{ line_item.properties["_hopsId"] | json }},
+                              sku: {{ line_item.sku | json }},
+                              productId: {{ line_item.product_id | json }},
+                              variantId: {{ line_item.variant_id | json }},
+                              productHandle: {{ line_item.product.handle | json }},
+                              productOnOrder: {% if line_item.product == blank %}false{% else %}true{% endif %},
+                              allProductsEmpty: true,
+                              reason: {% if line_item.product == blank %}"line_item.product is nil. The Shopify product saved on this order was deleted, so all_products[handle] is empty."{% else %}"Product is still linked on the order, but all_products[handle] is empty. It is draft, archived, or not published to the Online Store."{% endif %}
+                            });
+                          </script>
+                        {%- elsif RemoveBuyButton contains line_item.properties['_hopsId'] -%}
                           <p>{{ shop.metafields.helpText.ContactForPurchase.value }}</p>
                         {%- else -%}
                           <button class="btnn_respon" onclick="myAccountAddtoCart(lineItem1,{{ forloop.index }});" type="button" style="width:40%;font-weight: bold; border:none; border-radius: 2px; background-color: var(--heading-color); color:white; padding:10px;"> Add to cart </button>
@@ -419,6 +507,193 @@
           </div>
         </div>
       </div>
-    {%- endfor -%}
+      <script>
+        (function () {
+          function absUrl(src) {
+            if (!src) return "";
+            src = String(src);
+            if (src.indexOf("//") === 0) return "https:" + src;
+            return src;
+          }
+          function setImage(slot, src) {
+            src = absUrl(src);
+            if (!src || slot.querySelector("img[src]")) return;
+            var img = document.createElement("img");
+            img.className = "account-order-line-image";
+            img.alt = slot.getAttribute("data-title") || "";
+            img.width = 90;
+            img.height = 90;
+            img.style.cssText = "width:90px;height:90px;max-width:90px;object-fit:contain;display:block;";
+            img.src = src;
+            slot.appendChild(img);
+          }
+          function propValue(props, key) {
+            if (!props) return "";
+            if (!Array.isArray(props)) return props[key] || "";
+            for (var i = 0; i < props.length; i++) {
+              if (props[i] && props[i][0] === key) return props[i][1] || "";
+            }
+            return "";
+          }
+          function srcFromItem(item) {
+            if (!item) return "";
+            var canvas = propValue(item.properties, "_canvasImage");
+            if (canvas && String(canvas).indexOf("//") !== -1) return canvas;
+            if (typeof item.image === "string" && item.image) return item.image;
+            if (item.image && (item.image.src || item.image.url)) return item.image.src || item.image.url;
+            if (typeof item.featured_image === "string" && item.featured_image) return item.featured_image;
+            if (item.featured_image && (item.featured_image.url || item.featured_image.src)) return item.featured_image.url || item.featured_image.src;
+            var product = item.product || null;
+            if (!product) return "";
+            if (typeof product.featured_image === "string" && product.featured_image) return product.featured_image;
+            if (product.featured_image && (product.featured_image.src || product.featured_image.url)) return product.featured_image.src || product.featured_image.url;
+            if (product.images && product.images.length) {
+              var first = product.images[0];
+              if (typeof first === "string") return first;
+              if (first && (first.src || first.url)) return first.src || first.url;
+            }
+            return "";
+          }
+          function handleFrom(slot, item) {
+            var handle = slot.getAttribute("data-product-handle") || "";
+            if (handle) return handle;
+            var url = slot.getAttribute("data-product-url") || "";
+            if (!url && item) url = item.url || (item.product && item.product.url) || "";
+            var match = String(url).match(/\/products\/([^/?#]+)/);
+            if (match) return decodeURIComponent(match[1]);
+            if (item && item.handle) return item.handle;
+            if (item && item.product && item.product.handle) return item.product.handle;
+            return "";
+          }
+          function imageFromProduct(product, variantId) {
+            if (!product) return "";
+            var variants = product.variants || [];
+            for (var i = 0; i < variants.length; i++) {
+              if (variantId && String(variants[i].id) === String(variantId) && variants[i].featured_image && variants[i].featured_image.src) {
+                return variants[i].featured_image.src;
+              }
+            }
+            if (product.featured_image) return product.featured_image;
+            if (product.images && product.images.length) return product.images[0];
+            return "";
+          }
+          function skuMatches(product, hopsId) {
+            var variants = product.variants || [];
+            for (var i = 0; i < variants.length; i++) {
+              if (String(variants[i].sku) === String(hopsId)) return true;
+            }
+            return false;
+          }
+          var root = document.querySelector(".account-page-2-order-detail");
+          if (!root) return;
+          var key = root.getAttribute("data-order-key");
+          var items = (window.accountPage2LineItems && window.accountPage2LineItems[key]) || [];
+          var hopsWait = {};
+
+          function applyHops(hopsId, src) {
+            (hopsWait[hopsId] || []).forEach(function (slot) { setImage(slot, src); });
+          }
+          function confirmHandle(handle, hopsId) {
+            return fetch("/products/" + encodeURIComponent(handle) + ".js", { credentials: "same-origin" })
+              .then(function (response) { return response.ok ? response.json() : null; })
+              .then(function (product) {
+                if (!product) return "";
+                if (skuMatches(product, hopsId) || String(product.handle) === String(hopsId)) return imageFromProduct(product, "");
+                return fetch("/products/" + encodeURIComponent(handle), { credentials: "same-origin" })
+                  .then(function (response) { return response.ok ? response.text() : ""; })
+                  .then(function (html) {
+                    if (html.indexOf('hopsProdId = "' + hopsId + '"') === -1 && html.indexOf('data-id="' + hopsId + '"') === -1) return "";
+                    return imageFromProduct(product, "") || ((html.match(/property="og:image" content="([^"]+)"/) || [])[1] || "");
+                  });
+              });
+          }
+          function lookupByHops(slot, hopsId) {
+            if (hopsWait[hopsId]) {
+              hopsWait[hopsId].push(slot);
+              return;
+            }
+            hopsWait[hopsId] = [slot];
+            var title = slot.getAttribute("data-title") || "";
+            var queries = [];
+            if (title && title !== hopsId) queries.push(title);
+            queries.push(hopsId);
+            confirmHandle(hopsId, hopsId).then(function (src) {
+              if (src) {
+                applyHops(hopsId, src);
+                return;
+              }
+              var chain = Promise.resolve("");
+              queries.forEach(function (query) {
+                chain = chain.then(function (found) {
+                  if (found) return found;
+                  var searchUrl = "/search/suggest.json?q=" + encodeURIComponent(query) + "&resources[type]=product&resources[limit]=6&resources[options][fields]=title,product_type,variants.sku,tag";
+                  return fetch(searchUrl, { credentials: "same-origin" })
+                    .then(function (response) { return response.ok ? response.json() : null; })
+                    .then(function (data) {
+                      var products = (data && data.resources && data.resources.results && data.resources.results.products) || [];
+                      var handles = [];
+                      products.forEach(function (product) {
+                        if (product.handle && handles.indexOf(product.handle) === -1) handles.push(product.handle);
+                      });
+                      var inner = Promise.resolve("");
+                      handles.forEach(function (handle) {
+                        inner = inner.then(function (match) {
+                          if (match) return match;
+                          return confirmHandle(handle, hopsId);
+                        });
+                      });
+                      return inner;
+                    });
+                });
+              });
+              return chain.then(function (found) { if (found) applyHops(hopsId, found); });
+            }).catch(function () {});
+          }
+
+          root.querySelectorAll("[data-account-line-image]").forEach(function (slot) {
+            if (slot.querySelector("img[src]")) return;
+            var item = items[slot.getAttribute("data-line-index")] || null;
+            var src = srcFromItem(item);
+            if (src) {
+              setImage(slot, src);
+              return;
+            }
+            var handle = handleFrom(slot, item);
+            var hopsId = slot.getAttribute("data-hops-id") || "";
+            var variantId = slot.getAttribute("data-variant-id") || (item && item.variant_id) || "";
+            if (handle) {
+              fetch("/products/" + encodeURIComponent(handle) + ".js", { credentials: "same-origin" })
+                .then(function (response) { return response.ok ? response.json() : null; })
+                .then(function (product) {
+                  var found = imageFromProduct(product, variantId);
+                  if (found) setImage(slot, found);
+                  else if (hopsId) lookupByHops(slot, hopsId);
+                })
+                .catch(function () { if (hopsId) lookupByHops(slot, hopsId); });
+              return;
+            }
+            if (hopsId) lookupByHops(slot, hopsId);
+          });
+        })();
+      </script>
   </div>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var requested = (params.get("order_name") || "").replace(/[#\s]/g, "");
+      var detail = document.querySelector(".account-page-2-order-detail");
+      var key = detail ? (detail.getAttribute("data-order-key") || "").replace(/[#\s]/g, "") : "";
+      var number = detail ? (detail.getAttribute("data-order-number") || "").replace(/[#\s]/g, "") : "";
+      var loaderEl = document.getElementById("loaderbg");
+      if (detail && requested && (key === requested || number === requested)) {
+        detail.classList.add("is-active");
+        detail.removeAttribute("hidden");
+        document.documentElement.removeAttribute("data-account-order-loading");
+        if (loaderEl) loaderEl.style.display = "none";
+        return;
+      }
+      if (requested) document.documentElement.setAttribute("data-account-order-loading", requested);
+      if (loaderEl) loaderEl.style.display = "block";
+    })();
+  </script>
 {%- endif -%}

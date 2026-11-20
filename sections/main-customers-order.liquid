@@ -19,7 +19,6 @@ const subTypeIds = {{ shop.metafields.ProductSubType.subTypeIds | split: "," | j
 const excludeProductsSC = {{ shop.metafields.ExcludeProductsSC.ProductIds | split: "," | json}}
 
 {% assign promotionReorderHandle = shop.metafields.helpText.PromotionCollectionName.value | parse_json | first | default: "" %}
-const PromotionReorder = "{{ promotionReorderHandle }}";
 {% if promotionReorderHandle != "" and collections[promotionReorderHandle] != nil and collections[promotionReorderHandle].products.size > 0 %}
   const PromotionProductsReorder = {{ collections[promotionReorderHandle].products | map: "id" | json }};
 {% else %}
@@ -29,8 +28,11 @@ const PromotionReorder = "{{ promotionReorderHandle }}";
 {%- for line_item in order.line_items -%}
    {%- if line_item.product.type != 'HiddenCharges' and line_item.product != null and all_products[line_item.product.handle] != empty -%}
       chargeCode.push({ {{line_item.product.id}}:{{ all_products[line_item.product.handle].metafields.chargecode|json}} })
-      myAcc_productSubType[{{ line_item.properties["_hopsId"] | json }}] ={{ all_products[line_item.product.handle].metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductSubType | append: '' | json }};
-    {% endif %}
+      myAcc_productSubType[
+  {{ line_item.properties["_hopsId"] | json }}
+] ={{ all_products[line_item.product.handle].metafields.ProductMeta.ProductAdditionalInfo.value.ExtraInfoAboutProduct.ProductSubType | append: '' | json }};
+
+      {% endif %}
 	{%- if line_item.product != null and all_products[line_item.product.handle] != empty -%}
       {%- unless RemoveBuyButton contains line_item.properties["_hopsId"] -%}
       reorder.push({{line_item | json}})
@@ -255,11 +257,18 @@ const PromotionReorder = "{{ promotionReorderHandle }}";
                       <div class="line-item__product-info-wrapper repon_tab">
                         <div class="line-item__image-wrapper">
                           <div class="aspect-ratio aspect-ratio--square">
-                            {%- if line_item.properties['_canvasImage'] -%}
-                           <img src="{{line_item.properties['_canvasImage']}}" alt="{{ line_item.image.alt | escape }}">
-                           {%- else -%}
-                            <img src="{{ line_item.image | img_url: '90x90', scale: 2 }}" alt="{{ line_item.image.alt | escape }}">
-                           {%- endif -%}  
+                            {%- assign line_image = line_item.image | default: line_item.product.featured_image -%}
+                            {%- if line_image == blank and line_item.product.featured_media -%}
+                              {%- assign line_image = line_item.product.featured_media.preview_image -%}
+                            {%- endif -%}
+                            {%- capture line_image_src -%}{%- if line_image != blank -%}{{ line_image | img_url: '180x' }}{%- endif -%}{%- endcapture -%}
+                            {%- assign line_image_src = line_image_src | strip -%}
+                            {%- assign canvas_image = line_item.properties['_canvasImage'] -%}
+                            {%- if canvas_image contains '//' -%}
+                              <img src="{{ canvas_image }}" alt="{{ line_item.title | escape }}" {% if line_image_src != blank %}onerror="this.onerror=null;this.src='{{ line_image_src | escape }}';"{% endif %}>
+                            {%- elsif line_image_src != blank -%}
+                              <img src="{{ line_image_src }}" alt="{{ line_image.alt | default: line_item.title | escape }}">
+                            {%- endif -%}
                           </div>
                         </div>
 
@@ -352,8 +361,8 @@ const PromotionReorder = "{{ promotionReorderHandle }}";
                       {{- 'cart.general.free' | t -}}
                       {%- else -%}
                          {%- if acCharges -%}
-                      {%- assign _baseAc =  line_item.properties['_baseAc'] |  times: 100  -%} 
-                      <td class="line-item__line-price table__cell--right break1">{{_baseAc | plus: line_item.final_price | money }}</td>
+                            {%- assign _baseAc =  line_item.properties['_baseAc'] |  times: 100  -%} 
+                            <td class="line-item__line-price table__cell--right break1">{{_baseAc | plus: line_item.final_price | money }}</td>
                          {%- else -%}
                           <!-- {% comment %} {%- assign _baseAc =  line_item.properties['_baseAc'] |  times: 100  -%}  {% endcomment %} -->
                          <td class="line-item__line-price table__cell--right break1">{{ line_item.final_price | money }}</td>
@@ -363,8 +372,8 @@ const PromotionReorder = "{{ promotionReorderHandle }}";
                       {{- 'cart.general.free' | t -}}
                     {%- else -%}
                         {%- if acCharges -%}
-                      {%- assign _totalAc =  line_item.properties['_totalAc'] |  times: 100  -%} 
-                      <td class="line-item__line-price table__cell--right break2 tab_total_respon"><div id="my_box2">{{ _totalAc | plus: line_item.final_line_price | money }}</div></td>
+                             {%- assign _totalAc =  line_item.properties['_totalAc'] |  times: 100  -%} 
+                              <td class="line-item__line-price table__cell--right break2 tab_total_respon"><div id="my_box2">{{ _totalAc | plus: line_item.final_line_price | money }}</div></td>
                          {%- else -%}
                             {% comment %} {%- assign _totalAc =  line_item.properties['_totalAc'] |  times: 100  -%}  {% endcomment %}
                             <td class="line-item__line-price table__cell--right break2 tab_total_respon"><div id="my_box2">{{ line_item.final_line_price | money }}</div></td>

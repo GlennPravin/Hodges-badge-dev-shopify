@@ -1,7 +1,20 @@
 <script>
   (function () {
     var hash = (window.location.hash || "").replace("#", "");
-    if (hash === "addresses" || hash === "profile") {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get("order_name")) {
+      document.documentElement.setAttribute("data-account-order", "");
+      document.documentElement.setAttribute("data-account-order-loading", params.get("order_name"));
+      document.body.classList.add("account-page-2--orders", "account-page-2--order-detail");
+      if (!document.querySelector(".account-order-detail-loading")) {
+        var orderLoader = document.createElement("div");
+        orderLoader.className = "account-order-detail-loading";
+        orderLoader.setAttribute("role", "status");
+        orderLoader.setAttribute("aria-label", "Loading order");
+        orderLoader.innerHTML = '<span class="account-orders-loading__spinner"></span>';
+        document.body.appendChild(orderLoader);
+      }
+    } else if (hash === "addresses" || hash === "profile") {
       document.documentElement.setAttribute("data-account-tab", hash);
     }
   })();
@@ -12,8 +25,68 @@
     display: none !important;
   }
 
-  .account-page-2-addresses-section > .container {
+  .account-page-2-addresses-section,
+  .shopify-section:has(.account-page-2-addresses-section) {
     display: none !important;
+  }
+
+  html[data-account-order] .account-orders-view,
+  html[data-account-order] .account-page-2-panel--orders,
+  html[data-account-order] .account-page-2-panel--addresses {
+    display: none !important;
+  }
+
+  html[data-account-order] .account-page-2-order-details,
+  html[data-account-order] .account-page-2-order-detail {
+    display: block !important;
+  }
+
+  html[data-account-order-loading] .account-page-2-order-details,
+  html[data-account-order-loading] .account-page-2-order-detail,
+  html[data-account-order-loading] .account-page-2-order-detail.is-active {
+    display: none !important;
+  }
+
+  .account-order-detail-loading {
+    display: none;
+  }
+
+  html[data-account-order-loading] .account-order-detail-loading {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.92);
+  }
+
+  .account-orders-view.is-counting .account-orders-view__content {
+    display: none;
+  }
+
+  .account-orders-view:not(.is-counting) .account-orders-loading {
+    display: none;
+  }
+
+  .account-orders-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 280px;
+  }
+
+  .account-orders-loading__spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #e6e8eb;
+    border-top-color: #1c3f95;
+    border-radius: 50%;
+    animation: account-orders-spin 0.8s linear infinite;
+  }
+
+  @keyframes account-orders-spin {
+    to { transform: rotate(360deg); }
   }
 </style>
 <style>
@@ -136,11 +209,10 @@
 
       <div class="layout__section account-page-2-orders-content">
         <div class="card">
-          <div class="{% if customer.orders.size == 0 %}card__section card__section--tight{% else %}card__header card__header--tight{% endif %}">
-            <h1 class="heading h1">{{ 'customer.general.orders' | t }} {% if customer.orders.size > 0 %}({{ customer.orders.size }}){% endif %}</h1>
-          </div>
-
-          {%- if customer.orders.size == 0 -%}
+          {%- if customer == blank -%}
+            <div class="card__section card__section--tight">
+              <h1 class="heading h1">{{ 'customer.general.orders' | t }}</h1>
+            </div>
             <div class="card__section">
               <div class="empty-state empty-state--extra-tight">
                 <div class="empty-state__icon">
@@ -156,213 +228,140 @@
               </div>
             </div>
           {%- else -%}
-            {% assign pageSize = 10 %}
-            {% assign totalItems = customer.orders.size %}
-            {% assign fullPages = totalItems | divided_by: pageSize %}
-            {% assign remainingItems = totalItems | modulo: pageSize %}
-            {% assign totalPages = fullPages %}
-            {% assign currentPage = 1 %}
-            {% assign start = 0 %}
-            {% assign end = pageSize | minus: 1 %}
-            {% assign remaining = customer.orders.size %}
-            {% if remainingItems > 0 %}
-              {% assign totalPages = totalPages | plus: 1 %}
-            {% endif %}
-            <div class="table-wrapper">
-              <table class="table table--loose">
-                <thead>
-                  <tr>
-                    <th>{{ 'customer.order.order' | t }}</th>
-                    <th>{{ 'customer.order.date' | t }}</th>
-                    <th>{{ 'customer.order.payment_status' | t }}</th>
-                    <th>{{ 'customer.order.fulfillment_status' | t }}</th>
-                    <th class="table__cell--right">{{ 'customer.order.total' | t }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  hi
-                  {% if customer.b2b? %}
-                    pravin
-                    {% else %}
-                    ggfh
-                  {% endif %}
-                  {% for order in customer.orders %}
-                    {% if forloop.index0 >= start and forloop.index0 <= end %}
-                      <tr>
-                        <td><a href="{{ order.customer_url }}" class="link link--accented">{{ order.name }}</a></td>
-                        <td>{{ order.created_at | date: format: 'month_day_year' }}</td>
-                        {% if order.metafields.payment.status %}
-                          <td>{{ order.metafields.payment.status }}</td>
-                        {% else %}
-                          <td>{{ order.financial_status_label }}</td>
-                        {% endif %}
-                        <td>{{ order.fulfillment_status_label }}</td>
-                        <td class="table__cell--right">{{ order.total_price | money }}</td>
-                      </tr>
-                    {% endif %}
-                     {% if forloop.index0 == end %}
-                        {% assign start = end | plus: 1 %}
-                        {% assign end = start | plus: pageSize | minus: 1 %}
-                      {% endif %}
-                    {% if remaining > 0 and forloop.index0 == end %}
-                    {% assign start = end | plus: 1 %}
-                    {% assign end = remaining | divided_by: pageSize | ceil | times: pageSize | plus: start | minus: 1 %}
-                    {% assign remaining = remaining | minus: pageSize %}
-                  {% endif %}
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-
-            <div class="pagination">
-               {% if totalPages > 1 %}
-                <div class="pagination__inner account__prev">
-                    <a href="#" class="pagination__link pagination__prev link pagination__item account__pagination" data-label="prev"  data-page="{{ currentPage }}" onclick="paginationAccount(event)" id="pagination__prev" >
-                      {%- render 'icon', icon: 'arrow-left' -%} {{- 'general.pagination.previous_page' | t -}}
-                    </a>
-                  
-                  {% for page in (1..totalPages) %}
-                    <span class="pagination__nav-item ">
-                      <a href="#" class="pagination__link  link" data-page="{{ page }}" onclick="paginationAccount(event)">{{ page }}</a>
-                    </span>
-                 
-                  {% endfor %}
-                     {% if currentPage < totalPages %}
-                    <a href="#" class="pagination__link pagination__next link pagination__item" data-label="next" data-page="{{ currentPage }}" onclick="paginationAccount(event)" id="pagination__next">
-                      {{- 'general.pagination.next_page' | t -}} {%- render 'icon', icon: 'arrow-right' -%}
-                    </a>
-                   {% endif %}
+            {%- comment -%}
+              orders_count and paginate.items skip test orders, so a customer
+              with 3 paid and 45 test orders showed "3" and no page links.
+              Page through every order, 20 at a time. The heading total is filled
+              in by script. Line items stay unloaded so Liquid memory holds.
+            {%- endcomment -%}
+            {%- paginate customer.orders by 20 -%}
+              {%- comment -%}
+                routes.storefront_login_url includes return_to for this page, query string included.
+                content_for_header is already consumed in theme.liquid, so it cannot be read again here.
+              {%- endcomment -%}
+              {%- assign account_login_return = routes.storefront_login_url | url_decode | url_decode -%}
+              {%- assign requested_order_name = account_requested_order_name | default: '' | remove: '#' | strip -%}
+              {%- if account_login_return contains 'order_name=' -%}
+                {%- assign requested_order_name = account_login_return | split: 'order_name=' | last | split: '&' | first | split: '#' | first | url_decode | remove: '#' | strip -%}
+              {%- endif -%}
+              {%- if customer.orders.size == 0 and paginate.current_page == 1 -%}
+                <div class="card__section card__section--tight">
+                  <h1 class="heading h1">{{ 'customer.general.orders' | t }}</h1>
                 </div>
-              {% endif %}
-            </div>
+                <div class="card__section">
+                  <div class="empty-state empty-state--extra-tight">
+                    <div class="empty-state__icon">
+                      {%- render 'icon', icon: 'package' -%}
+                      <span class="empty-state__count">0</span>
+                    </div>
+
+                    <p class="empty-state__icon-description">{{ 'customer.general.no_orders' | t }}</p>
+
+                    <div class="empty-state__button-container">
+                      <a href="{{ routes.all_products_collection_url }}" class="empty-state__button button button--primary">{{ 'customer.general.no_orders_button' | t }}</a>
+                    </div>
+                  </div>
+                </div>
+              {%- else -%}
+                {%- assign orders_pending = false -%}
+                {%- if requested_order_name == blank -%}
+                  {%- if customer.orders.size == 20 or paginate.current_page > 1 -%}
+                    {%- assign orders_pending = true -%}
+                  {%- endif -%}
+                {%- endif -%}
+                <div class="account-orders-view{% if orders_pending %} is-counting{% endif %}">
+                <div class="account-orders-loading" role="status" aria-live="polite">
+                  <span class="account-orders-loading__spinner"></span>
+                </div>
+                <div class="account-orders-view__content">
+                <div
+                  class="card__header card__header--tight"
+                  data-account-orders-meta
+                  data-page="{{ paginate.current_page }}"
+                  data-page-size="20"
+                  data-on-page="{{ customer.orders.size }}"
+                >
+                  <h1 class="heading h1">{{ 'customer.general.orders' | t }} <span data-account-orders-count>{% unless orders_pending %}({{ customer.orders.size }}){% endunless %}</span></h1>
+                </div>
+
+                {%- if customer.orders.size == 0 -%}
+                  <div class="card__section">
+                    <p>{{ 'customer.general.no_orders' | t }}</p>
+                    <a class="link" href="{{ request.path }}">{{ 'general.pagination.previous_page' | t }}</a>
+                  </div>
+                {%- else -%}
+                  <div class="table-wrapper">
+                    <table class="table table--loose">
+                      <thead>
+                        <tr>
+                          <th>{{ 'customer.order.order' | t }}</th>
+                          <th>{{ 'customer.order.date' | t }}</th>
+                          <th>{{ 'customer.order.payment_status' | t }}</th>
+                          <th>{{ 'customer.order.fulfillment_status' | t }}</th>
+                          <th class="table__cell--right">{{ 'customer.order.total' | t }}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {%- for order in customer.orders -%}
+                          {%- assign order_key = order.name | remove: '#' -%}
+                          <tr data-account-order-row>
+                            <td><a href="{{ request.path }}?order_name={{ order_key }}{% if paginate.current_page > 1 %}&page={{ paginate.current_page }}{% endif %}" data-order-page="{{ paginate.current_page }}" class="link link--accented">{{ order.name }}</a></td>
+                            <td>{{ order.created_at | date: format: 'month_day_year' }}</td>
+                            {%- if order.metafields.payment.status -%}
+                              <td>{{ order.metafields.payment.status }}</td>
+                            {%- else -%}
+                              <td>{{ order.financial_status_label }}</td>
+                            {%- endif -%}
+                            <td>{{ order.fulfillment_status_label }}</td>
+                            <td class="table__cell--right">{{ order.total_price | money }}</td>
+                          </tr>
+                        {%- endfor -%}
+                      </tbody>
+                    </table>
+                  </div>
+                {%- endif -%}
+
+                <div
+                  class="pagination"
+                  data-account-orders-pagination
+                  data-label-prev="{{ 'general.pagination.previous_page' | t | escape }}"
+                  data-label-next="{{ 'general.pagination.next_page' | t | escape }}"
+                  {% if customer.orders.size < 20 and paginate.current_page == 1 %}hidden{% endif %}
+                >
+                  <div class="pagination__inner">
+                    {%- if paginate.current_page > 1 -%}
+                      <a class="pagination__prev link" data-page="{{ paginate.current_page | minus: 1 }}" href="{{ request.path }}?page={{ paginate.current_page | minus: 1 }}">
+                        {%- render 'icon', icon: 'arrow-left' -%} {{ 'general.pagination.previous_page' | t }}
+                      </a>
+                    {%- endif -%}
+                    {%- if customer.orders.size == 20 -%}
+                      <a class="pagination__next link" data-page="{{ paginate.current_page | plus: 1 }}" href="{{ request.path }}?page={{ paginate.current_page | plus: 1 }}">
+                        {{ 'general.pagination.next_page' | t }} {%- render 'icon', icon: 'arrow-right' -%}
+                      </a>
+                    {%- endif -%}
+                  </div>
+                </div>
+                </div>
+                </div>
+                {%- if requested_order_name != blank -%}
+                  {%- for order in customer.orders -%}
+                    {%- assign order_key = order.name | remove: '#' | strip -%}
+                    {%- assign order_number_key = order.order_number | append: '' | strip -%}
+                    {%- if order_key == requested_order_name or order_number_key == requested_order_name -%}
+                      {%- render 'account-page-2-order-detail', order: order -%}
+                      {%- break -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endpaginate -%}
           {%- endif -%}
         </div>
       </div>
     </div>
-  <div>
-</div>
-</div>
+  </div>
 </section>
-
-
 <script>
-  document.addEventListener('DOMContentLoaded', function(event) { 
-    var tableRows = document.querySelectorAll('.table-wrapper tbody tr');
-    var pageSize = {{ pageSize }};
-    var currentPage = 1;
-    var startIndex = (currentPage - 1) * pageSize;
-    var endIndex = Math.min(startIndex + pageSize, tableRows.length);
-    let pagination__prev = document.getElementById("pagination__prev");
-    pagination__prev.style.display="none";
-
-    for (var i = 0; i < tableRows.length; i++) {
-      tableRows[i].style.display = 'none';
-    }
-
-    for (var i = startIndex; i < endIndex; i++) {
-      if (tableRows[i]) {
-        tableRows[i].style.display = '';
-      }
-    }
-
-    var paginationLinks = document.querySelectorAll('.pagination__link');
-    paginationLinks.forEach(function(link) {
-      if (link.getAttribute('data-page') === '1' && link.getAttribute('data-label') != 'next' && link.getAttribute('data-label') != 'prev') {
-        link.setAttribute('data-count',link.getAttribute('data-page'))
-        link.classList.add('pagination__nav-item','is-active')
-        link.parentElement.classList.add('pagination__item--active');
-      } else {
-         link.classList.remove('pagination__nav-item','is-active')
-        link.parentElement.classList.remove('pagination__item--active');
-      }
-    });
-  });
-
-  function paginationAccount(event) {
-    event.preventDefault();
-     var targetPage;
-     var currentPage;
-    let pagination__prev = document.getElementById("pagination__prev");
-    pagination__prev.style.display="none";
-    if(event.target.getAttribute('data-label') == "next"){
-      pagination__prev.style.display="block";
-      var paginationLinks = document.querySelectorAll('.pagination__link');
-      paginationLinks.forEach(function(link) {
-      if (link.getAttribute('data-count')) {
-         currentPage =parseInt(link.getAttribute('data-count'))
-      }
-    });
-      targetPage = parseInt(currentPage) +1
-    }else if(event.target.getAttribute('data-label') == "prev"){
-      var paginationLinks = document.querySelectorAll('.pagination__link');
-      paginationLinks.forEach(function(link) {
-      if (link.getAttribute('data-count')) {
-         currentPage =parseInt(link.getAttribute('data-count'))
-      }
-    });
-      targetPage = parseInt(currentPage) -1
-    }
-    else{
-    targetPage = parseInt(event.target.getAttribute('data-page'));
-      if(targetPage == 1){
-        pagination__prev.style.display="none";
-      } else{
-         pagination__prev.style.display="block";
-      }    
-    }
-
-    var tableRows = document.querySelectorAll('.table-wrapper tbody tr');
-    var pageSize = {{ pageSize }};
-    var startIndex = (targetPage - 1) * pageSize;
-    var endIndex = Math.min(startIndex + pageSize, tableRows.length);
-    for (var i = 0; i < tableRows.length; i++) {
-      tableRows[i].style.display = 'none';
-    }
-
-    for (var i = startIndex; i < endIndex; i++) {
-      if (tableRows[i]) {
-        tableRows[i].style.display = '';
-      }
-    }
-    let pagination__next = document.getElementById("pagination__next");  
-    pagination__next.style.display = "block";
-    if (targetPage === {{ totalPages }}) {
-    pagination__prev.style.display="block";
-    pagination__next.style.display = "none";  
-    var start = (targetPage - 1) * pageSize;
-    let end = {{customer.orders.size }} 
-    for (let i = start; i < end.length; i++) {
-      if (tableRows[i]) {
-        tableRows[i].style.display = '';
-      }
-    }
-    }else{
-       pagination__next.style.display = "block";
-    }
-    var paginationLinks = document.querySelectorAll('.pagination__link');
-    paginationLinks.forEach(function(link) {
-       link.removeAttribute('data-count')
-       if(link.getAttribute('data-page') == parseInt(currentPage)+1 && event.target.getAttribute('data-label') == "next"){
-         link.setAttribute('data-count',parseInt(currentPage)+1) 
-         if(event.target.getAttribute('data-label') == "next"){
-         link.classList.add('pagination__nav-item','is-active')
-         }
-       }else if(link.getAttribute('data-page') == parseInt(currentPage)-1 && event.target.getAttribute('data-label') == "prev"){
-         link.setAttribute('data-count',parseInt(currentPage)-1) 
-       }
-      link.classList.remove('pagination__nav-item','is-active')
-      link.parentElement.classList.remove('pagination__item--active');
-    });
-     if(event.target.getAttribute('data-label') != "next"){
-     event.target.parentElement.querySelector('a').setAttribute('data-count',event.target.getAttribute('data-page') );
-     event.target.classList.add('pagination__nav-item','is-active');
-     }else if(event.target.getAttribute('data-label') != "prev"){
-        event.target.parentElement.querySelector('a').setAttribute('data-count',event.target.getAttribute('data-page'));
-        event.target.classList.add('pagination__nav-item','is-active');
-     }
-    event.target.parentElement.classList.add('pagination__item--active');
-  }
-
   let slideIndex = 0;
   showSlide(slideIndex);
 
@@ -388,10 +387,131 @@
   function changeSlide(offset) {
     showSlide(slideIndex += offset);
   }
-
-  
 </script>
+<script>
+  (function () {
+    var meta = document.querySelector("[data-account-orders-meta]");
+    if (!meta) return;
 
+    var pageSize = parseInt(meta.getAttribute("data-page-size"), 10) || 20;
+    var currentPage = parseInt(meta.getAttribute("data-page"), 10) || 1;
+    var onPage = document.querySelectorAll("[data-account-order-row]").length;
+    if (!onPage) onPage = parseInt(meta.getAttribute("data-on-page"), 10) || 0;
+    var countEl = document.querySelector("[data-account-orders-count]");
+    var pager = document.querySelector("[data-account-orders-pagination]");
+    var section = meta.closest("[data-section-id]");
+    var sectionId = section ? section.getAttribute("data-section-id") : "";
+    var seen = {};
+    var currentLink = document.querySelector("[data-account-order-row] a");
+    if (currentLink) seen[currentLink.textContent.trim()] = true;
+
+    function setCount(total) {
+      if (countEl) countEl.textContent = "(" + total + ")";
+    }
+
+    function pageHref(page) {
+      var url = new URL(window.location.href);
+      url.hash = "";
+      url.searchParams.delete("order_name");
+      url.searchParams.delete("address_page");
+      if (page > 1) url.searchParams.set("page", String(page));
+      else url.searchParams.delete("page");
+      return url.pathname + url.search;
+    }
+
+    function renderPager(total) {
+      if (!pager) return;
+      var pages = Math.ceil(total / pageSize);
+      if (pages <= 1) {
+        pager.hidden = true;
+        pager.innerHTML = "";
+        return;
+      }
+
+      var prevLabel = pager.getAttribute("data-label-prev") || "Previous";
+      var nextLabel = pager.getAttribute("data-label-next") || "Next";
+      var html = '<div class="pagination__inner">';
+      if (currentPage > 1) {
+        html += '<a class="pagination__prev link" data-page="' + (currentPage - 1) + '" href="' + pageHref(currentPage - 1) + '">' + prevLabel + "</a>";
+      }
+      html += '<div class="pagination__nav pagination_items_nav">';
+      for (var i = 1; i <= pages; i++) {
+        if (i === currentPage) {
+          html += '<span class="pagination__nav-item is-active">' + i + "</span>";
+        } else {
+          html += '<a class="pagination__nav-item link" data-page="' + i + '" href="' + pageHref(i) + '">' + i + "</a>";
+        }
+      }
+      html += "</div>";
+      html += '<span class="pagination__page-count">Page ' + currentPage + " / " + pages + "</span>";
+      if (currentPage < pages) {
+        html += '<a class="pagination__next link" data-page="' + (currentPage + 1) + '" href="' + pageHref(currentPage + 1) + '">' + nextLabel + "</a>";
+      }
+      html += "</div>";
+      pager.hidden = false;
+      pager.innerHTML = html;
+    }
+
+    function finish(total) {
+      setCount(total);
+      renderPager(total);
+      var view = document.querySelector(".account-orders-view");
+      if (view) view.classList.remove("is-counting");
+    }
+
+    if (onPage < pageSize && currentPage === 1) {
+      finish(onPage);
+      return;
+    }
+
+    var total = 0;
+    var page = 1;
+
+    function step() {
+      if (page > 40) {
+        finish(total);
+        return;
+      }
+      if (page === currentPage) {
+        total += onPage;
+        if (onPage < pageSize) {
+          finish(total);
+          return;
+        }
+        page += 1;
+        step();
+        return;
+      }
+
+      var url = window.location.pathname + "?section_id=" + encodeURIComponent(sectionId) + "&page=" + page;
+      fetch(url, { credentials: "same-origin", cache: "no-store" })
+        .then(function (response) { return response.text(); })
+        .then(function (html) {
+          var doc = new DOMParser().parseFromString(html, "text/html");
+          var link = doc.querySelector("[data-account-order-row] a");
+          var name = link ? link.textContent.trim() : "";
+          var count = doc.querySelectorAll("[data-account-order-row]").length;
+          if (!count || (name && seen[name])) {
+            finish(total);
+            return;
+          }
+          seen[name] = true;
+          total += count;
+          if (count < pageSize) {
+            finish(total);
+            return;
+          }
+          page += 1;
+          step();
+        })
+        .catch(function () {
+          finish(total || onPage);
+        });
+    }
+
+    step();
+  })();
+</script>
 
 {% schema %}
 {

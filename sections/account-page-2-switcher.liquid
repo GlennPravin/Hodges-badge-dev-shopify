@@ -4,7 +4,12 @@
   </script>
 {%- endif -%}
 
-{% render 'account-page-2-order-detail' %}
+{% comment %}
+  Do not render every order here. Looping customer.orders and printing each
+  line item, product metafield, and JSON payload exceeds Shopify's Liquid
+  memory limit ("Liquid error: Memory limits exceeded"). One order is rendered
+  by the order template when its row is opened.
+{% endcomment %}
 
 <style>
   body.account-page-2--orders .account-page-2-panel--addresses,
@@ -130,7 +135,8 @@
     line-height: 1.4;
   }
 
-  input.account-profile__input[type="text"] {
+  input.account-profile__input[type="text"],
+  input.account-profile__input[type="email"] {
     display: none;
     width: 100%;
     height: 44px;
@@ -201,6 +207,12 @@
     display: block !important;
   }
 
+  html[data-account-order-loading] body.account-page-2--order-detail .account-page-2-order-details,
+  html[data-account-order-loading] body.account-page-2--order-detail .account-page-2-order-detail,
+  html[data-account-order-loading] body.account-page-2--order-detail .account-page-2-order-detail.is-active {
+    display: none !important;
+  }
+
   .account-page-2-panels > .layout__section {
     margin: 0;
     width: 100%;
@@ -253,8 +265,8 @@
 
     <div class="account-profile__email">
       <span class="account-profile__label">Email address</span>
-      <span class="account-profile__value">{{ customer.email | escape }}</span>
-      <input type="hidden" name="email" value="{{ customer.email | escape }}" data-profile-email data-account-email="{{ customer.email | escape }}">
+      <span class="account-profile__value" data-profile-value="email">{% if customer.email != blank %}{{ customer.email | escape }}{% else %}—{% endif %}</span>
+      <input id="profile-email" class="account-profile__input" type="email" name="email" value="{{ customer.email | escape }}" autocomplete="email" inputmode="email" data-profile-name data-profile-email data-account-email="{{ customer.email | escape }}">
     </div>
 
     <div class="account-page-2-profile-actions">
@@ -510,7 +522,16 @@
       return getLinkPath(link) === logoutPath;
     }
 
+    function linkOrderName(link) {
+      try {
+        return new URL(link.href, window.location.origin).searchParams.get("order_name") || "";
+      } catch (e) {
+        return "";
+      }
+    }
+
     function isOrderDetailLink(link) {
+      if (linkOrderName(link)) return true;
       if (findOrderDetail(link)) return true;
       var path = getLinkPath(link);
       return path.indexOf(accountPath + "/orders/") === 0;
@@ -546,8 +567,27 @@
       return !!(link.closest(".account-page-2-panel--addresses") && link.closest(".pagination"));
     }
 
+    function isOrdersPaginationLink(link) {
+      return !!(link.closest(".account-page-2-orders-content") && link.closest(".pagination"));
+    }
+
+    function ordersPaginationUrl(link) {
+      var pageUrl = new URL(link.href, window.location.origin);
+      pageUrl.pathname = "/pages/account-page";
+      pageUrl.hash = "";
+      pageUrl.searchParams.delete("order_name");
+      pageUrl.searchParams.delete("address_page");
+      var page = parseInt(pageUrl.searchParams.get("page") || link.getAttribute("data-page") || "1", 10);
+      if (page > 1) {
+        pageUrl.searchParams.set("page", String(page));
+      } else {
+        pageUrl.searchParams.delete("page");
+      }
+      return pageUrl.pathname + pageUrl.search;
+    }
+
     function isOrdersLink(link) {
-      if (isAddressPaginationLink(link)) return false;
+      if (isAddressPaginationLink(link) || isOrdersPaginationLink(link)) return false;
       if (isLogoutLink(link) || isTaxDetailsLink(link) || isOrderDetailLink(link) || isBackToOrdersLink(link) || isAddressesLink(link) || isProfileLink(link)) return false;
       var path = getLinkPath(link);
       return path === accountPath || path === normalizePath(accountPageUrl);
@@ -639,6 +679,9 @@
       reorder = window.reorder;
       history.replaceState(null, "", orderDetailPageUrl(key));
       setOrderDetailBreadcrumb(key);
+      document.documentElement.removeAttribute("data-account-order-loading");
+      var pageLoader = document.getElementById("loaderbg");
+      if (pageLoader) pageLoader.style.display = "none";
     }
 
     function getAccountSections() {
@@ -651,6 +694,8 @@
 
     function setAccountTab(tab) {
       var nextTab = tab === "addresses" ? "addresses" : tab === "profile" ? "profile" : "orders";
+      document.documentElement.removeAttribute("data-account-order");
+      document.documentElement.removeAttribute("data-account-order-loading");
       document.documentElement.setAttribute("data-account-tab", nextTab);
       document.body.classList.remove("account-page-2--order-detail", "account-page-2--addresses", "account-page-2--orders", "account-page-2--profile");
       document.body.classList.add("account-page-2--" + nextTab);
@@ -777,6 +822,10 @@
       var link = event.target.closest("a[href]");
       if (!link) return;
 
+      if (link.getAttribute("data-action") === "toggle-popover" && link.getAttribute("aria-controls") === "account-popover") {
+        return;
+      }
+
       if (isTaxDetailsLink(link) || isLogoutLink(link)) {
         return;
       }
@@ -789,6 +838,14 @@
         document.documentElement.setAttribute("data-account-tab", "addresses");
         rememberAddressesTab();
         window.location.href = pageUrl.pathname + pageUrl.search + pageUrl.hash;
+        return;
+      }
+
+      if (isOrdersPaginationLink(link)) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        document.documentElement.setAttribute("data-account-tab", "orders");
+        window.location.href = ordersPaginationUrl(link);
         return;
       }
 
@@ -826,7 +883,12 @@
             detailEl = findOrderDetailByName(new URL(link.href, window.location.origin).searchParams.get("order_name"));
           } catch (e) {}
         }
-        if (!detailEl) return;
+        if (!detailEl) {
+          event.preventDefault();
+          beginOrderLoading(linkOrderName(link) || link.textContent);
+          window.location.href = orderLinkUrl(link);
+          return;
+        }
         event.preventDefault();
         event.stopPropagation();
         showOrderDetail(detailEl);
@@ -837,9 +899,13 @@
       return String(left || "").trim().toLowerCase() === String(right || "").trim().toLowerCase();
     }
 
+    function isValidEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim());
+    }
+
     function profileSaveError(message) {
       if (/already been taken|already exist/i.test(message || "")) {
-        return "Email Already exist with another account";
+        return "Email already exists.";
       }
       if (/valid email/i.test(message || "")) {
         return "Enter a valid email address.";
@@ -946,11 +1012,15 @@
         var first = firstField ? firstField.value.trim() : "";
         var last = lastField ? lastField.value.trim() : "";
         var email = emailField ? emailField.value.trim() : "";
-        var accountEmail = emailField ? (emailField.getAttribute("data-account-email") || "") : "";
         var panel = document.querySelector(".account-page-2-panel--profile");
 
-        if (!first || !last || email.toLowerCase() !== accountEmail.toLowerCase()) {
+        if (!first || !last) {
           showProfileMessage("Profile could not be saved.", false);
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          showProfileMessage("Enter a valid email address.", false);
           return;
         }
 
@@ -962,16 +1032,18 @@
 
         var currentFirst = panel ? panel.getAttribute("data-profile-first") : "";
         var currentLast = panel ? panel.getAttribute("data-profile-last") : "";
-        if (namesMatch(first, currentFirst) && namesMatch(last, currentLast)) {
+        var currentEmail = panel ? panel.getAttribute("data-profile-email") : "";
+        if (namesMatch(first, currentFirst) && namesMatch(last, currentLast) && namesMatch(email, currentEmail)) {
           setEditing(false);
           showProfileMessage("Profile saved.", true);
           return;
         }
 
-        var saveUrl = "https://hops-connect.dev.hodgesbadge.com/ShopifyCustomer/UpdateCustomerName"
+        var saveUrl = "https://hops-connect.staging.hodgesbadge.com/ShopifyCustomer/UpdateCustomerName"
           + "?customer_id=" + encodeURIComponent(customerId)
           + "&first_name=" + encodeURIComponent(first)
-          + "&last_name=" + encodeURIComponent(last);
+          + "&last_name=" + encodeURIComponent(last)
+          + "&email=" + encodeURIComponent(email);
 
         setSaving(true);
         fetch(saveUrl, { method: "POST" })
@@ -1005,18 +1077,174 @@
       setEditing(false);
     }
 
+    function beginOrderLoading(orderName) {
+      document.documentElement.setAttribute("data-account-order", "");
+      document.documentElement.setAttribute("data-account-order-loading", orderNameKey(orderName));
+      document.body.classList.add("account-page-2--orders", "account-page-2--order-detail");
+      if (!document.querySelector(".account-order-detail-loading")) {
+        var orderLoader = document.createElement("div");
+        orderLoader.className = "account-order-detail-loading";
+        orderLoader.setAttribute("role", "status");
+        orderLoader.setAttribute("aria-label", "Loading order");
+        orderLoader.innerHTML = '<span class="account-orders-loading__spinner"></span>';
+        document.body.appendChild(orderLoader);
+      }
+      var pageLoader = document.getElementById("loaderbg");
+      if (pageLoader) pageLoader.style.display = "block";
+    }
+
+    function currentOrderName() {
+      try {
+        return new URL(window.location.href).searchParams.get("order_name") || "";
+      } catch (e) {
+        return "";
+      }
+    }
+
+    function orderLinkUrl(link) {
+      var target = new URL(link.href, window.location.origin);
+      var orderKey = orderNameKey(linkOrderName(link) || link.textContent);
+      var rowPage = parseInt(link.getAttribute("data-order-page") || "1", 10);
+      target.pathname = "/pages/account-page";
+      target.hash = "";
+      target.search = "";
+      if (orderKey) target.searchParams.set("order_name", orderKey);
+      if (rowPage > 1) target.searchParams.set("page", String(rowPage));
+      return target.pathname + target.search;
+    }
+
+    function orderRowOnPage(orderName) {
+      var key = orderNameKey(orderName);
+      var found = false;
+      document.querySelectorAll("[data-account-order-row] a").forEach(function (link) {
+        var name = orderNameKey(linkOrderName(link) || link.textContent);
+        if (name === key) found = true;
+      });
+      return found;
+    }
+
+    function activateOrderScripts(root) {
+      root.querySelectorAll("script").forEach(function (oldScript) {
+        var script = document.createElement("script");
+        if (oldScript.src) script.src = oldScript.src;
+        else script.textContent = oldScript.textContent;
+        oldScript.parentNode.replaceChild(script, oldScript);
+      });
+    }
+
+    function mountFetchedOrder(html, orderName) {
+      var doc = new DOMParser().parseFromString(html, "text/html");
+      var details = doc.querySelector(".account-page-2-order-details");
+      if (!details) return false;
+      var existing = document.querySelector(".account-page-2-order-details");
+      if (existing) existing.remove();
+      var wrapper = document.querySelector(".account-page-2-panels");
+      (wrapper || document.body).appendChild(details);
+      activateOrderScripts(details);
+      var opened = findOrderDetailByName(orderName);
+      if (!opened) return false;
+      showOrderDetail(opened);
+      return true;
+    }
+
+    function loadOrderDetail(orderName) {
+      beginOrderLoading(orderName);
+      var url = new URL(window.location.href);
+      url.searchParams.set("order_name", orderNameKey(orderName));
+      fetch(url.pathname + url.search, { credentials: "same-origin", cache: "no-store" })
+        .then(function (response) { return response.text(); })
+        .then(function (html) {
+          if (mountFetchedOrder(html, orderName)) return;
+          document.documentElement.removeAttribute("data-account-order");
+          if (!orderRowOnPage(orderName)) {
+            loadOrderOnItsPage(orderName);
+            return;
+          }
+          setAccountTab("orders");
+        })
+        .catch(function () {
+          document.documentElement.removeAttribute("data-account-order");
+          setAccountTab("orders");
+        });
+    }
+
+    function loadOrderOnItsPage(orderName) {
+      if (orderRowOnPage(orderName)) return;
+
+      var meta = document.querySelector("[data-account-orders-meta]");
+      var section = meta && meta.closest("[data-section-id]");
+      var sectionId = section ? section.getAttribute("data-section-id") : "";
+      if (!meta || !sectionId) return;
+
+      var pageSize = parseInt(meta.getAttribute("data-page-size"), 10) || 20;
+      var currentPage = parseInt(meta.getAttribute("data-page"), 10) || 1;
+      var key = orderNameKey(orderName);
+      var page = 1;
+      var seen = {};
+
+      function step() {
+        if (page > 40) return;
+        if (page === currentPage) {
+          page += 1;
+          step();
+          return;
+        }
+
+        var url = window.location.pathname + "?section_id=" + encodeURIComponent(sectionId) + "&page=" + page;
+        fetch(url, { credentials: "same-origin", cache: "no-store" })
+          .then(function (response) { return response.text(); })
+          .then(function (html) {
+            var doc = new DOMParser().parseFromString(html, "text/html");
+            var links = doc.querySelectorAll("[data-account-order-row] a");
+            if (!links.length) return;
+            var firstName = orderNameKey(links[0].textContent);
+            if (seen[firstName]) return;
+            seen[firstName] = true;
+            for (var i = 0; i < links.length; i++) {
+              if (orderNameKey(linkOrderName(links[i]) || links[i].textContent) === key) {
+                var next = new URL(window.location.href);
+                next.hash = "";
+                next.searchParams.set("order_name", key);
+                if (page > 1) next.searchParams.set("page", String(page));
+                else next.searchParams.delete("page");
+                window.location.href = next.pathname + next.search;
+                return;
+              }
+            }
+            if (links.length < pageSize) return;
+            page += 1;
+            step();
+          })
+          .catch(function () {});
+      }
+
+      step();
+    }
+
     function init() {
       setupPanels();
       setupAddressForms();
       setupProfileForm();
+
+      var orderName = currentOrderName();
+      if (orderName) {
+        var openedOrder = findOrderDetailByName(orderName);
+        if (openedOrder) {
+          showOrderDetail(openedOrder);
+          return;
+        }
+        loadOrderDetail(orderName);
+        return;
+      }
+
       var expected = readProfileExpected();
       var hash = (window.location.hash || "").replace("#", "");
-      if (hash === "addresses" || (hash !== "profile" && consumeAddressesTab())) {
+      if (!orderName && (hash === "addresses" || (hash !== "profile" && consumeAddressesTab()))) {
         setAccountTab("addresses");
         history.replaceState(null, "", addressesPageUrl());
         return;
       }
-      if (hash === "profile" || consumeProfileTab()) {
+      if (!orderName && (hash === "profile" || consumeProfileTab())) {
         setAccountTab("profile");
         history.replaceState(null, "", profilePageUrl());
         if (expected) {
@@ -1026,15 +1254,7 @@
         return;
       }
 
-      var orderName = "";
-      try {
-        orderName = new URL(window.location.href).searchParams.get("order_name") || "";
-      } catch (e) {}
-      var detailEl = findOrderDetailByName(orderName);
-      if (detailEl) {
-        showOrderDetail(detailEl);
-        return;
-      }
+      if (orderName) return;
 
       setAccountTab("orders");
     }

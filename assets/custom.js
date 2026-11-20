@@ -4942,11 +4942,13 @@ $(document).ready(() => {
   if (window.location.href.includes("/cart")) {
     setLocalStorageCart();
   }
-if(!window.location.href.includes('&cart_id')){
- document.getElementById("loaderbg").style.display = "none";
-
-}
-});
+  if(!window.location.href.includes('&cart_id') && !window.location.href.includes("/cart")){
+    if (!document.documentElement.hasAttribute("data-account-order-loading")) {
+      var accountPageLoader = document.getElementById("loaderbg");
+      if (accountPageLoader) accountPageLoader.style.display = "none";
+    }
+  }
+  });
 
 /**----------------------------------------*
  *********CART-PAGE-JS*******END************
