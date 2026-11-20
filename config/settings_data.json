@@ -195,11 +195,11 @@
           "@media (max-width: 600px) {p span {font-size: 16px !important; display: inline-block; padding-left: 14px; padding-right: 14px; } p span br {display: none; }}"
         ],
         "settings": {
-          "show_BannerImage": false,
+          "show_BannerImage": true,
           "expand_items": false,
           "banner_position": "height_110",
-          "image": "shopify://shop_images/laborday_sale_banners_0926_01.jpg",
-          "link_image": "",
+          "image": "shopify://shop_images/thanksgiving_holidayhours_1193x109banner_1126_34cbc8f3-cf5a-4369-904f-192d8ae32c18.jpg",
+          "link_image": "https://staging.hodgesbadge.com/apps/pagefly/preview?id=4db59a19-a639-4578-9927-40cf41f26e1f",
           "overlay_opacity": 30,
           "stretch_image": false,
           "background": "#ffffff",
